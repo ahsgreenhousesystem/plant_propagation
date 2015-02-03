@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="" />
+<meta name="description" content="Overview of Environmental Controls">
+<meta name="author" content="ISU Senior Design Dec15-01">
+<link rel="icon" href="/img/favicon.ico">
+<title>Environmental Controls Overview | Ames High School</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body onload="getZoneStates()" />
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" target="_blank" href="http://www.ames.k12.ia.us/AHS/AHS.html">Ames High School</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li id="overview" class="active"><a href="overview.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
+          <li id="config"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
+          <li id="zones"><a href="zones.html"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Setup</a></li>
+          <li id="log"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Log</a></li>
+          <li id="users"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container" style="text-align: center">
+    <div class="page-header">
+      <h1>Overview</h1>
+    </div>
+
+    <!--<div id="dvLoading" style="display: block">
+      <div class="loading">
+        <span class="loadingText">Please wait: <br />Scanning
+          Sensors...
+        </span>
+      </div>
+    </div>
+    <br>-->
+    <div id="dvOverview">
+      <div class="row">
+        <div>Zone 1</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open1" onclick="overviewClick('O1')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close1" onclick="overviewClick('C1')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto1" onclick="overviewClick('A1')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 2</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open2" onclick="overviewClick('O2')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close2" onclick="overviewClick('C2')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto2" onclick="overviewClick('A2')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 3</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open3" onclick="overviewClick('O3')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close3" onclick="overviewClick('C3')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto3" onclick="overviewClick('A3')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 4</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open4" onclick="overviewClick('O4')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close4" onclick="overviewClick('C4')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto4" onclick="overviewClick('A4')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 5</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open5" onclick="overviewClick('O5')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close5" onclick="overviewClick('C5')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto5" onclick="overviewClick('A5')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 6</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open6" onclick="overviewClick('O6')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close6" onclick="overviewClick('C6')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto6" onclick="overviewClick('A6')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 7</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open7" onclick="overviewClick('O7')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close7" onclick="overviewClick('C7')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto7" onclick="overviewClick('A7')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 8</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open8" onclick="overviewClick('O8')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close8" onclick="overviewClick('C8')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto8" onclick="overviewClick('A8')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 9</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open9" onclick="overviewClick('O9')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close9" onclick="overviewClick('C9')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto9" onclick="overviewClick('A9')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 10</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open10" onclick="overviewClick('O10')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close10" onclick="overviewClick('C10')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto10" onclick="overviewClick('A10')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 11</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open11" onclick="overviewClick('O11')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close11" onclick="overviewClick('C11')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto11" onclick="overviewClick('A11')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 12</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open12" onclick="overviewClick('O12')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close12" onclick="overviewClick('C12')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto12" onclick="overviewClick('A12')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 13</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open13" onclick="overviewClick('O13')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close13" onclick="overviewClick('C13')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto13" onclick="overviewClick('A13')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 14</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open14" onclick="overviewClick('O14')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close14" onclick="overviewClick('C14')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto14" onclick="overviewClick('A14')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 15</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open15" onclick="overviewClick('O15')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close15" onclick="overviewClick('C15')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto15" onclick="overviewClick('A15')" />
+        </div>
+        <div>Log...</div>
+      </div>
+      <br>
+      <div class="row">
+        <div>Zone 16</div>
+        <div>
+          <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open16" onclick="overviewClick('O16')" />
+          <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close16" onclick="overviewClick('C16')" />
+          <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto16" onclick="overviewClick('A16')" />
+        </div>
+        <div>Log...</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.plugin.js"></script>
+<script src="js/jquery.timeentry.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

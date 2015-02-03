@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="" />
+<meta name="description" content="Setup Zones For Environmental Controls">
+<meta name="author" content="ISU Senior Design Dec15-01">
+<link rel="icon" href="/img/favicon.ico">
+<title>Environmental Controls Setup | Ames High School</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" target="_blank" href="http://www.ames.k12.ia.us/AHS/AHS.html">Ames High School</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li id="overview"><a href="overview.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
+          <li id="config"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
+          <li id="zones" class="active"><a href="zones.html"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Setup</a></li>
+          <li id="log"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Log</a></li>
+          <li id="users"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container" style="text-align: center">
+    <div class="page-header">
+      <h1>Setup Zones</h1>
+    </div>
+    <div id="dvZones">
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 1</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('1')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 2</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('2')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 3</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('3')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 4</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('4')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 5</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('5')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 6</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('6')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 7</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />  
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('7')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 8</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('8')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 9</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('9')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 10</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('10')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 11</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('11')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 12</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('12')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 13</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('13')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 14</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('14')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 15</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('15')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-8 col-lg-6 col-md-4 col-lg-2">Zone 16</div>
+        <div class="configTime col-xs-8 col-lg-6 col-md-4 col-lg-2">
+          <label>Active:&nbsp;</label><input type="checkbox" class="visible" value="1">
+          <input placeholder="Name" class="name form-control" maxlength="20" />
+          <button type="button" class="btn btn-primary btn-sm" onclick="setupClick('16')">Update</button>
+        </div>
+      </div>
+      <br>
+      <div class="submitDiv">
+        <button type="button" style="float:right" class="btn btn-primary btn-sm" onclick="setupClick()">Update Zones</button>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.plugin.js"></script>
+<script src="js/jquery.timeentry.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
