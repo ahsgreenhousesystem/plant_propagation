@@ -12,7 +12,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
   </head>
-  <body onload="getZoneStates()" />
+  <body onload="getZoneStates()">
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -56,7 +56,7 @@
         <th></th>
         <th></th>
       </thead>
-      <tfoot>
+      <tbody>
       <tr>
         <td>Zone 1</td>
         <td>Log...</td>
@@ -169,8 +169,9 @@
         <td><input type="submit" value="Close" class="btn btn-primary btn-sm" id="close16" onclick="overviewClick('C16')" /></td>
         <td><input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto16" onclick="overviewClick('A16')" /></td>
       </tr>
-    </tfoot>
+    </tbody>
     </table>
+  </div>
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.plugin.js"></script>
