@@ -92,12 +92,20 @@ a:focus, a:hover {
 
 .btn-primary {
   color: #fff;
-  background-color: #FF6600;
-  border-color: #000033;
+  background-color: #000033;
+}
+
+.btn-default {
+	color: #fff;
+	background-color: #FF6600;
 }
 
 .btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
   color: #fff;
+  background-color: #FF6600;
+}
+
+.btn-default.active, .btn-default.focus, .btn-default:active, .btn-default:focus, .btn-default:hover, .open>.dropdown-toggle.btn-default {
+  color: #fff;
   background-color: #000033;
-  border-color: #FF6600;
 }
