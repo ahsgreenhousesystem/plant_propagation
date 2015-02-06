@@ -13,7 +13,6 @@
     <link href="css/style.css" rel="stylesheet">
   </head>
   <body>
-  <!-- test -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -36,15 +35,58 @@
         </div>
       </div>
     </nav>
-    <div class="container" style="text-align: center">
-      <div class="page-header">
-        <h1>Users</h1>
-      </div>
-      <div id="dvUsers">USER PAGE</div>
+  <div class="container" style="text-align:center">
+    <div class="page-header">
+      <h1>Users</h1>
     </div>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery.plugin.js"></script>
-  <script src="js/jquery.timeentry.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  </body>
+    <div id="dvUsers">
+      <div class="newDiv">
+        <a href="#" data-toggle="modal" data-target="#newUserModal" class="btn btn-default btn-sm">New User</a>
+    </div>
+    <div class="modal fade" id="newUserModal" tabindex="-1" role="dialog" aria-labelledby="newUserModal" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title" id="newUserModalLabel">New User</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <input type="text" placeholder="Full Name" class="form-control" /><br>
+                <input type="text" placeholder="Email" class="form-control" /><br>
+                <input type="text" placeholder="Phone Number" class="form-control" /><br>
+                <input type="button" value="Save" class="btn btn-md btn-default" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+    </div>
+    </div>
+      <br>
+      <table id="userTable" class="table table-striped">
+        <thead>
+          <th style="text-align:center">Name</th>
+          <th style="text-align:center">Email</th>
+          <th style="text-align:center">Phone</th>
+          <th></th>
+          <th></th>
+        </thead>
+        <tfoot>
+          <tr>
+            <td>User's full name</td>
+            <td>User's email</td>
+            <td>User's phone number</td>
+            <td><button type="button" class="btn btn-primary btn-sm">Update</button></td>
+            <td><button type="button" class="btn btn-primary btn-sm">Delete</button></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.plugin.js"></script>
+<script src="js/jquery.timeentry.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
 </html>
