@@ -35,7 +35,7 @@
       </div>
     </div>
   </nav>
-  <div class="container" style="text-align:center">
+  <div class="container">
     <div class="page-header">
       <h1>Overview</h1>
     </div>
@@ -48,21 +48,22 @@
     </div>
     <br>-->
     <div id="dvOverview" style="margin-left:auto; margin-right:auto;">
+    <!-- 
     <table id="overviewTable" class="table table-striped table-hover">
       <thead>
         <th style="text-align:center">Zone</th>
         <th style="text-align:center">Log</th>
-        <th></th>
-        <th></th>
         <th></th>
       </thead>
       <tbody>
       <tr>
         <td>Zone 1</td>
         <td>Log...</td>
-        <td><input type="submit" value="Open" class="btn btn-primary btn-sm" id="open1" onclick="overviewClick('O1')" /></td>
-        <td><input type="submit" value="Close" class="btn btn-primary btn-sm" id="close1" onclick="overviewClick('C1')" /></td>
-        <td><input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto1" onclick="overviewClick('A1')" /></td>
+        <td>
+        <div class="btn-group" role="group">
+        <input type="submit" value="Open" class="btn btn-primary btn-sm" id="open1" onclick="overviewClick('O1')" />
+        <input type="submit" value="Close" class="btn btn-primary btn-sm" id="close1" onclick="overviewClick('C1')" />
+        <input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto1" onclick="overviewClick('A1')" /></div></td>
       </tr>
       <tr>
         <td>Zone 2</td>
@@ -171,6 +172,279 @@
       </tr>
     </tbody>
     </table>
+     -->
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 1</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open1" onclick="overviewClick('O1')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close1" onclick="overviewClick('C1')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto1" onclick="overviewClick('A1')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 2</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open2" onclick="overviewClick('O2')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close2" onclick="overviewClick('C2')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto2" onclick="overviewClick('A2')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 3</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open3" onclick="overviewClick('O3')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close3" onclick="overviewClick('C3')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto3" onclick="overviewClick('A3')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 4</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open4" onclick="overviewClick('O4')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close4" onclick="overviewClick('C4')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto4" onclick="overviewClick('A4')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 5</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open5" onclick="overviewClick('O5')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close5" onclick="overviewClick('C5')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto5" onclick="overviewClick('A5')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 6</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open6" onclick="overviewClick('O6')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close1" onclick="overviewClick('C6')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto1" onclick="overviewClick('A6')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 7</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open7" onclick="overviewClick('O7')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close7" onclick="overviewClick('C7')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto7" onclick="overviewClick('A7')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 8</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open8" onclick="overviewClick('O8')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close8" onclick="overviewClick('C8')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto8" onclick="overviewClick('A8')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 9</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open9" onclick="overviewClick('O9')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close9" onclick="overviewClick('C9')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto9" onclick="overviewClick('A9')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 10</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open10" onclick="overviewClick('O10')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close10" onclick="overviewClick('C10')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto10" onclick="overviewClick('A10')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 11</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open11" onclick="overviewClick('O11')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close11" onclick="overviewClick('C11')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto11" onclick="overviewClick('A11')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 12</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open12" onclick="overviewClick('O12')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close12" onclick="overviewClick('C12')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto12" onclick="overviewClick('A12')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 13</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open13" onclick="overviewClick('O13')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close13" onclick="overviewClick('C13')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto13" onclick="overviewClick('A13')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 14</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open14" onclick="overviewClick('O14')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close14" onclick="overviewClick('C14')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto14" onclick="overviewClick('A14')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 15</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open15" onclick="overviewClick('O15')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close15" onclick="overviewClick('C15')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto15" onclick="overviewClick('A15')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 16</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-primary btn-sm" id="open16" onclick="overviewClick('O16')" />
+	        		<input type="submit" value="Close" class="btn btn-primary btn-sm" id="close16" onclick="overviewClick('C16')" />
+	        		<input type="submit" value="Auto" class="btn btn-primary btn-sm" id="auto16" onclick="overviewClick('A16')" />
+	       		</div>
+	       		<div>
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
   </div>
     </div>
     <script src="js/jquery.min.js"></script>
