@@ -95,7 +95,7 @@ a:focus, a:hover {
   background-color: #000033;
 }
 
-.btn-default {
+.btn-success {
 	color: #fff;
 	background-color: #FF6600;
 }
@@ -107,10 +107,12 @@ a:focus, a:hover {
 
 .btn-default.active, .btn-default.focus, .btn-default:active, .btn-default:focus, .btn-default:hover, .open>.dropdown-toggle.btn-default {
   color: #fff;
-  background-color: #000033;
+  background-color: #FF6600;
 }
+
+
 .panel-heading {
-	background-color: #FF6600!important;
+	background-color: #000033!important;
 	text-align:center;
 }
 
