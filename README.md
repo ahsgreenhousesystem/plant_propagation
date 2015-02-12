@@ -1,5 +1,3 @@
-This repository is to be used by SD May14-01 for the Greenhouse watering system at ISU
-
 Current State:
  - Website builds in Arduino using the Wiznet Ethernet shield.
  - Time is displaying correctly on the config page
@@ -17,7 +15,7 @@ TODO:
 HOW TO USE
  - Load website files onto SD card
  - Open webserver code in Arduino 
- -   Modify IP address to suit network
+ - Modify IP address to suit network
  - Upload to Arduino with ethernet shield installed
  - Visit assigned IP address (~10 second load)
  - Navigate to "Config > Setup Zones" to choose which zones to make visible and name specific zones
