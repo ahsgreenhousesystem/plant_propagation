@@ -117,6 +117,9 @@ a:focus, a:hover {
   background-color: #FF6600;
 }
 
+.panel-heading > h4 > a {
+	color: #fff;	
+}
 
 .panel-heading {
 	background-color: #000033!important;
