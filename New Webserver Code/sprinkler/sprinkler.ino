@@ -4,25 +4,29 @@ const int zoneThree = 27;
 const int zoneFour  = 29;
 const int zoneFive  = 31;
 const int zoneSix   = 45;
+const int zoneSeven   = 47;
 
-const int timeDelay = 1000;     // delay in ms -- important -- relays wear out if driven too fast
+const int timeDelay = 10000;     // delay in ms -- important -- relays wear out if driven too fast
 
 void setup()
 {
   //set zone pins as output 
-  pinMode(zoneOne,   OUTPUT);  
+//  pinMode(zoneOne,   OUTPUT);  
   pinMode(zoneTwo,   OUTPUT);
-  pinMode(zoneThree, OUTPUT);
-  pinMode(zoneFour,  OUTPUT);
-  pinMode(zoneFive,  OUTPUT);
-  pinMode(zoneSix,   OUTPUT);
+//  pinMode(zoneThree, OUTPUT);
+//  pinMode(zoneFour,  OUTPUT);
+//  pinMode(zoneFive,  OUTPUT);
+//  pinMode(zoneSix,   OUTPUT);
+//  pinMode(zoneSeven, OUTPUT);
 }
 
 
 void loop()                    
 {
-  sprinklersOn(zoneOne);
-  sprinklersOff(zoneOne);
+  sprinklersOff(zoneTwo);
+  sprinklersOn(zoneTwo);
+//  sprinklersOff(zoneSeven);
+//  sprinklersOn(zoneSix);
 } 
 
 
