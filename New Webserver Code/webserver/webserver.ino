@@ -10,9 +10,8 @@ with an Ethernet shield using the WizNet chipset.
 #include <Ethernet.h>
 #include <SD.h>
 #include "Globals.h"
-#include <config_parser.ino>
 #include <EthernetUdp.h>
-#include <EDP.h>
+#include <EDB.h>
 
 // size of buffer used to capture HTTP requests
 #define REQ_BUF_SZ   60
@@ -56,9 +55,9 @@ String time = "";
 //char email_list[NUM_USERS][30] = {0};
 
  // attempt to use time_t
- typedef struct 
+struct ZoneProperties
  {
-   String Zone; 
+   String Name; 
    int Visible; 
    String Time1; 
    int  duration1;
@@ -66,7 +65,9 @@ String time = "";
    int  duration2;
    String Time3; 
    int  duration3;
- } zone_properties;
+ } zone_config;
+ 
+
  
 void writer(unsigned long address, byte data)
 {
@@ -84,7 +85,7 @@ byte reader(unsigned long address)
 EDB config_DB(&writer, &reader);
 
 //Define all zone scructs
-zone_properties zone[NUM_ZONES];
+ZoneProperties zone[NUM_ZONES];
 
 void setup()
 {
@@ -107,20 +108,20 @@ void setup()
         return;  // can't find index file
     }
     
-    Serial.println("Opening example.db ...");
-    dbFile = SD.open("example.db", FILE_WRITE);
-    if(!config_DB.exists()) {
-        config_DB.create(0, TABLE_SIZE, sizeof(zone_properties));
+    Serial.println("Opening config.db ...");
+    dbFile = SD.open("config.db", FILE_WRITE);
+  //  if(!config_DB.exists()) {
+        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
         Serial.println("Config database created.");
         //might need to initialize all zones here
-    }
+  //  }
 
     Serial.println("SUCCESS - Found index.htm file.");
   
     for(int i=0; i < config_DB.count();i++)
     {
-        config_DB.read(i, EDB_REC zone_properties);
-        zone[i] = zone_properties;
+        config_DB.readRec(i,EDB_REC zone_config);
+        zone[i] = zone_config;
     }
 
     for(int i =0; i< config_DB.count(); i++) {
@@ -873,7 +874,7 @@ void Zone_States(void)
         zone[zone_update].Name = parsed_GET[2];
         zone[zone_update].Visible = parsed_GET[3].toInt();
 
-        config_DB.updateRec(zone_update, zone[zone_update]);
+        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]);
        
     }
 
@@ -888,9 +889,10 @@ void Zone_States(void)
         zone[zone_update].Time3 = parsed_GET[6];
         zone[zone_update].duration3 = parsed_GET[7].toInt();
         
-        config_DB.updateRec(zone_update, zone[zone_update]);
+        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]);
     
     }
+}
 }
 
 // send the XML file
