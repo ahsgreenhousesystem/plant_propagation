@@ -10,14 +10,14 @@ with an Ethernet shield using the WizNet chipset.
 #include <Ethernet.h>
 #include <SD.h>
 #include "Globals.h"
+//#include <config_parser.ino>
 #include <EthernetUdp.h>
-#include <EDB.h>
 
 // size of buffer used to capture HTTP requests
 #define REQ_BUF_SZ   60
 #define NUM_ZONES 16
+#define NUM_PROPS 8
 #define BUFFER_SIZE 64
-#define TABLE_SIZE 16
 
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
@@ -26,7 +26,6 @@ EthernetServer server(80);  // create a server at port 80
 
 unsigned int localPort = 8888;      // local port to listen for UDP packets
 IPAddress timeServer(132, 163, 4, 101); // time-a.timefreq.bldrdoc.gov NTP server
-
 const int NTP_PACKET_SIZE= 48; // NTP time stamp is in the first 48 bytes of the message
 byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets 
 // A UDP instance to let us send and receive packets over UDP
@@ -35,12 +34,13 @@ EthernetUDP Udp;
 File webFile;               // the web page file on the SD card
 char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
 int req_index = 0;              // index into HTTP_req buffer
-//boolean LED_state[4] = {0}; // stores the states of the LEDs
+boolean LED_state[4] = {0}; // stores the states of the LEDs
 char ZoneState[NUM_ZONES] = {'C'}; //stores zone active states
+String config_array[NUM_ZONES][NUM_PROPS]; //stores values from website
 String parsed_GET[10];
 int count = 0; //for buffering packet
 byte httpBuffer[BUFFER_SIZE];
-File dbFile;
+File return_file;
 String Http_req_full = "";
 
 int hours,minutes;
@@ -52,10 +52,22 @@ String time = "";
 //char //log_file[LOG_SIZE][LOG_MESSAGE] = {0};
 //char email_list[NUM_USERS][30] = {0};
 
-EDB config_DB(&writer, &reader);
 
-//Define all zone structs
-//ZoneProperties zone[NUM_ZONES];
+// typedef struct 
+// {
+// String Name; 
+// int Visible; 
+// String Time1; 
+// int  duration1;
+// String Time2; 
+// int  duration2;
+// String Time3; 
+// int  duration3;
+// } zone_properties;
+
+
+//Define all zone scructs
+zone_properties zone[NUM_ZONES];
 
 void setup()
 {
@@ -77,29 +89,32 @@ void setup()
         Serial.println("ERROR - Can't find index.htm file!");
         return;  // can't find index file
     }
-    
-    Serial.println("Opening config.db ...");
-    dbFile = SD.open("config.db", FILE_WRITE);
-  //  if(!config_DB.exists()) {
-        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-        Serial.println("Config database created.");
-        //might need to initialize all zones here
-  //  }
+
+    if (!SD.exists("config.h")) {
+        Serial.println("ERROR - Can't find config.h - resetting to default settings");
+        return;
+    }
 
     Serial.println("SUCCESS - Found index.htm file.");
+    Serial.println("SUCCESS - Found config.h Parsing now...");
+   // split_config(config_array);
   
-   /* for(int i=0; i < config_DB.count();i++)
+    for(int i=0; i<NUM_ZONES;i++)
     {
-        config_DB.readRec(i,EDB_REC zone_config);
-        zone[i] = zone_config;
+        zone[i].Name = config_array[i][0];
+        zone[i].Visible = config_array[i][1].toInt();
+        zone[i].Time1 = config_array[i][2];
+        zone[i].duration1 = config_array[i][3].toInt();
+        zone[i].Time2 = config_array[i][4];
+        zone[i].duration2 = config_array[i][5].toInt();
+        zone[i].Time3 = config_array[i][6];
+        zone[i].duration3 = config_array[i][7].toInt();
+
     }
 
-    for(int i =0; i< config_DB.count(); i++) {
+    Serial.println("Parse -> Struct: Complete.");
+    for(int i =0; i<NUM_ZONES; i++)
         Serial.println(zone[i].Name);
-    }
-    
-    */
-    
     Ethernet.begin(mac, ip);  // initialize Ethernet device
     server.begin();           // start to listen for clients
     Udp.begin(localPort);
@@ -198,11 +213,7 @@ void loop()
                     currentLineIsBlank = false;
                 }
             } // end if (client.available())
-            else {
-             Serial.println("ERROR - Client not available.");
-            }
         } // end while (client.connected())
-        Serial.println("WARNING - Client disconnected.");
         delay(1);      // give the web browser time to receive the data
         client.stop(); // close the connection
     } // end if (client)
@@ -841,44 +852,86 @@ void Zone_States(void)
     {
         int zone_update = parsed_GET[1].toInt();
         zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
-        
-        //might need to create one first, not read.
-        config_DB.readRec(zone_update, EDB_REC zone_config);
-        zone_config.Name = parsed_GET[2];
-        zone_config.Visible = parsed_GET[3].toInt();
 
-       // zone[zone_update].Name = parsed_GET[2];
-       // zone[zone_update].Visible = parsed_GET[3].toInt();
 
-        config_DB.updateRec(zone_update, EDB_REC zone_config);
-       
+        zone[zone_update].Name = parsed_GET[2];
+        zone[zone_update].Visible = parsed_GET[3].toInt();
+
+
+        if(SD.exists("config.h"))
+        {
+            SD.remove("config.h");
+        }
+        File config_file = SD.open("config.h", FILE_WRITE);
+        if (config_file) {
+            for(int i =0; i< NUM_ZONES; i++)
+            {
+                config_file.print(zone[i].Name);
+                config_file.print(",");
+                config_file.print(zone[i].Visible);
+                config_file.print(",");
+                config_file.print(zone[i].Time1);
+                config_file.print(",");
+                config_file.print(zone[i].duration1);
+                config_file.print(",");                
+                config_file.print(zone[i].Time2);
+                config_file.print(",");
+                config_file.print(zone[i].duration2);
+                config_file.print(",");                
+                config_file.print(zone[i].Time3);
+                config_file.print(",");
+                config_file.print(zone[i].duration3);
+                config_file.print(",");
+
+            }
+        }
+        config_file.close();
+
     }
 
     if(parsed_GET[0].equals("config"))
     {
         int zone_update = parsed_GET[1].toInt();
         zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
-      /*  
         zone[zone_update].Time1 = parsed_GET[2];
         zone[zone_update].duration1 = parsed_GET[3].toInt();
         zone[zone_update].Time2 = parsed_GET[4];
         zone[zone_update].duration2 = parsed_GET[5].toInt();
         zone[zone_update].Time3 = parsed_GET[6];
         zone[zone_update].duration3 = parsed_GET[7].toInt();
-        */
-        
-        config_DB.readRec(zone_update, EDB_REC zone_config);
-        
-        zone_config.Time1 = parsed_GET[2];
-        zone_config.duration1 = parsed_GET[3].toInt();
-        zone_config.Time2 = parsed_GET[4];
-        zone_config.duration2 = parsed_GET[5].toInt();
-        zone_config.Time3 = parsed_GET[6];
-        zone_config.duration3 = parsed_GET[7].toInt();
-        
-        config_DB.updateRec(zone_update, EDB_REC zone_config);  
+
+        //UPDATE config.h
+        if(SD.exists("config.h"))
+        {
+            SD.remove("config.h");
+        }
+        File config_file = SD.open("config.h", FILE_WRITE);
+        if (config_file) {
+            for(int i =0; i< NUM_ZONES; i++)
+            {
+                config_file.print(zone[i].Name);
+                config_file.print(",");
+                config_file.print(zone[i].Visible);
+                config_file.print(",");
+                config_file.print(zone[i].Time1);
+                config_file.print(",");
+                config_file.print(zone[i].duration1);
+                config_file.print(",");                
+                config_file.print(zone[i].Time2);
+                config_file.print(",");
+                config_file.print(zone[i].duration2);
+                config_file.print(",");                
+                config_file.print(zone[i].Time3);
+                config_file.print(",");
+                config_file.print(zone[i].duration3);
+                config_file.print(",");
+
+            }
+        }
+        config_file.close();
     }
-}
+    
+    }
 }
 
 // send the XML file
@@ -890,37 +943,36 @@ void XML_response(EthernetClient cl)
     
     for(int i = 0; i<NUM_ZONES; i++)
     {
-        config_DB.readRec(i, EDB_REC zone_config);
         cl.print("<name>");
-        cl.print(zone_config.Name);
+        cl.print(zone[i].Name);
         cl.print("</name>");
 
         cl.print("<visible>");
-        cl.print(zone_config.Visible);
+        cl.print(zone[i].Visible);
         cl.print("</visible>");
 
         cl.print("<time1>");
-        cl.print(zone_config.Time1);
+        cl.print(zone[i].Time1);
         cl.print("</time1>");
  
         cl.print("<duration1>");
-        cl.print(zone_config.duration1);
+        cl.print(zone[i].duration1);
         cl.print("</duration1>");
 
         cl.print("<time2>");
-        cl.print(zone_config.Time2);
+        cl.print(zone[i].Time2);
         cl.print("</time2>");
 
         cl.print("<duration2>");
-        cl.print(zone_config.duration2);
+        cl.print(zone[i].duration2);
         cl.print("</duration2>");
 
         cl.print("<time3>");
-        cl.print(zone_config.Time3);
+        cl.print(zone[i].Time3);
         cl.print("</time3>");
 
         cl.print("<duration3>");
-        cl.print(zone_config.duration3);
+        cl.print(zone[i].duration3);
         cl.print("</duration3>");
 
         cl.print("<state>");
@@ -1062,7 +1114,6 @@ unsigned long sendNTPpacket(IPAddress& address)
 
 void water_time(void)
 {
-  /*
     for(int i = 0; i<NUM_ZONES; i++)
         {
             if(zone[i].Time1.equals(time) && ZoneState[i] == 'A')
@@ -1078,18 +1129,4 @@ void water_time(void)
                 
             }
         }
-    */
-}
-
-void writer(unsigned long address, byte data)
-{
-  dbFile.seek(address); 
-  dbFile.write(data); 
-  dbFile.flush();
-}
- 
-byte reader(unsigned long address)
-{
-  dbFile.seek(address); 
-  return dbFile.read(); 
 }

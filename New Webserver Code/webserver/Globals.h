@@ -8,17 +8,18 @@
 #define Globals_h
 #endif
  
-/*typedef struct
-{
-String Name; 
-int Visible; 
-String Time1; 
-int  duration1;
-String Time2; 
-int  duration2;
-String Time3; 
-int  duration3;
-} zone_properties;*/
+ // attempt to use time_t
+struct ZoneProperties
+ {
+   String Name; 
+   String Time1;
+   String Time2;
+   String Time3; 
+   int Visible; 
+   int  duration1;
+   int  duration2;
+   int  duration3;
+ } zone_config;
 
 typedef enum zone_list 
 { 
