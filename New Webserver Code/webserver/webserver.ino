@@ -12,12 +12,14 @@ with an Ethernet shield using the WizNet chipset.
 #include "Globals.h"
 #include <config_parser.ino>
 #include <EthernetUdp.h>
+#include <EDP.h>
 
 // size of buffer used to capture HTTP requests
 #define REQ_BUF_SZ   60
 #define NUM_ZONES 16
 #define NUM_PROPS 8
 #define BUFFER_SIZE 64
+#define TABLE_SIZE 512
 
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
@@ -41,6 +43,7 @@ String parsed_GET[10];
 int count = 0; //for buffering packet
 byte httpBuffer[BUFFER_SIZE];
 File return_file;
+File dbFile;
 String Http_req_full = "";
 
 int hours,minutes;
@@ -52,19 +55,33 @@ String time = "";
 //char //log_file[LOG_SIZE][LOG_MESSAGE] = {0};
 //char email_list[NUM_USERS][30] = {0};
 
-
-// typedef struct 
-// {
-// String Name; 
-// int Visible; 
-// String Time1; 
-// int  duration1;
-// String Time2; 
-// int  duration2;
-// String Time3; 
-// int  duration3;
-// } zone_properties;
-
+ // attempt to use time_t
+ typedef struct 
+ {
+   String Zone; 
+   int Visible; 
+   String Time1; 
+   int  duration1;
+   String Time2; 
+   int  duration2;
+   String Time3; 
+   int  duration3;
+ } zone_properties;
+ 
+void writer(unsigned long address, byte data)
+{
+  dbFile.seek(address); 
+  dbFile.write(data); 
+  dbFile.flush();
+}
+ 
+byte reader(unsigned long address)
+{
+  dbFile.seek(address); 
+  return dbFile.read(); 
+}
+ 
+EDB config_DB(&writer, &reader);
 
 //Define all zone scructs
 zone_properties zone[NUM_ZONES];
@@ -89,32 +106,27 @@ void setup()
         Serial.println("ERROR - Can't find index.htm file!");
         return;  // can't find index file
     }
-
-    if (!SD.exists("config.h")) {
-        Serial.println("ERROR - Can't find config.h - resetting to default settings");
-        return;
+    
+    Serial.println("Opening example.db ...");
+    dbFile = SD.open("example.db", FILE_WRITE);
+    if(!config_DB.exists()) {
+        config_DB.create(0, TABLE_SIZE, sizeof(zone_properties));
+        Serial.println("Config database created.");
+        //might need to initialize all zones here
     }
 
     Serial.println("SUCCESS - Found index.htm file.");
-    Serial.println("SUCCESS - Found config.h Parsing now...");
-    split_config(config_array);
   
-    for(int i=0; i<NUM_ZONES;i++)
+    for(int i=0; i < config_DB.count();i++)
     {
-        zone[i].Name = config_array[i][0];
-        zone[i].Visible = config_array[i][1].toInt();
-        zone[i].Time1 = config_array[i][2];
-        zone[i].duration1 = config_array[i][3].toInt();
-        zone[i].Time2 = config_array[i][4];
-        zone[i].duration2 = config_array[i][5].toInt();
-        zone[i].Time3 = config_array[i][6];
-        zone[i].duration3 = config_array[i][7].toInt();
-
+        config_DB.read(i, EDB_REC zone_properties);
+        zone[i] = zone_properties;
     }
 
-    Serial.println("Parse -> Struct: Complete.");
-    for(int i =0; i<NUM_ZONES; i++)
+    for(int i =0; i< config_DB.count(); i++) {
         Serial.println(zone[i].Name);
+    }
+    
     Ethernet.begin(mac, ip);  // initialize Ethernet device
     server.begin();           // start to listen for clients
     Udp.begin(localPort);
@@ -861,36 +873,8 @@ void Zone_States(void)
         zone[zone_update].Name = parsed_GET[2];
         zone[zone_update].Visible = parsed_GET[3].toInt();
 
-
-        if(SD.exists("config.h"))
-        {
-            SD.remove("config.h");
-        }
-        File config_file = SD.open("config.h", FILE_WRITE);
-        if (config_file) {
-            for(int i =0; i< NUM_ZONES; i++)
-            {
-                config_file.print(zone[i].Name);
-                config_file.print(",");
-                config_file.print(zone[i].Visible);
-                config_file.print(",");
-                config_file.print(zone[i].Time1);
-                config_file.print(",");
-                config_file.print(zone[i].duration1);
-                config_file.print(",");                
-                config_file.print(zone[i].Time2);
-                config_file.print(",");
-                config_file.print(zone[i].duration2);
-                config_file.print(",");                
-                config_file.print(zone[i].Time3);
-                config_file.print(",");
-                config_file.print(zone[i].duration3);
-                config_file.print(",");
-
-            }
-        }
-        config_file.close();
-
+        config_DB.updateRec(zone_update, zone[zone_update]);
+       
     }
 
     if(parsed_GET[0].equals("config"))
@@ -903,37 +887,8 @@ void Zone_States(void)
         zone[zone_update].duration2 = parsed_GET[5].toInt();
         zone[zone_update].Time3 = parsed_GET[6];
         zone[zone_update].duration3 = parsed_GET[7].toInt();
-
-        //UPDATE config.h
-        if(SD.exists("config.h"))
-        {
-            SD.remove("config.h");
-        }
-        File config_file = SD.open("config.h", FILE_WRITE);
-        if (config_file) {
-            for(int i =0; i< NUM_ZONES; i++)
-            {
-                config_file.print(zone[i].Name);
-                config_file.print(",");
-                config_file.print(zone[i].Visible);
-                config_file.print(",");
-                config_file.print(zone[i].Time1);
-                config_file.print(",");
-                config_file.print(zone[i].duration1);
-                config_file.print(",");                
-                config_file.print(zone[i].Time2);
-                config_file.print(",");
-                config_file.print(zone[i].duration2);
-                config_file.print(",");                
-                config_file.print(zone[i].Time3);
-                config_file.print(",");
-                config_file.print(zone[i].duration3);
-                config_file.print(",");
-
-            }
-        }
-        config_file.close();
-    }
+        
+        config_DB.updateRec(zone_update, zone[zone_update]);
     
     }
 }
