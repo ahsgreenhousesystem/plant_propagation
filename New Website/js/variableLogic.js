@@ -21,12 +21,8 @@ var loadData = 1;
 function getZoneStates() {
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
-		if (this.readyState == 4) {
-			if (this.status == 200) {
+		if (this.readyState == 4 && this.status == 200) {
 				if ((this.responseXML != null) && (loadData == 1)) {
-					// XML file received - contains analog values, switch values
-					// and LED states
-					var count;
 					// XML file received - contains analog values, switch values
 					// and LED states
 					var count = 0;
@@ -158,7 +154,7 @@ function configClick(zone) {
 function setupClick(zone) {
 	var active = 0;
 	cmd = "&setup"
-	cmd = cmd.concat("," + zone);
+	cmd = `cmd.concat("," + zone);
 	zone = zone - 1;
 	if (document.getElementsByClassName("visible")[zone].checked)
 		active = 1;

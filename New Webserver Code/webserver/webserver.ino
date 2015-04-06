@@ -21,7 +21,7 @@ with an Ethernet shield using the WizNet chipset.
 
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 1, 177); // IP address, may need to change depending on network
+IPAddress ip(10, 222, 1, 250); //10.222.1.250// IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
 
 unsigned int localPort = 8888;      // local port to listen for UDP packets
@@ -77,16 +77,18 @@ void setup()
         Serial.println("ERROR - Can't find index.htm file!");
         return;  // can't find index file
     }
+    Serial.println("SUCCESS - Found index.htm file.");
     
     Serial.println("Opening config.db ...");
     dbFile = SD.open("config.db", FILE_WRITE);
-  //  if(!config_DB.exists()) {
+    //how do I check if the table already exists?
+    if(config_DB.count() < 1) {
         config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-        Serial.println("Config database created.");
+        Serial.println("SUCCESS - Config database created.");
         //might need to initialize all zones here
-  //  }
-
-    Serial.println("SUCCESS - Found index.htm file.");
+    } else {
+       Serial.println("Config database already exists."); 
+    }
   
    /* for(int i=0; i < config_DB.count();i++)
     {
@@ -113,6 +115,7 @@ void loop()
     if (client) {  // got client?
         boolean currentLineIsBlank = true;
         while (client.connected()) {
+          Serial.println("Client connected.");
             if (client.available()) {   // client data available to read
                 char c = client.read(); // read 1 byte (character) from client
                 // limit the size of the stored received HTTP request
@@ -840,7 +843,8 @@ void Zone_States(void)
     if(parsed_GET[0].equals("setup"))
     {
         int zone_update = parsed_GET[1].toInt();
-        zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
+        //EDB handles this
+       // zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
         
         //might need to create one first, not read.
         config_DB.readRec(zone_update, EDB_REC zone_config);
@@ -857,7 +861,7 @@ void Zone_States(void)
     if(parsed_GET[0].equals("config"))
     {
         int zone_update = parsed_GET[1].toInt();
-        zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
+        //zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
       /*  
         zone[zone_update].Time1 = parsed_GET[2];
         zone[zone_update].duration1 = parsed_GET[3].toInt();
