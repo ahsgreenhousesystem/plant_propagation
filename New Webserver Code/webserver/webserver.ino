@@ -29,8 +29,7 @@ IPAddress timeServer(132, 163, 4, 101); // time-a.timefreq.bldrdoc.gov NTP serve
 
 const int NTP_PACKET_SIZE= 48; // NTP time stamp is in the first 48 bytes of the message
 byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets 
-// A UDP instance to let us send and receive packets over UDP
-EthernetUDP Udp;
+EthernetUDP Udp; // A UDP instance to let us send and receive packets over UDP
 
 File webFile;               // the web page file on the SD card
 char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
@@ -44,7 +43,7 @@ File dbFile;
 String Http_req_full = "";
 
 int hours,minutes;
-int time_check =0;
+int time_check = 0;
 char after_noon = 'A';
 String time = "";
 
@@ -405,7 +404,8 @@ void Zone_States(void)
 
             break;
 
-            case 5:
+           //ZONE 5
+           case 5:
            if(parsed_GET[2].charAt(0) == 'O')
                 {
                     if(ZoneState[ZONE5] == 'O')
@@ -556,6 +556,7 @@ void Zone_States(void)
                 }
             break;
 
+            //ZONE 9
             case 9:
             if(parsed_GET[2].charAt(0) == 'O')
                 {
@@ -627,6 +628,7 @@ void Zone_States(void)
                 }
             break;
 
+            //ZONE 11
             case 11:
             if(parsed_GET[2].charAt(0) == 'O')
                 {
@@ -662,6 +664,7 @@ void Zone_States(void)
                 }   
             break;
 
+            //ZONE 12
             case 12:
             if(parsed_GET[2].charAt(0) == 'O')
                 {
@@ -697,6 +700,7 @@ void Zone_States(void)
                 }
             break;
 
+            //ZONE 13
             case 13:
             if(parsed_GET[2].charAt(0) == 'O')
                 {
@@ -732,6 +736,7 @@ void Zone_States(void)
                 }
             break;
 
+            //ZONE 14
             case 14:
             if(parsed_GET[2].charAt(0) == 'O')
                 {
@@ -767,6 +772,7 @@ void Zone_States(void)
                 }
             break;
 
+            //ZONE 15
             case 15:
             if(parsed_GET[2].charAt(0) == 'O')
                 {
@@ -802,6 +808,7 @@ void Zone_States(void)
                 }
             break;
 
+            //ZONE 16
             case 16:
             if(parsed_GET[2].charAt(0) == 'O')
                 {
