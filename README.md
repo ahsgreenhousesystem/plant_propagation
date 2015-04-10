@@ -1,23 +1,18 @@
 Current State:
- - Website builds in Arduino using the Wiznet Ethernet shield.
- - Time is displaying correctly on the config page
+ - Website builds in Arduino using the Wiznet Ethernet shield
  - Navigation between pages
- - Parsing of config file to load previous settings
- - Structure between IOs for XML requests
  
 TODO:
  - Use pinout from excel spreadsheet to define zones
  - Write config file after "Update zones" button pressed
  - Handle GET requests from html for changing zone states
- - Implement and test LCD display functionality
- - Share variables and arrays between LCD library and website control 
  
 HOW TO USE
- - Load website files onto SD card
- - Open webserver code in Arduino 
- - Modify IP address to suit network
- - Upload to Arduino with ethernet shield installed
- - Visit assigned IP address (~10 second load)
- - Navigate to "Config > Setup Zones" to choose which zones to make visible and name specific zones
- - Assign start times and durations to each zone
- - Verify IO pinout with relays
+ 1) Load web interface files onto SD card
+ 2) Open webserver code in Arduino 
+    - Modify IP address to suit network (obtain from school network administrator)
+    - Upload to Arduino with ethernet shield installed
+ 3) Visit assigned IP address (~10 second load)
+ 4) Navigate to "Config > Setup Zones" to choose which zones to make visible and name specific zones
+ 5) Assign start times and durations to each zone
+ 6) Verify IO pinout with relays
