@@ -11,7 +11,7 @@ with an Ethernet shield using the WizNet chipset.
 #include <SD.h>
 #include "Globals.h"
 #include <EthernetUdp.h>
-#include <EDB.h>
+//#include <EDB.h>
 
 // size of buffer used to capture HTTP requests
 #define REQ_BUF_SZ   60
@@ -52,7 +52,7 @@ String time = "";
 //char //log_file[LOG_SIZE][LOG_MESSAGE] = {0};
 //char email_list[NUM_USERS][30] = {0};
 
-EDB config_DB(&writer, &reader);
+//EDB config_DB(&writer, &reader);
 
 //Define all zone structs
 //ZoneProperties zone[NUM_ZONES];
@@ -82,17 +82,17 @@ void setup()
     Serial.println("Opening config.db ...");
     dbFile = SD.open("config.db", FILE_WRITE);
     //how do I check if the table already exists?
-    if(config_DB.count() < 1) {
-        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-        Serial.println("SUCCESS - Config database created.");
-        //might need to initialize all zones here
-    } else {
-       Serial.println("Config database already exists."); 
-    }
+//    if(config_DB.count() < 1) {
+//        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
+//        Serial.println("SUCCESS - Config database created.");
+//        //might need to initialize all zones here
+//    } else {
+//       Serial.println("Config database already exists."); 
+//    }
   
    /* for(int i=0; i < config_DB.count();i++)
     {
-        config_DB.readRec(i,EDB_REC zone_config);
+//        config_DB.readRec(i,EDB_REC zone_config);
         zone[i] = zone_config;
     }
 
@@ -157,6 +157,13 @@ void loop()
                         Zone_States();
                         // send XML file containing input states
                         XML_response(client);
+                    }
+                    else if (StrContains(HTTP_req, "GET /zones.png")) {
+                        webFile = SD.open("zones.png");
+                        if (webFile) {
+                          client.println("HTTP/1.1 200 OK");
+                          client.println();
+                        }
                     }
                     else {  // web page request
                         // send rest of HTTP header
@@ -847,14 +854,14 @@ void Zone_States(void)
        // zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
         
         //might need to create one first, not read.
-        config_DB.readRec(zone_update, EDB_REC zone_config);
+//        config_DB.readRec(zone_update, EDB_REC zone_config);
         zone_config.Name = parsed_GET[2];
         zone_config.Visible = parsed_GET[3].toInt();
 
        // zone[zone_update].Name = parsed_GET[2];
        // zone[zone_update].Visible = parsed_GET[3].toInt();
 
-        config_DB.updateRec(zone_update, EDB_REC zone_config);
+//        config_DB.updateRec(zone_update, EDB_REC zone_config);
        
     }
 
@@ -871,7 +878,7 @@ void Zone_States(void)
         zone[zone_update].duration3 = parsed_GET[7].toInt();
         */
         
-        config_DB.readRec(zone_update, EDB_REC zone_config);
+//        config_DB.readRec(zone_update, EDB_REC zone_config);
         
         zone_config.Time1 = parsed_GET[2];
         zone_config.duration1 = parsed_GET[3].toInt();
@@ -880,7 +887,7 @@ void Zone_States(void)
         zone_config.Time3 = parsed_GET[6];
         zone_config.duration3 = parsed_GET[7].toInt();
         
-        config_DB.updateRec(zone_update, EDB_REC zone_config);  
+//        config_DB.updateRec(zone_update, EDB_REC zone_config);  
     }
 }
 }
@@ -894,7 +901,7 @@ void XML_response(EthernetClient cl)
     
     for(int i = 0; i<NUM_ZONES; i++)
     {
-        config_DB.readRec(i, EDB_REC zone_config);
+//        config_DB.readRec(i, EDB_REC zone_config);
         cl.print("<name>");
         cl.print(zone_config.Name);
         cl.print("</name>");
