@@ -1,0 +1,306 @@
+<!DOCTYPE html><!-- THIS FILE HAS CSS/JS IMPORTED WITH CDN LINKS -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="" />
+    <meta name="description" content="Overview of Environmental Controls">
+    <meta name="author" content="ISU Senior Design Dec15-01">
+    <link rel="icon" href="/img/favicon.ico">
+    <title>Environmental Controls Overview | Ames High School</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <style>
+    	html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #FF6600;
+}
+
+footer a {
+  color: #FFF;
+}
+
+body > .container {
+  padding: 60px 15px 0;
+}
+.container .text-muted {
+  margin: 20px 0;
+  color: #FFF;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+code {
+  font-size: 80%;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+  border-color: #FF6600;
+}
+
+.navbar-default {
+  background-color: #FF6600;
+  border-color: #e7e7e7;
+}
+
+.navbar-default .navbar-brand {
+  color: #FFF;
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: #FFF;
+}
+
+a {
+  color: #FF6600;
+  text-decoration: none;
+}
+
+a:focus, a:hover {
+  color: #000033;
+  text-decoration: underline;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+  color: #000033;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+  color: #000033;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover { 
+  color: #FF6600;
+  background-color: #000033;
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+  background-color: #000033;
+}
+
+.navbar-default .navbar-toggle {
+  border-color: #FFF;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFF;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #000033;
+}
+
+.btn-success {
+	color: #fff;
+	background-color: #FF6600;
+  border-color: #000033;
+}
+
+.btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #FF6600;
+}
+
+.btn-success.active, .btn-success.focus, .btn-success:active, .btn-success:focus, .btn-success:hover, .open>.dropdown-toggle.btn-success {
+  color: #fff;
+  background-color: #000033;
+  border-color: #FF6600;
+}
+
+.btn-default.active, .btn-default.focus, .btn-default:active, .btn-default:focus, .btn-default:hover, .open>.dropdown-toggle.btn-default {
+  color: #fff;
+  background-color: #FF6600;
+}
+
+.panel-heading > h4 > a {
+	color: #fff;	
+}
+
+.panel-heading {
+	background-color: #000033!important;
+	text-align:center;
+}
+
+.panel-body {
+	text-align:center;
+}
+
+.panel-heading > h3 {
+	color:white
+}
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" target="_blank" href="http://www.ames.k12.ia.us/AHS/AHS.html">Ames High School</a>
+        </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li id="overviewTab" class="active"><a href="overview.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
+          <li id="configTab"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
+          <li id="zonesTab"><a href="zones.html"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Setup</a></li>
+          <li id="logTab"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Log</a></li>
+          <li id="usersTab"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container" style="text-align:center">
+    <div class="page-header">
+      <h1>Overview</h1>
+    </div>
+    <div id="dvOverview" style="margin-left:auto; margin-right:auto;">
+    	<div>
+    		<img src="zones.png" alt="Zone Overview">
+    	</div>	
+      <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 1</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-default btn-sm" id="open1" onclick="overviewClick('O1')" />
+	        		<input type="submit" value="Close" class="btn btn-default btn-sm" id="close1" onclick="overviewClick('C1')" />
+	        		<input type="submit" value="Auto" class="btn btn-default btn-sm" id="auto1" onclick="overviewClick('A1')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 2</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-default btn-sm" id="open2" onclick="overviewClick('O2')" />
+	        		<input type="submit" value="Close" class="btn btn-default btn-sm" id="close2" onclick="overviewClick('C2')" />
+	        		<input type="submit" value="Auto" class="btn btn-default btn-sm" id="auto2" onclick="overviewClick('A2')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 3</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-default btn-sm" id="open3" onclick="overviewClick('O3')" />
+	        		<input type="submit" value="Close" class="btn btn-default btn-sm" id="close3" onclick="overviewClick('C3')" />
+	        		<input type="submit" value="Auto" class="btn btn-default btn-sm" id="auto3" onclick="overviewClick('A3')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 4</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-default btn-sm" id="open4" onclick="overviewClick('O4')" />
+	        		<input type="submit" value="Close" class="btn btn-default btn-sm" id="close4" onclick="overviewClick('C4')" />
+	        		<input type="submit" value="Auto" class="btn btn-default btn-sm" id="auto4" onclick="overviewClick('A4')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 5</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-default btn-sm" id="open5" onclick="overviewClick('O5')" />
+	        		<input type="submit" value="Close" class="btn btn-default btn-sm" id="close5" onclick="overviewClick('C5')" />
+	        		<input type="submit" value="Auto" class="btn btn-default btn-sm" id="auto5" onclick="overviewClick('A5')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 6</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-default btn-sm" id="open6" onclick="overviewClick('O6')" />
+	        		<input type="submit" value="Close" class="btn btn-default btn-sm" id="close1" onclick="overviewClick('C6')" />
+	        		<input type="submit" value="Auto" class="btn btn-default btn-sm" id="auto1" onclick="overviewClick('A6')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+     <div class="col-lg-4 col-md-6">
+	     <div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">Zone 7</h3>
+	  		</div>
+	  		<div class="panel-body">
+	    		<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+	        		<input type="submit" value="Open" class="btn btn-default btn-sm" id="open7" onclick="overviewClick('O7')" />
+	        		<input type="submit" value="Close" class="btn btn-default btn-sm" id="close7" onclick="overviewClick('C7')" />
+	        		<input type="submit" value="Auto" class="btn btn-default btn-sm" id="auto7" onclick="overviewClick('A7')" />
+	       		</div>
+	       		<div >
+	       			Log...
+	       		</div>
+	  		</div>
+		</div>
+	</div>
+  </div>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  </body>
+</html>
