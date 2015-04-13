@@ -12,25 +12,12 @@ void setup()
 {
   //initialize all zone pins
   pinMode(zone1, OUTPUT);
-  sprinklerOff(zone1);
-
   pinMode(zone2, OUTPUT);
-  sprinklerOff(zone2);
-
   pinMode(zone3, OUTPUT);
-  sprinklerOff(zone3);
-
   pinMode(zone4, OUTPUT);
-  sprinklerOff(zone4);
-
   pinMode(zone5, OUTPUT);
-  sprinklerOff(zone5);
-
   pinMode(zone6, OUTPUT);
-  sprinklerOff(zone6);
-
   pinMode(zone7, OUTPUT);
-  sprinklerOff(zone7);
 }
 
 void loop()                    
@@ -39,14 +26,14 @@ void loop()
   sprinklerOn(zone2);
 } 
 
-void sprinklerOn(int pin) {
-  Serial.println(pin + " was turned ON.");       // will be put in log
-  digitalWrite(pin, HIGH);                       // turn relay on
+void sprinklerOff(int pin) {
+  Serial.println(pin + " was turned OFF.");      // will be put in log
+  digitalWrite(pin, HIGH);                       // turn relay off
   delay(timeDelay);                              // wait for five seconds
 }
 
-void sprinklerOff(int pin) {
-  Serial.println(pin + " was turned OFF.");      // will be put in log
-  digitalWrite(pin, LOW);                        // turn relay off
-  delay(timeDelay);                              // wait for five seconds
+void sprinklerOn(int pin) {
+  Serial.println(pin + " was turned ON.");      // will be put in log
+  digitalWrite(pin, LOW);                       // turn relay on
+  delay(timeDelay);                             // wait for five seconds
 }
