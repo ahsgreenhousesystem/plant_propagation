@@ -68,10 +68,10 @@ void setup()
     Serial.println("SUCCESS - SD card initialized.");
     // check for index.htm file
     if (!SD.exists("website/overview.htm")) {
-        Serial.println("ERROR - Can't find website/overview.html file!");
+        Serial.println("ERROR - Can't find website/overview.htm file!");
         return;  // can't find index file
     }
-    Serial.println("SUCCESS - Found website/overview.html file.");
+    Serial.println("SUCCESS - Found website/overview.htm file.");
     
     Serial.println("Opening config.db ...");
     dbFile = SD.open("config.db", FILE_WRITE);
