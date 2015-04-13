@@ -33,7 +33,7 @@ void sprinklerOff(int pin) {
 }
 
 void sprinklerOn(int pin) {
-  Serial.println(pin + " was turned ON.");      // will be put in log
-  digitalWrite(pin, LOW);                       // turn relay on
-  delay(timeDelay);                             // wait for five seconds
+  Serial.println(pin + " was turned ON.");       // will be put in log
+  digitalWrite(pin, LOW);                        // turn relay on
+  delay(timeDelay);                              // wait for five seconds
 }
