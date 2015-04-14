@@ -17,6 +17,16 @@ with an Ethernet shield using the WizNet chipset.
 #define BUFFER_SIZE 64
 #define TABLE_SIZE 16
 
+const int zone1 = 23; 
+const int zone2 = 25;
+const int zone3 = 27;
+const int zone4 = 29;
+const int zone5 = 31;
+const int zone6 = 45;
+const int zone7 = 47;
+
+const int timeDelay = 5000; // delay in ms -- important -- relays wear out if driven too fast
+
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // MAC address from Ethernet shield sticker under board
 IPAddress ip(10, 222, 1, 250); // 10.222.1.250 is the IP address given by Ames High School Technology Director
 EthernetServer server(80);  // create a server at port 80
@@ -53,6 +63,15 @@ String time = "";
 
 void setup()
 {
+    // Initialize all zone pins
+    pinMode(zone1, OUTPUT);
+    pinMode(zone2, OUTPUT);
+    pinMode(zone3, OUTPUT);
+    pinMode(zone4, OUTPUT);
+    pinMode(zone5, OUTPUT);
+    pinMode(zone6, OUTPUT);
+    pinMode(zone7, OUTPUT);
+  
     // disable Ethernet chip
     pinMode(10, OUTPUT);
     digitalWrite(10, HIGH);
@@ -73,6 +92,10 @@ void setup()
     }
     Serial.println("SUCCESS - Found website/overview.htm file.");
     
+    if (!SD.exists("config.db")) {
+        Serial.println("ERROR - Can't find config.db file!");
+        return;  // can't find index file
+    }
     Serial.println("Opening config.db ...");
     dbFile = SD.open("config.db", FILE_WRITE);
     // how do I check if the table already exists?
@@ -131,33 +154,33 @@ void loop()
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("overview.htm");        // open web page file
+                        webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /config.htm")) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("config.htm");        // open web page file
+                        webFile = SD.open("website/config.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /zones.htm")) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("zones.htm");        // open web page file
+                        webFile = SD.open("website/zones.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /log.htm")) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("log.htm");        // open web page file
+                        webFile = SD.open("website/log.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /users.htm")) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("users.htm");        // open web page file
+                        webFile = SD.open("website/users.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /zones.png")) {
-                        webFile = SD.open("zones.png");
+                        webFile = SD.open("website/zones.png");
                         if (webFile) {
                             client.println("HTTP/1.1 200 OK");
                             client.println();
@@ -265,4 +288,16 @@ byte reader(unsigned long address)
 {
   dbFile.seek(address); 
   return dbFile.read(); 
+}
+
+void sprinklerOff(int pin) {
+  Serial.println(pin + " was turned OFF.");       // will be put in log
+  digitalWrite(pin, HIGH);                       // turn relay on
+  delay(timeDelay);                              // wait for five seconds
+}
+
+void sprinklerOn(int pin) {
+  Serial.println(pin + " was turned ON.");      // will be put in log
+  digitalWrite(pin, LOW);                        // turn relay off
+  delay(timeDelay);                              // wait for five seconds
 }
