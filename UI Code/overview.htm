@@ -294,15 +294,16 @@ a:focus, a:hover {
   	
   		$("form").submit(function(e) { 
   			e.preventDefault();
-			var zone = $("input[type=submit][clicked=true]").attr("name");
-			var action = $("input[type=submit][clicked=true]").val();
+  			var button = $("input[type=submit][clicked=true]");
+			var zone = button.attr("name");
+			var action = button.val();
 			$.post( "/?" + zone + "=" + action, function(data) {
 				$("#" + zone + "log").text(data);
-				var temp = document.getElementsByName(zone);
-				for (var i = 0; i < temp.length; i++) {
-					temp[i].className("btn btn-default btn-sm");
+				var zoneButtons = document.getElementsByName(zone);
+				for (var i = 0; i < zoneButtons.length; i++) {
+					zoneButtons[i].className("btn btn-default btn-sm");
 				}
-				$("input[type=submit][clicked=true]").addClass("btn-success");
+				button.addClass("btn-success");
 			});
 		});
 	});
