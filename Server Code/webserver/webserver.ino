@@ -10,7 +10,8 @@ with an Ethernet shield using the WizNet chipset.
 #include <Ethernet.h>
 #include <SD.h>
 #include <EthernetUdp.h>
-//#include <EDB.h>
+#include <EDB.h>
+#include <Time.h>
 
 #define REQ_BUF_SZ 60 // size of buffer used to capture HTTP requests
 #define NUM_ZONES 7
@@ -40,7 +41,6 @@ const int NTP_PACKET_SIZE= 48; // NTP time stamp is in the first 48 bytes of the
 byte packetBuffer[ NTP_PACKET_SIZE]; // buffer to hold incoming and outgoing packets
 EthernetUDP Udp; // A UDP instance to let us send and receive packets over UDP
 
-//boolean LED_state[4] = {0}; // stores the states of the LEDs
 char ZoneState[NUM_ZONES] = {'C'}; // stores zone active states
 int count = 0; // for buffering packet
 byte httpBuffer[BUFFER_SIZE];
@@ -56,10 +56,23 @@ String time = "";
 //char //log_file[LOG_SIZE][LOG_MESSAGE] = {0};
 //char email_list[NUM_USERS][30] = {0};
 
-//EDB config_DB(&writer, &reader);
+EDB config_DB(&writer, &reader);
 
 // Define all zone structs
-// ZoneProperties zone[NUM_ZONES];
+
+struct ZoneProperties
+{
+String Name; 
+int Visible; 
+String Time1; 
+int  duration1;
+String Time2; 
+int  duration2;
+String Time3; 
+int  duration3;
+} zone_config;
+
+ ZoneProperties zone[NUM_ZONES];
 
 void setup()
 {
@@ -105,18 +118,19 @@ void setup()
     }
     Serial.println("Opening config.db ...");
     dbFile = SD.open("config.db", FILE_WRITE);
+    
     // how do I check if the table already exists?
-//    if(config_DB.count() < 1) {
-//        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-//        Serial.println("SUCCESS - Config database created.");
-//        //might need to initialize all zones here
-//    } else {
-//       Serial.println("Config database already exists.");
-//    }
+    if(config_DB.count() < 1) {
+        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
+        Serial.println("SUCCESS - Config database created.");
+        //might need to initialize all zones here
+    } else {
+       Serial.println("Config database already exists.");
+    }
 
-   /* for(int i=0; i < config_DB.count();i++)
+    for(int i=0; i < config_DB.count();i++)
     {
-//        config_DB.readRec(i,EDB_REC zone_config);
+        config_DB.readRec(i,EDB_REC zone_config);
         zone[i] = zone_config;
     }
 
@@ -124,7 +138,6 @@ void setup()
         Serial.println(zone[i].Name);
     }
 
-    */
 
     Ethernet.begin(mac, ip);  // initialize Ethernet device
     server.begin();           // start to listen for clients
@@ -165,8 +178,23 @@ void loop()
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
-                        client.println();
+                        client.println();                  
                         webFile = SD.open("website/config.htm");        // open web page file
+                    } else if(StrContains(HTTP_req, "POST /?config")) {
+                        client.println("HTTP/1.1 200 OK");
+                        client.println("Content-Type: text/html");
+                        client.println("Recieved config");
+                        Serial.println(HTTP_req);
+                        client.println("Connnection: close");
+                       /* int zone_update = parsed_GET[1].toInt();
+                        zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
+                        zone[zone_update].Time1 = parsed_GET[2];
+                        zone[zone_update].duration1 = parsed_GET[3].toInt();
+                        zone[zone_update].Time2 = parsed_GET[4];
+                        zone[zone_update].duration2 = parsed_GET[5].toInt();
+                        zone[zone_update].Time3 = parsed_GET[6];
+                        zone[zone_update].duration3 = parsed_GET[7].toInt();
+                        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
                     } else if (StrContains(HTTP_req, "GET /zones.htm")) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
@@ -192,6 +220,7 @@ void loop()
                         client.println();
                         sprinklerOn(zone1);
                         Serial.print("Zone 1 was opened.");
+                        log("Zone 1 was opened.", 1);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone1=Close")) {
                         client.println("HTTP/1.1 200 OK");
@@ -200,6 +229,7 @@ void loop()
                         client.println();
                         sprinklerOff(zone1);
                         Serial.print("Zone 1 was closed.");
+                        log("Zone 1 was closed.", 1);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone1=Auto")) {
                         client.println("HTTP/1.1 200 OK");
@@ -207,6 +237,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         Serial.print("Zone 1 was set to auto.");
+                        log("Zone 1 was set to auto.", 1);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone2=Open")) {
                         client.println("HTTP/1.1 200 OK");
@@ -215,6 +246,7 @@ void loop()
                         client.println();
                         sprinklerOn(zone2);
                         Serial.print("Zone 2 was opened.");
+                        log("Zone 2 was opened.", 2);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone2=Close")) {
                         client.println("HTTP/1.1 200 OK");
@@ -223,6 +255,7 @@ void loop()
                         client.println();
                         sprinklerOff(zone2);
                         Serial.print("Zone 2 was closed.");
+                        log("Zone 2 was closed.", 2);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone2=Auto")) {
                         client.println("HTTP/1.1 200 OK");
@@ -230,6 +263,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         Serial.print("Zone 2 was set to auto.");
+                        log("Zone 2 was set to auto.", 2);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone3=Open")) {
                         client.println("HTTP/1.1 200 OK");
@@ -238,6 +272,7 @@ void loop()
                         client.println();
                         sprinklerOn(zone3);
                         Serial.print("Zone 3 was opened.");
+                        log("Zone 3 was opened.", 3);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone3=Close")) {
                         client.println("HTTP/1.1 200 OK");
@@ -246,6 +281,7 @@ void loop()
                         client.println();
                         sprinklerOff(zone3);
                         Serial.print("Zone 3 was closed.");
+                        log("Zone 3 was closed.", 3);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone3=Auto")) {
                         client.println("HTTP/1.1 200 OK");
@@ -253,6 +289,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         Serial.print("Zone 3 was set to auto.");
+                        log("Zone 3 was set to auto.", 3);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone4=Open")) {
                         client.println("HTTP/1.1 200 OK");
@@ -261,6 +298,7 @@ void loop()
                         client.println();
                         sprinklerOn(zone4);
                         Serial.print("Zone 4 was opened.");
+                        log("Zone 4 was opened.", 4);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone4=Close")) {
                         client.println("HTTP/1.1 200 OK");
@@ -268,6 +306,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone4);
+                        log("Zone 4 was closed.", 4);
                         Serial.print("Zone 4 was closed.");
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone4=Auto")) {
@@ -276,6 +315,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         Serial.print("Zone 4 was set to auto.");
+                        log("Zone 4 was set to auto.", 4);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone5=Open")) {
                         client.println("HTTP/1.1 200 OK");
@@ -284,6 +324,7 @@ void loop()
                         client.println();
                         sprinklerOn(zone5);
                         Serial.print("Zone 5 was opened.");
+                        log("Zone 5 was opened.", 5);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone5=Close")) {
                         client.println("HTTP/1.1 200 OK");
@@ -292,6 +333,7 @@ void loop()
                         client.println();
                         sprinklerOff(zone5);
                         Serial.print("Zone 5 was closed.");
+                        log("Zone 5 was closed.", 5);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone5=Auto")) {
                         client.println("HTTP/1.1 200 OK");
@@ -299,6 +341,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         Serial.print("Zone 5 was set to auto.");
+                        log("Zone 5 was set to auto.", 5);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone6=Open")) {
                         client.println("HTTP/1.1 200 OK");
@@ -307,6 +350,7 @@ void loop()
                         client.println();
                         sprinklerOn(zone6);
                         Serial.print("Zone 6 was opened.");
+                        log("Zone 6 was opened.", 6);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone6=Close")) {
                         client.println("HTTP/1.1 200 OK");
@@ -315,6 +359,7 @@ void loop()
                         client.println();
                         sprinklerOff(zone6);
                         Serial.print("Zone 6 was closed.");
+                        log("Zone 6 was closed.", 6);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone6=Auto")) {
                         client.println("HTTP/1.1 200 OK");
@@ -322,6 +367,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         Serial.print("Zone 6 was set to auto.");
+                        log("Zone 6 was set to auto.", 6);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone7=Open")) {
                         client.println("HTTP/1.1 200 OK");
@@ -330,6 +376,7 @@ void loop()
                         client.println();
                         sprinklerOn(zone7);
                         Serial.print("Zone 7 was opened.");
+                        log("Zone 7 was opened.", 7);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone7=Close")) {
                         client.println("HTTP/1.1 200 OK");
@@ -338,6 +385,7 @@ void loop()
                         client.println();
                         sprinklerOff(zone7);
                         Serial.print("Zone 7 was closed.");
+                        log("Zone 7 was closed.", 7);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /?zone7=Auto")) {
                         client.println("HTTP/1.1 200 OK");
@@ -345,6 +393,7 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         Serial.print("Zone 7 was set to auto.");
+                        log("Zone 7 was set to auto.", 7);
                         webFile = SD.open("website/overview.htm");        // open web page file
                     } else if (StrContains(HTTP_req, "GET /zones.png")) {
                         webFile = SD.open("website/zones.png");
@@ -441,6 +490,61 @@ unsigned long sendNTPpacket(IPAddress& address)
   Udp.write(packetBuffer,NTP_PACKET_SIZE);
   Udp.endPacket();
 }
+
+void log(String message, int Zone) {
+        
+  char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+  
+        if(!SD.exists(logs))
+        {
+            Serial.println("Creating a new log file for zone " + Zone);
+        }
+        
+        File logFile = SD.open(logs, FILE_WRITE);
+        
+        
+        //need to install time library 
+       if(logFile) {
+        // logFile.println(now() + ": " + message);
+         logFile.close();
+       }
+ 
+}
+
+/*String readLine(int Zone) {
+   char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+    if(!SD.exists(logs)) {
+        Serial.println("Could not find log file.");
+        return "Could not find log file.";
+    }
+    
+    File logFile = SD.open(logs);
+    
+    String line = "Could not read line in log file.";
+    if(logFile.available()) {
+       // line = logFile.read();
+    }
+    
+    return line;
+}*/
+
+/*void readLog(int Zone) {
+  
+    //change this to return a large string to display whole log?
+    char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+    if(!SD.exists(logs)) {
+        Serial.println("Could not find log file.");
+        return;
+    }
+    
+    File logFile = SD.open("logs" + Zone + ".h");
+    
+    
+    while(logFile.available()) {
+        Serial.println(logFile.read());
+    }
+  
+}*/
 
 void writer(unsigned long address, byte data)
 {

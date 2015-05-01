@@ -424,5 +424,23 @@ a:focus, a:hover {
     </div>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script> 
+    	
+    	$("button").click(function(zone){
+    		$.post("/?config",
+    		{
+        		zone: zone,
+       			time1: document.getElementsByClassName("time1")[zone].value,
+       			duration1: document.getElementsByClassName("duration1")[zone].value,
+       			time2: document.getElementsByClassName("time2")[zone].value,
+       			duration2: document.getElementsByClassName("duration2")[zone].value,
+       			time3: document.getElementsByClassName("time3")[zone].value,
+       			duration3: document.getElementsByClassName("duration3")[zone].value
+    		},
+    		function(response){
+        		alert("Response: " + response);
+   			 });
+		});
+
   </body>
 </html>
