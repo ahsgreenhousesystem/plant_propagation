@@ -426,7 +426,8 @@ a:focus, a:hover {
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script> 
     	$(function() { 
-    	 	$("button").click(function(){
+    	 	$(".updateTimes").bind("click", function(){
+    	 		console.warn("Button clicked.");
 	    	 	var zone = $(this).attr("id");
 	    		$.post("/?config",
 	    		{

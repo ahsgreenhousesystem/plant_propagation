@@ -184,6 +184,7 @@ void loop()
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Recieved config");
+                        Serial.println("Recieved config post");
                         Serial.println(HTTP_req);
                         client.println("Connnection: close");
                        /* int zone_update = parsed_GET[1].toInt();
