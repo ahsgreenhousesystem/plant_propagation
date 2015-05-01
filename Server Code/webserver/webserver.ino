@@ -72,7 +72,7 @@ String Time3;
 int  duration3;
 } zone_config;
 
- ZoneProperties zone[NUM_ZONES];
+ZoneProperties zone[NUM_ZONES];
 
 void setup()
 {
@@ -197,6 +197,17 @@ void loop()
                         config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
                         client.println();
                         //webFile = SD.open("website/config.htm");        // open config page
+                    } else if (StrContains(HTTP_req, "POST /&setup")) {
+                        client.println("HTTP/1.1 200 OK");
+                        client.println("Content-Type: text/html");
+                        client.println("Recieved config");
+                        Serial.println(HTTP_req);
+                        client.println("Connection: close");
+                      /*  int zone_update = parsed_GET[1].toInt();
+                        zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
+                        zone[zone_update].Name = parsed_GET[2];
+                        zone[zone_update].Visible = parsed_GET[3].toInt();
+                        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
                     } else if (StrContains(HTTP_req, "GET /zones.htm")) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
@@ -252,7 +263,6 @@ void loop()
                         webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 2 was opened.");
                     } else if (StrContains(HTTP_req, "POST /?zone2=Close")) {
->>>>>>> db736d5addb1309ff748322757700e259de9b78c
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
