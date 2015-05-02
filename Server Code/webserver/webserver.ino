@@ -32,7 +32,8 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // MAC address from Etherne
 IPAddress ip(10, 222, 1, 250); // 10.222.1.250 is the IP address given by Ames High School Technology Director
 EthernetServer server(80);  // create a server at port 80
 File webFile;
-char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
+//char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
+String HTTP_req;
 char req_index = 0;              // index into HTTP_req buffer
 
 unsigned int localPort = 8888;      // local port to listen for UDP packets
@@ -156,36 +157,42 @@ void loop()
                 // limit the size of the stored received HTTP request
                 // buffer first part of HTTP request in HTTP_req array (string)
                 // leave last element in array as 0 to null terminate string (REQ_BUF_SZ - 1)
-                if (req_index < (REQ_BUF_SZ - 1)) {
+                HTTP_req += c;
+              /*  if (req_index < (REQ_BUF_SZ - 1)) {
                     Http_req_full += c;
                     HTTP_req[req_index] = c;          // save HTTP request character
                     req_index++;
 
-                }
+                } */
                 Serial.print(c); // print HTTP request character to serial monitor
                 // last line of client request is blank and ends with \n
                 // respond to client only after last line received
                 if (c == '\n' && currentLineIsBlank) {
                     // open requested web page file
-                    if (StrContains(HTTP_req, "GET / ")
-                                 || StrContains(HTTP_req, "GET /overview.htm")) {
+                    if (HTTP_req.indexOf("GET / ") > -1
+                                 || HTTP_req.indexOf("GET /overview.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         webFile = SD.open("website/overview.htm");        // open overview page
-                    } else if (StrContains(HTTP_req, "GET /config.htm")) {
+                    } else if (HTTP_req.indexOf("GET /config.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();                  
                         webFile = SD.open("website/config.htm");        // open web page file
-                    } else if(StrContains(HTTP_req, "POST /?config")) {
+                    } else if(HTTP_req.indexOf("POST /?config") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Recieved config");
                         Serial.println("Recieved config post");
-                        Serial.println(HTTP_req);
+                        //Serial.println(HTTP_req);
+                        if(HTTP_req.indexOf("zone=1") > -1) {
+                          Serial.println("Found zone id");
+                        } else {
+                           Serial.println("Didnt find zone id"); 
+                        }
                         client.println("Connnection: close");
                        /* int zone_update = parsed_GET[1].toInt();
                         zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
@@ -196,9 +203,8 @@ void loop()
                         zone[zone_update].Time3 = parsed_GET[6];
                         zone[zone_update].duration3 = parsed_GET[7].toInt();
                         config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
-                        client.println();
                         //webFile = SD.open("website/config.htm");        // open config page
-                    } else if (StrContains(HTTP_req, "POST /&setup")) {
+                    } else if (HTTP_req.indexOf("POST /&setup") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Recieved config");
@@ -209,13 +215,14 @@ void loop()
                         zone[zone_update].Name = parsed_GET[2];
                         zone[zone_update].Visible = parsed_GET[3].toInt();
                         config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
-                    } else if (StrContains(HTTP_req, "GET /zones.htm")) {
+                    } else if (HTTP_req.indexOf("GET /zones.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("website/zones.htm");        // open zones page
-                    } else if (StrContains(HTTP_req, "GET /log.htm")) {
+                        webFile = SD.open("website/zones.htm"); 
+                           // open zones page
+                   } else if (StrContains(HTTP_req, "GET /log.htm")) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
@@ -227,218 +234,180 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         webFile = SD.open("website/users.htm");        // open users page
-                    } else if (StrContains(HTTP_req, "POST /?zone1=Open")) {
+                    } else if (HTTP_req.indexOf("POST /?zone1=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOn(zone1);
-                        Serial.print("Zone 1 was opened.");
+                        client.println("Zone 1 was opened.");
                         log("Zone 1 was opened.", 1);
-                        webFile = SD.open("website/overview.htm");        // open web page file
-                    } else if (StrContains(HTTP_req, "POST /?zone1=Close")) {
+                    } else if (HTTP_req.indexOf("POST /?zone1=Close") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone1);
-                        Serial.print("Zone 1 was closed.");
+                        client.println("Zone 1 was closed.");
                         log("Zone 1 was closed.", 1);
-                        webFile = SD.open("website/overview.htm");        // open web page file
-                    } else if (StrContains(HTTP_req, "POST /?zone1=Auto")) {
+                    } else if (HTTP_req.indexOf("POST /?zone1=Auto") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        Serial.print("Zone 1 was set to auto.");
+                        client.println("Zone 1 was set to auto.");
                         log("Zone 1 was set to auto.", 1);
-                        webFile = SD.open("website/overview.htm");        // open web page file
-                    } else if (StrContains(HTTP_req, "POST /?zone2=Open")) {
+                    } else if (HTTP_req.indexOf("POST /?zone2=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOn(zone2);
-                        Serial.print("Zone 2 was opened.");
                         log("Zone 2 was opened.", 2);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 2 was opened.");
-                    } else if (StrContains(HTTP_req, "POST /?zone2=Close")) {
+                    } else if (HTTP_req.indexOf("POST /?zone2=Close") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone2);
-                        Serial.print("Zone 2 was closed.");
                         log("Zone 2 was closed.", 2);
-                        webFile = SD.open("website/overview.htm");        // open web page file
-                    } else if (StrContains(HTTP_req, "GET /?zone2=Auto")) {
                         client.println("Zone 2 was closed.");
-                    } else if (StrContains(HTTP_req, "POST /?zone2=Auto")) {
+                    } else if (HTTP_req.indexOf("POST /?zone2=Auto") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        Serial.print("Zone 2 was set to auto.");
                         log("Zone 2 was set to auto.", 2);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 2 was set to auto.");
-                    } else if (StrContains(HTTP_req, "POST /?zone3=Open")) {
+                    } else if (HTTP_req.indexOf("POST /?zone3=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOn(zone3);
-                        Serial.print("Zone 3 was opened.");
                         log("Zone 3 was opened.", 3);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 3 was opened.");
-                    } else if (StrContains(HTTP_req, "POST /?zone3=Close")) {
+                    } else if (HTTP_req.indexOf("POST /?zone3=Close") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone3);
-                        Serial.print("Zone 3 was closed.");
                         log("Zone 3 was closed.", 3);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 3 was closed.");
-                    } else if (StrContains(HTTP_req, "POST /?zone3=Auto")) {
+                    } else if (HTTP_req.indexOf("POST /?zone3=Auto") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        Serial.print("Zone 3 was set to auto.");
                         log("Zone 3 was set to auto.", 3);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 3 was set to auto.");
-                    } else if (StrContains(HTTP_req, "POST /?zone4=Open")) {
+                    } else if (StrContains(HTTP_req.indexOf("POST /?zone4=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOn(zone4);
-                        Serial.print("Zone 4 was opened.");
                         log("Zone 4 was opened.", 4);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 4 was opened.");
-                    } else if (StrContains(HTTP_req, "POST /?zone4=Close")) {
+                    } else if (HTTP_req.indexOf("POST /?zone4=Close") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone4);
                         log("Zone 4 was closed.", 4);
-                        Serial.print("Zone 4 was closed.");
                         client.println("Zone 4 was closed.");
-                    } else if (StrContains(HTTP_req, "POST /?zone4=Auto")) {
+                    } else if (HTTP_req.indexOf("POST /?zone4=Auto") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        Serial.print("Zone 4 was set to auto.");
                         log("Zone 4 was set to auto.", 4);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 4 was set to auto.");
-                    } else if (StrContains(HTTP_req, "POST /?zone5=Open")) {
+                    } else if (HTTP_req.indexOf("POST /?zone5=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOn(zone5);
-                        Serial.print("Zone 5 was opened.");
                         log("Zone 5 was opened.", 5);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 5 was opened.");
-                    } else if (StrContains(HTTP_req, "POST /?zone5=Close")) {
+                    } else if (HTTP_req.indexOf("POST /?zone5=Close") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone5);
-                        Serial.print("Zone 5 was closed.");
                         log("Zone 5 was closed.", 5);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 5 was closed.");
-                    } else if (StrContains(HTTP_req, "POST /?zone5=Auto")) {
+                    } else if (HTTP_req.indexOf("POST /?zone5=Auto") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        Serial.print("Zone 5 was set to auto.");
                         log("Zone 5 was set to auto.", 5);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 5 was set to auto.");
-                    } else if (StrContains(HTTP_req, "POST /?zone6=Open")) {
+                    } else if (HTTP_req.indexOf("POST /?zone6=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOn(zone6);
-                        Serial.print("Zone 6 was opened.");
                         log("Zone 6 was opened.", 6);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 6 was opened.");
-                    } else if (StrContains(HTTP_req, "POST /?zone6=Close")) {
+                    } else if (HTTP_req.indexOf("POST /?zone6=Close") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone6);
-                        Serial.print("Zone 6 was closed.");
                         log("Zone 6 was closed.", 6);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 6 was closed.");
-                    } else if (StrContains(HTTP_req, "POST /?zone6=Auto")) {
+                    } else if (HTTP_req.indexOf("POST /?zone6=Auto") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        Serial.print("Zone 6 was set to auto.");
-                        log("Zone 6 was set to auto.", 6);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 6 was set to auto.");
-                    } else if (StrContains(HTTP_req, "POST /?zone7=Open")) {
+                        log("Zone 6 was set to auto.", 6);
+                    } else if (HTTP_req.indexOf("POST /?zone7=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOn(zone7);
-                        Serial.print("Zone 7 was opened.");
+                        client.println("Zone 7 was opened.");
                         log("Zone 7 was opened.", 7);
-                        webFile = SD.open("website/overview.htm");        // open web page file
-                    } else if (StrContains(HTTP_req, "POST /?zone7=Close")) {
+                    } else if (HTTP_req.indexOf("POST /?zone7=Close") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         sprinklerOff(zone7);
-                        Serial.print("Zone 7 was closed.");
                         log("Zone 7 was closed.", 7);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 7 was closed.");
-                    } else if (StrContains(HTTP_req, "POST /?zone7=Auto")) {
+                    } else if (HTTP_req.indexOf("POST /?zone7=Auto") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        Serial.print("Zone 7 was set to auto.");
                         log("Zone 7 was set to auto.", 7);
-                        webFile = SD.open("website/overview.htm");        // open web page file
                         client.println("Zone 7 was set to auto.");
-                    } else if (StrContains(HTTP_req, "GET /zones.png")) {
+                    } else if (HTTP_req.indexOf("GET /zones.png") > -1) {
+                        webFile = SD.open("website/zones.png");
+                        if (webFile) {
+                            client.println("HTTP/1.1 200 OK");
+                            client.println();
+                        } 
+                    } else if (HTTP_req.indexOf("GET /favicon.ico") > -1) {
                         webFile = SD.open("website/zones.png");
                         if (webFile) {
                             client.println("HTTP/1.1 200 OK");
                             client.println();
                         }
-                    } else if (StrContains(HTTP_req, "GET /favicon.ico")) {
-                        webFile = SD.open("website/zones.png");
-                        if (webFile) {
-                            client.println("HTTP/1.1 200 OK");
-                            client.println();
-                        }
-                    }
+                    } 
                     if (webFile) {
                         while(webFile.available()) {
                             client.write(webFile.read()); // send web page to client
@@ -447,7 +416,7 @@ void loop()
                     }
                     // reset buffer index and all buffer elements to 0
                     req_index = 0;
-                    StrClear(HTTP_req, REQ_BUF_SZ);
+                    HTTP_req = "";
                     break;
                 }
                 // every line of text received from the client ends with \r\n
@@ -467,7 +436,7 @@ void loop()
         client.stop(); // close the connection
     } // end if (client)
 }
-
+/*
 // sets every element of str to 0 (clears array)
 void StrClear(char *str, char length)
 {
@@ -475,6 +444,7 @@ void StrClear(char *str, char length)
         str[i] = 0;
     }
 }
+*/
 
 // searches for the string sfind in the string str
 // returns 1 if string found
