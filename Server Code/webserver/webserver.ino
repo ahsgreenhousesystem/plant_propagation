@@ -219,7 +219,7 @@ void loop()
                         beginIndex = endIndex + 4;
                         zone[zone_update].duration3 = HTTP_req.substring(beginIndex).toInt();
                         
-                        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
+                        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]);
                         //webFile = SD.open("website/config.htm");        // open config page
                     } else if (HTTP_req.indexOf("POST /&setup") > -1) {
                         client.println("HTTP/1.1 200 OK");
