@@ -183,25 +183,42 @@ void loop()
                         client.println();                  
                         webFile = SD.open("website/config.htm");        // open web page file
                     } else if(HTTP_req.indexOf("POST /?config") > -1) {
+                      ///?config" + "&zone="+zone+"&t1="+time1+"&d1="+duration1+"&t2="+time2+"&d2="+duration2+"&t3="+time3+"&d3="+duration3
+                      
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Recieved config");
                         Serial.println("Recieved config post");
-                        //Serial.println(HTTP_req);
-                        if(HTTP_req.indexOf("zone=1") > -1) {
-                          Serial.println("Found zone id");
-                        } else {
-                           Serial.println("Didnt find zone id"); 
-                        }
                         client.println("Connnection: close");
-                       /* int zone_update = parsed_GET[1].toInt();
-                        zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
-                        zone[zone_update].Time1 = parsed_GET[2];
-                        zone[zone_update].duration1 = parsed_GET[3].toInt();
-                        zone[zone_update].Time2 = parsed_GET[4];
-                        zone[zone_update].duration2 = parsed_GET[5].toInt();
-                        zone[zone_update].Time3 = parsed_GET[6];
-                        zone[zone_update].duration3 = parsed_GET[7].toInt();
+                        
+                        Serial.println(HTTP_req);
+                        int beginIndex = HTTP_req.indexOf("&zone=")+5;
+                        int endIndex = HTTP_req.indexOf("&t1=");
+                        int zone_update = HTTP_req.substring(beginIndex, endIndex).toInt() - 1;
+                        
+                        beginIndex = endIndex + 4;
+                        endIndex = HTTP_req.indexOf("&d1=");
+                        zone[zone_update].Time1 = HTTP_req.substring(beginIndex, endIndex);
+                        
+                        beginIndex = endIndex + 4;
+                        endIndex = HTTP_req.indexOf("&t2=");
+                        zone[zone_update].duration1 = HTTP_req.substring(beginIndex, endIndex).toInt();
+                        
+                        beginIndex = endIndex + 4;
+                        endIndex = HTTP_req.indexOf("&d2=");
+                        zone[zone_update].Time2 = HTTP_req.substring(beginIndex, endIndex);
+                        
+                        beginIndex = endIndex + 4;
+                        endIndex = HTTP_req.indexOf("&t3=");
+                        zone[zone_update].duration2 = HTTP_req.substring(beginIndex, endIndex).toInt();
+                        
+                        beginIndex = endIndex + 4;
+                        endIndex = HTTP_req.indexOf("&d3=");
+                        zone[zone_update].Time3 = HTTP_req.substring(beginIndex, endIndex);
+                        
+                        beginIndex = endIndex + 4;
+                        zone[zone_update].duration3 = HTTP_req.substring(beginIndex).toInt();
+                        
                         config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
                         //webFile = SD.open("website/config.htm");        // open config page
                     } else if (HTTP_req.indexOf("POST /&setup") > -1) {
@@ -210,6 +227,7 @@ void loop()
                         client.println("Recieved config");
                         Serial.println(HTTP_req);
                         client.println("Connection: close");
+                        
                       /*  int zone_update = parsed_GET[1].toInt();
                         zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
                         zone[zone_update].Name = parsed_GET[2];
@@ -222,13 +240,13 @@ void loop()
                         client.println();
                         webFile = SD.open("website/zones.htm"); 
                            // open zones page
-                   } else if (StrContains(HTTP_req, "GET /log.htm")) {
+                   } else if (HTTP_req.indexOf("GET /log.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
                         webFile = SD.open("website/log.htm");        // open log page
-                    } else if (StrContains(HTTP_req, "GET /users.htm")) {
+                    } else if (HTTP_req.indexOf("GET /users.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
@@ -303,7 +321,7 @@ void loop()
                         client.println();
                         log("Zone 3 was set to auto.", 3);
                         client.println("Zone 3 was set to auto.");
-                    } else if (StrContains(HTTP_req.indexOf("POST /?zone4=Open") > -1) {
+                    } else if (HTTP_req.indexOf("POST /?zone4=Open") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
