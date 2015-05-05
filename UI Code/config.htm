@@ -727,16 +727,15 @@ a:focus, a:hover {
                 });
         	 	$("button").click(function(){
     	    	 	var zone = $(this).attr("id");
-    	       		var	time1 = $("#Z"+zone+"T1").val();
-    	       		var	duration1 = $('#Z'+zone+"D1").val();
-    	       		var	time2 = $('#Z'+zone+"T2").val();
-    	       		var	duration2 = $('#Z'+zone+"D2").val();
-    	       		var	time3 = $('#Z'+zone+"T3").val();
-    	       		var	duration3 = $('#Z'+zone+"D3").val();
+    	       		var	begin1 = $("#Z"+zone+"T1").val();
+    	       		var	end1 = $('#Z'+zone+"D1").val();
+    	       		var	begin2 = $('#Z'+zone+"T2").val();
+    	       		var	end2 = $('#Z'+zone+"D2").val();
+    	       		var	begin3 = $('#Z'+zone+"T3").val();
+    	       		var	end3 = $('#Z'+zone+"D3").val();
     	       		
-    	    		$.post("/?config" + "&zone="+zone+"&t1="+time1+"&d1="+duration1+"&t2="+time2+"&d2="+duration2+"&t3="+time3+"&d3="+duration3,
+    	    		$.post("/?config" + "&zone="+zone+"&b1="+begin1+"&e1="+end1+"&b2="+begin2+"&e2="+end2+"&b3="+begin3+"&e3="+end3,
     	    		function(response){
-    	        		alert("Response: " + response);
     	   			 }); 
     			});
         	});
