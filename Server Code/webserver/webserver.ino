@@ -195,7 +195,6 @@ void loop()
                         client.println();                  
                         webFile = SD.open("website/config.htm");        // open web page file
                     } else if(HTTP_req.indexOf("POST /?config") > -1) {
-                      // /?config" + "&zone="+zone+"&b1="+begin1+"&e1="+end1+"&b2="+begin2+"&e2="+end2+"&b3="+begin3+"&e3="+end3    
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Recieved config");
@@ -240,167 +239,14 @@ void loop()
                         client.println("Connnection: close");
                         client.println();
                         webFile = SD.open("website/users.htm");        // open users page
-                    } else if (HTTP_req.indexOf("POST /?zone1=Open") > -1) {
+                    } else if (HTTP_req.indexOf("POST /?control") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        sprinklerOn(zone1);
-                        client.println("Zone 1 was opened.");
-                        log("Zone 1 was opened.", 1);
-                    } else if (HTTP_req.indexOf("POST /?zone1=Close") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOff(zone1);
-                        client.println("Zone 1 was closed.");
-                        log("Zone 1 was closed.", 1);
-                    } else if (HTTP_req.indexOf("POST /?zone1=Auto") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        client.println("Zone 1 was set to auto.");
-                        log("Zone 1 was set to auto.", 1);
-                    } else if (HTTP_req.indexOf("POST /?zone2=Open") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOn(zone2);
-                        log("Zone 2 was opened.", 2);
-                        client.println("Zone 2 was opened.");
-                    } else if (HTTP_req.indexOf("POST /?zone2=Close") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOff(zone2);
-                        log("Zone 2 was closed.", 2);
-                        client.println("Zone 2 was closed.");
-                    } else if (HTTP_req.indexOf("POST /?zone2=Auto") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        log("Zone 2 was set to auto.", 2);
-                        client.println("Zone 2 was set to auto.");
-                    } else if (HTTP_req.indexOf("POST /?zone3=Open") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOn(zone3);
-                        log("Zone 3 was opened.", 3);
-                        client.println("Zone 3 was opened.");
-                    } else if (HTTP_req.indexOf("POST /?zone3=Close") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOff(zone3);
-                        log("Zone 3 was closed.", 3);
-                        client.println("Zone 3 was closed.");
-                    } else if (HTTP_req.indexOf("POST /?zone3=Auto") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        log("Zone 3 was set to auto.", 3);
-                        client.println("Zone 3 was set to auto.");
-                    } else if (HTTP_req.indexOf("POST /?zone4=Open") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOn(zone4);
-                        log("Zone 4 was opened.", 4);
-                        client.println("Zone 4 was opened.");
-                    } else if (HTTP_req.indexOf("POST /?zone4=Close") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOff(zone4);
-                        log("Zone 4 was closed.", 4);
-                        client.println("Zone 4 was closed.");
-                    } else if (HTTP_req.indexOf("POST /?zone4=Auto") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        log("Zone 4 was set to auto.", 4);
-                        client.println("Zone 4 was set to auto.");
-                    } else if (HTTP_req.indexOf("POST /?zone5=Open") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOn(zone5);
-                        log("Zone 5 was opened.", 5);
-                        client.println("Zone 5 was opened.");
-                    } else if (HTTP_req.indexOf("POST /?zone5=Close") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOff(zone5);
-                        log("Zone 5 was closed.", 5);
-                        client.println("Zone 5 was closed.");
-                    } else if (HTTP_req.indexOf("POST /?zone5=Auto") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        log("Zone 5 was set to auto.", 5);
-                        client.println("Zone 5 was set to auto.");
-                    } else if (HTTP_req.indexOf("POST /?zone6=Open") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOn(zone6);
-                        log("Zone 6 was opened.", 6);
-                        client.println("Zone 6 was opened.");
-                    } else if (HTTP_req.indexOf("POST /?zone6=Close") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOff(zone6);
-                        log("Zone 6 was closed.", 6);
-                        client.println("Zone 6 was closed.");
-                    } else if (HTTP_req.indexOf("POST /?zone6=Auto") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        client.println("Zone 6 was set to auto.");
-                        log("Zone 6 was set to auto.", 6);
-                    } else if (HTTP_req.indexOf("POST /?zone7=Open") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOn(zone7);
-                        client.println("Zone 7 was opened.");
-                        log("Zone 7 was opened.", 7);
-                    } else if (HTTP_req.indexOf("POST /?zone7=Close") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        sprinklerOff(zone7);
-                        log("Zone 7 was closed.", 7);
-                        client.println("Zone 7 was closed.");
-                    } else if (HTTP_req.indexOf("POST /?zone7=Auto") > -1) {
-                        client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Connnection: close");
-                        client.println();
-                        log("Zone 7 was set to auto.", 7);
-                        client.println("Zone 7 was set to auto.");
+                        String message = parseControl();
+                        client.println(message);
+                        //log(message);
                     } else if (HTTP_req.indexOf("GET /zones.png") > -1) {
                         webFile = SD.open("website/zones.png");
                         if (webFile) {
@@ -558,6 +404,56 @@ void log(String message, int Zone) {
     }
   
 }*/
+
+String parseControl() {
+  // "/?control" + "&zone="+zone.substring(4) + "&action=" + action 
+  
+    int beginIndex = HTTP_req.indexOf("&zone=")+6;
+    int endIndex = HTTP_req.indexOf("&action=");
+    int zone = HTTP_req.substring(beginIndex, endIndex).toInt();
+    
+    beginIndex = endIndex + 8;
+    endIndex = HTTP_req.indexOf(" HTTP/1.1");
+    String action = HTTP_req.substring(beginIndex, endIndex);
+    int zonePin = getZonePin(zone);
+    
+    String message = "Zone ";
+    message += zone;
+    if(action.indexOf("Open") > -1) {
+      sprinklerOn(zonePin);
+      message += " was opened.";
+    } else if(action.indexOf("Close") > -1) {
+      sprinklerOff(zonePin);
+      message += " was closed.";
+    } else if(action.indexOf("Auto") > -1) {
+      //no implementation for this yet.
+      message += " was set to auto.";
+    } 
+    return message;   
+}
+
+int getZonePin(int zone) {
+   switch(zone) {
+     case 1 : return zone1;
+     case 2 : return zone2;
+     case 3 : return zone3;
+     case 4 : return zone4;
+     case 5 : return zone5;
+     case 6 : return zone6;
+     case 7 : return zone7;
+     default: return -1;
+   } 
+}
+
+/*
+const int zone1 = 23;
+const int zone2 = 47;
+const int zone3 = 27;
+const int zone4 = 29;
+const int zone5 = 31;
+const int zone6 = 45;
+const int zone7 = 25;
+*/
 
 void readRecord(int recno) {
     

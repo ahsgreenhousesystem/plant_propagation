@@ -297,7 +297,7 @@ a:focus, a:hover {
   			var button = $("input[type=submit][clicked=true]");			// the button that was clicked
 			var zone = button.attr("name"); 							// button zone name
 			var action = button.val(); 									// button value (Open/Close/Auto)
-			$.post( "/?" + zone + "=" + action, function(data) {		// send AJAX request to the web server
+			$.post("/?control" + "&zone="+zone.substring(4) + "&action=" + action, function(data) {		// send AJAX request to the web server
 				$("#" + zone + "log").text(data); 						// add notification to the log in the zone button panel
 				var zoneButtons = document.getElementsByName(zone); 	// array of the buttons for that zone
 				for (var i = 0; i < zoneButtons.length; i++) {
