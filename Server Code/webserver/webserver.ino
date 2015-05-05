@@ -64,7 +64,6 @@ EDB config_DB(&writer, &reader);
 struct ZoneProperties
 {
   String Name; 
-  int ID;
   int Visible; 
   String Begin1; 
   String  End1;
@@ -129,7 +128,6 @@ void setup()
         for(int i=0; i < NUM_ZONES; i++) {
           ZoneProperties zone;
           zone.Name = "";
-          zone.ID = i+1;
           zone.Visible = 1;
           zone.Begin1="";
           zone.End1 = "";
@@ -197,8 +195,7 @@ void loop()
                         client.println();                  
                         webFile = SD.open("website/config.htm");        // open web page file
                     } else if(HTTP_req.indexOf("POST /?config") > -1) {
-                      // /?config" + "&zone="+zone+"&b1="+begin1+"&e1="+end1+"&b2="+begin2+"&e2="+end2+"&b3="+begin3+"&e3="+end3
-                      
+                      // /?config" + "&zone="+zone+"&b1="+begin1+"&e1="+end1+"&b2="+begin2+"&e2="+end2+"&b3="+begin3+"&e3="+end3    
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Recieved config");
@@ -206,70 +203,11 @@ void loop()
                         client.println("Connnection: close");
                         
                         Serial.println(HTTP_req);
-                        int beginIndex = HTTP_req.indexOf("&zone=")+6;
-                        int endIndex = HTTP_req.indexOf("&b1=");
-                        int zone_update = HTTP_req.substring(beginIndex, endIndex).toInt() - 1;
-                        
-                        
-                        beginIndex = endIndex + 4;
-                        endIndex = HTTP_req.indexOf("&e1=");
-                        Serial.println(HTTP_req.substring(beginIndex, endIndex));
-                        zones[zone_update].Begin1 = HTTP_req.substring(beginIndex, endIndex);
-                        
-                        beginIndex = endIndex + 4;
-                        endIndex = HTTP_req.indexOf("&b2=");
-                        zones[zone_update].End1 = HTTP_req.substring(beginIndex, endIndex);
-                        Serial.println(zones[zone_update].End1);
-                        
-                        beginIndex = endIndex + 4;
-                        endIndex = HTTP_req.indexOf("&e2=");
-                        Serial.println(HTTP_req.substring(beginIndex, endIndex));
-                        zones[zone_update].Begin2 = HTTP_req.substring(beginIndex, endIndex);
-                        
-                        beginIndex = endIndex + 4;
-                        endIndex = HTTP_req.indexOf("&b3=");
-                        zones[zone_update].End2 = HTTP_req.substring(beginIndex, endIndex);
-                        Serial.println(zones[zone_update].End2);
-                        
-                        beginIndex = endIndex + 4;
-                        endIndex = HTTP_req.indexOf("&e3=");
-                         Serial.println(HTTP_req.substring(beginIndex, endIndex));
-                        zones[zone_update].Begin3 = HTTP_req.substring(beginIndex, endIndex);
-                        
-                        beginIndex = endIndex + 4;
-                        endIndex = HTTP_req.indexOf(" HTTP/1.1");
-                        zones[zone_update].End3 = HTTP_req.substring(beginIndex, endIndex);
-                        Serial.println(zones[zone_update].End3);
-                        
-                        EDB_Status result = config_DB.updateRec(zone_update, EDB_REC zones[zone_update]);
-                        if (result != EDB_OK) {
-                            Serial.print("ERROR: ");
-                            switch (result)
-                            {
-                              case EDB_OUT_OF_RANGE:
-                                Serial.println("Recno out of range");
-                                break;
-                              case EDB_TABLE_FULL:
-                                Serial.println("Table full");
-                                break;
-                              default:
-                                Serial.println("OK");
-                                break;
-                            } 
-                        }
-                        
-                        ZoneProperties test;
-                        config_DB.readRec(zone_update,EDB_REC test);
-                        
-                        //testing to see if time and duration is getting stored.
-                        Serial.println("Time1: " + test.Begin1);               
-                        Serial.println("Time2: " + test.Begin2);            
-                        Serial.println("Time3: " + test.Begin3);
-
-                        Serial.println(test.End1);
-                        Serial.println(test.End2);
-                        Serial.println(test.End3);
-                        
+                        int recno = parseConfig();
+                        EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno]);
+                        printStatus(result);
+                        //for testing purposes
+                        readRecord(recno);
                         
                     } else if (HTTP_req.indexOf("POST /&setup") > -1) {
                         client.println("HTTP/1.1 200 OK");
@@ -621,6 +559,78 @@ void log(String message, int Zone) {
   
 }*/
 
+void readRecord(int recno) {
+    
+    ZoneProperties zone;
+    config_DB.readRec(recno ,EDB_REC zone);
+    
+    Serial.println("Name: " + zone.Name);
+    Serial.print("Visible: "); Serial.println(zone.Visible);
+    Serial.println("Begin1: " + zone.Begin1);  
+    Serial.println("End1: " + zone.End1);    
+    Serial.println("Begin2: " + zone.Begin2);  
+    Serial.println("End2: " + zone.End2);    
+    Serial.println("Begin3: " + zone.Begin3);
+    Serial.println("End3: " + zone.End3); 
+}
+
+int parseConfig() {
+    
+    int beginIndex = HTTP_req.indexOf("&zone=")+6;
+    int endIndex = HTTP_req.indexOf("&b1=");
+    int zone_update = HTTP_req.substring(beginIndex, endIndex).toInt() - 1;
+    
+    
+    beginIndex = endIndex + 4;
+    endIndex = HTTP_req.indexOf("&e1=");
+    Serial.println(HTTP_req.substring(beginIndex, endIndex));
+    zones[zone_update].Begin1 = HTTP_req.substring(beginIndex, endIndex);
+    
+    beginIndex = endIndex + 4;
+    endIndex = HTTP_req.indexOf("&b2=");
+    zones[zone_update].End1 = HTTP_req.substring(beginIndex, endIndex);
+    Serial.println(zones[zone_update].End1);
+    
+    beginIndex = endIndex + 4;
+    endIndex = HTTP_req.indexOf("&e2=");
+    Serial.println(HTTP_req.substring(beginIndex, endIndex));
+    zones[zone_update].Begin2 = HTTP_req.substring(beginIndex, endIndex);
+    
+    beginIndex = endIndex + 4;
+    endIndex = HTTP_req.indexOf("&b3=");
+    zones[zone_update].End2 = HTTP_req.substring(beginIndex, endIndex);
+    Serial.println(zones[zone_update].End2);
+    
+    beginIndex = endIndex + 4;
+    endIndex = HTTP_req.indexOf("&e3=");
+    Serial.println(HTTP_req.substring(beginIndex, endIndex));
+    zones[zone_update].Begin3 = HTTP_req.substring(beginIndex, endIndex);
+    
+    beginIndex = endIndex + 4;
+    endIndex = HTTP_req.indexOf(" HTTP/1.1");
+    zones[zone_update].End3 = HTTP_req.substring(beginIndex, endIndex);
+    Serial.println(zones[zone_update].End3);
+    
+    return zone_update;
+}
+
+void printStatus(EDB_Status result) {
+    if (result != EDB_OK) {
+      Serial.print("ERROR: ");
+      switch (result)
+      {
+        case EDB_OUT_OF_RANGE:
+          Serial.println("Recno out of range");
+          break;
+        case EDB_TABLE_FULL:
+          Serial.println("Table full");
+          break;
+        default:
+          Serial.println("OK.");
+          break;
+      } 
+  } 
+}
 void writer(unsigned long address, byte data)
 {
   dbFile.seek(address);
