@@ -65,6 +65,7 @@ struct ZoneProperties
 {
   String Name; 
   int Visible; 
+  int Zone;
   String Begin1; 
   String  End1;
   String Begin2; 
@@ -72,6 +73,12 @@ struct ZoneProperties
   String Begin3; 
   String  End3;
 } zone_config;
+
+struct LogEvent {
+   int ID;
+   int Zone;
+   String Message;  
+} logEvent;
 
 ZoneProperties zones[NUM_ZONES];
 
@@ -120,14 +127,15 @@ void setup()
     Serial.println("Opening config.db ...");
     dbFile = SD.open("config.db", FILE_WRITE);
     
-    // how do I check if the table already exists?
+    //TODO- how do I check if the table already exists?
     if(config_DB.count() == 0) {
         config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-        Serial.println("SUCCESS - Config database created.");
-        
+        config_DB.clear();
+        Serial.println("SUCCESS - Config database created."); 
         for(int i=0; i < NUM_ZONES; i++) {
           ZoneProperties zone;
           zone.Name = "";
+          zone.Zone = i+1;
           zone.Visible = 1;
           zone.Begin1="";
           zone.End1 = "";
@@ -135,9 +143,10 @@ void setup()
           zone.End2="";
           zone.Begin3="";
           zone.End3 = "";
-          config_DB.insertRec(i, EDB_REC zone); 
+          config_DB.appendRec(EDB_REC zone); 
         }
         Serial.println("Initialized all zones in DB.");
+        Serial.print("Total records: "); Serial.println(config_DB.count());
     } else {
        Serial.println("Config database already exists. Opening config DB.");   
        config_DB.open(0); 
@@ -147,10 +156,11 @@ void setup()
     for(int i=0; i < config_DB.count();i++)
     {
         ZoneProperties zone;
-        config_DB.readRec(i, EDB_REC zone);
+        config_DB.readRec(i+1, EDB_REC zone);
         zones[i] = zone;
+        Serial.println(zones[i].Zone);
+        //printRecord(i+1); this busts if commented out, but printRecord works elsewhere? 
     }
-
 
     Ethernet.begin(mac, ip);  // initialize Ethernet device
     server.begin();           // start to listen for clients
@@ -199,22 +209,18 @@ void loop()
                         client.println("Content-Type: text/html");
                         client.println("Recieved config");
                         Serial.println("Recieved config post");
-                        client.println("Connnection: close");
-                        
+                        client.println("Connnection: close");          
                         Serial.println(HTTP_req);
-                        int recno = parseConfig();
-                        EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno]);
+                        int recno = parseConfig() + 1;
+                        Serial.print("Updating record for Zone "); Serial.println(recno);
+                        EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno-1]);
                         printStatus(result);
                         //for testing purposes
-                        readRecord(recno);
-                        
+                        printRecord(recno);                       
                     } else if (HTTP_req.indexOf("POST /&setup") > -1) {
                         client.println("HTTP/1.1 200 OK");
-                        client.println("Content-Type: text/html");
-                        client.println("Recieved config");
-                        Serial.println(HTTP_req);
-                        client.println("Connection: close");
-                        
+                        client.println("Content-Type: text/html");            
+                        client.println("Connection: close");          
                       /*  int zone_update = parsed_GET[1].toInt();
                         zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
                         zone[zone_update].Name = parsed_GET[2];
@@ -288,44 +294,7 @@ void loop()
         client.stop(); // close the connection
     } // end if (client)
 }
-/*
-// sets every element of str to 0 (clears array)
-void StrClear(char *str, char length)
-{
-    for (int i = 0; i < length; i++) {
-        str[i] = 0;
-    }
-}
-*/
 
-// searches for the string sfind in the string str
-// returns 1 if string found
-// returns 0 if string not found
-char StrContains(char *str, char *sfind)
-{
-    char found = 0;
-    char index = 0;
-    char len;
-
-    len = strlen(str);
-    if (strlen(sfind) > len) {
-        return 0;
-    }
-    while (index < len) {
-        if (str[index] == sfind[found]) {
-            found++;
-            if (strlen(sfind) == found) {
-                return 1;
-            }
-        }
-        else {
-            found = 0;
-        }
-        index++;
-    }
-
-    return 0;
-}
 
 unsigned long sendNTPpacket(IPAddress& address)
 {
@@ -351,17 +320,15 @@ unsigned long sendNTPpacket(IPAddress& address)
 }
 
 void log(String message, int Zone) {
-        
-  char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+     
+    char logs[] = {'l', 'o','g','s',Zone,'.','h'};
   
         if(!SD.exists(logs))
         {
             Serial.println("Creating a new log file for zone " + Zone);
-        }
-        
+        }        
         File logFile = SD.open(logs, FILE_WRITE);
-        
-        
+          
         //need to install time library 
        if(logFile) {
         // logFile.println(now() + ": " + message);
@@ -445,63 +412,62 @@ int getZonePin(int zone) {
    } 
 }
 
-/*
-const int zone1 = 23;
-const int zone2 = 47;
-const int zone3 = 27;
-const int zone4 = 29;
-const int zone5 = 31;
-const int zone6 = 45;
-const int zone7 = 25;
-*/
-
-void readRecord(int recno) {
+void printRecord(int recno) {  
+    Serial.print("Printing record for "); Serial.println(recno);
+   // ZoneProperties zone = zones[recno-1];
     
     ZoneProperties zone;
-    config_DB.readRec(recno ,EDB_REC zone);
+                        config_DB.readRec(recno, EDB_REC zone);
     
     Serial.println("Name: " + zone.Name);
+    Serial.print("Zone: "); Serial.println(zone.Zone);
     Serial.print("Visible: "); Serial.println(zone.Visible);
     Serial.println("Begin1: " + zone.Begin1);  
     Serial.println("End1: " + zone.End1);    
     Serial.println("Begin2: " + zone.Begin2);  
     Serial.println("End2: " + zone.End2);    
     Serial.println("Begin3: " + zone.Begin3);
-    Serial.println("End3: " + zone.End3); 
+    Serial.println("End3: " + zone.End3);     
+    Serial.println("Finished printing record.");
 }
 
-int parseConfig() {
-    
+int parseConfig() {    
+    //grab zone that is to be updated
     int beginIndex = HTTP_req.indexOf("&zone=")+6;
     int endIndex = HTTP_req.indexOf("&b1=");
     int zone_update = HTTP_req.substring(beginIndex, endIndex).toInt() - 1;
     
-    
+    //grab Begin1 time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&e1=");
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
     zones[zone_update].Begin1 = HTTP_req.substring(beginIndex, endIndex);
     
+    //grab End1 time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&b2=");
     zones[zone_update].End1 = HTTP_req.substring(beginIndex, endIndex);
     Serial.println(zones[zone_update].End1);
     
+    //grab Begin2 time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&e2=");
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
     zones[zone_update].Begin2 = HTTP_req.substring(beginIndex, endIndex);
     
+    //grab End2 time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&b3=");
     zones[zone_update].End2 = HTTP_req.substring(beginIndex, endIndex);
     Serial.println(zones[zone_update].End2);
     
+    //grab Begin3 time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&e3=");
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
     zones[zone_update].Begin3 = HTTP_req.substring(beginIndex, endIndex);
     
+    //grab End3 time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf(" HTTP/1.1");
     zones[zone_update].End3 = HTTP_req.substring(beginIndex, endIndex);
@@ -511,6 +477,7 @@ int parseConfig() {
 }
 
 void printStatus(EDB_Status result) {
+    Serial.println("Printing database status.");
     if (result != EDB_OK) {
       Serial.print("ERROR: ");
       switch (result)
