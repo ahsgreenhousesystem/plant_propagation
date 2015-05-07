@@ -7,7 +7,6 @@
     <meta name="keywords" content="" />
     <meta name="description" content="Overview of Environmental Controls">
     <meta name="author" content="ISU Senior Design Dec15-01">
-    <link rel="icon" href="/img/favicon.ico">
     <title>Environmental Controls Overview | Ames High School</title>
     <link type="text/css" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <style>
@@ -301,7 +300,7 @@ a:focus, a:hover {
 				$("#" + zone + "log").text(data); 						// add notification to the log in the zone button panel
 				var zoneButtons = document.getElementsByName(zone); 	// array of the buttons for that zone
 				for (var i = 0; i < zoneButtons.length; i++) {
-					zoneButtons[i].className("btn btn-default btn-sm"); // reset all buttons to default
+					zoneButtons[i].setAttribute("class", "btn btn-default btn-sm"); // reset all buttons to default
 				}
 				button.addClass("btn-success"); 						// highlight the button that was clicked
 			});

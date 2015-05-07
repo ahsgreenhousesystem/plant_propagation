@@ -120,22 +120,20 @@ void setup()
     }
     Serial.println("SUCCESS - Found website/overview.htm file.");
 
-    if (!SD.exists("config.db")) {
-        Serial.println("ERROR - Can't find config.db file!");
-        return;  // can't find index file
-    }
-    Serial.println("Opening config.db ...");
-    dbFile = SD.open("config.db", FILE_WRITE);
-    
-    //TODO- how do I check if the table already exists?
-    if(config_DB.count() == 0) {
+    if (SD.exists("config.db")) {
+      Serial.println("Opening config.db ...");
+      dbFile = SD.open("config.db");
+      config_DB.open(0);
+    } else {
+        Serial.println("config.db does NOT exist! Creating it...");
+        dbFile = SD.open("config.db", FILE_WRITE);
         config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-        config_DB.clear();
         Serial.println("SUCCESS - Config database created."); 
-        for(int i=0; i < NUM_ZONES; i++) {
+        Serial.println("Creating records...");
+        for(int i=1; i < NUM_ZONES + 1; i++) {
           ZoneProperties zone;
           zone.Name = "";
-          zone.Zone = i+1;
+          zone.Zone = i;
           zone.Visible = 1;
           zone.Begin1="";
           zone.End1 = "";
@@ -147,19 +145,16 @@ void setup()
         }
         Serial.println("Initialized all zones in DB.");
         Serial.print("Total records: "); Serial.println(config_DB.count());
-    } else {
-       Serial.println("Config database already exists. Opening config DB.");   
-       config_DB.open(0); 
     }
     
     Serial.println("Reading records into local cache.");
-    for(int i=0; i < config_DB.count();i++)
+    for(int i=1; i < config_DB.count() + 1; i++)
     {
         ZoneProperties zone;
-        config_DB.readRec(i+1, EDB_REC zone);
+        config_DB.readRec(i, EDB_REC zone);
         zones[i] = zone;
         Serial.println(zones[i].Zone);
-        //printRecord(i+1); this busts if commented out, but printRecord works elsewhere? 
+        printRecord(i);
     }
 
     Ethernet.begin(mac, ip);  // initialize Ethernet device
@@ -259,13 +254,7 @@ void loop()
                             client.println("HTTP/1.1 200 OK");
                             client.println();
                         } 
-                    } else if (HTTP_req.indexOf("GET /favicon.ico") > -1) {
-                        webFile = SD.open("website/zones.png");
-                        if (webFile) {
-                            client.println("HTTP/1.1 200 OK");
-                            client.println();
-                        }
-                    } 
+                    }
                     if (webFile) {
                         while(webFile.available()) {
                             client.write(webFile.read()); // send web page to client
@@ -294,7 +283,6 @@ void loop()
         client.stop(); // close the connection
     } // end if (client)
 }
-
 
 unsigned long sendNTPpacket(IPAddress& address)
 {
@@ -417,17 +405,17 @@ void printRecord(int recno) {
    // ZoneProperties zone = zones[recno-1];
     
     ZoneProperties zone;
-                        config_DB.readRec(recno, EDB_REC zone);
+    config_DB.readRec(recno, EDB_REC zone);
     
-    Serial.println("Name: " + zone.Name);
+    Serial.print("Name: "); Serial.println(zone.Name);
     Serial.print("Zone: "); Serial.println(zone.Zone);
     Serial.print("Visible: "); Serial.println(zone.Visible);
-    Serial.println("Begin1: " + zone.Begin1);  
-    Serial.println("End1: " + zone.End1);    
-    Serial.println("Begin2: " + zone.Begin2);  
-    Serial.println("End2: " + zone.End2);    
-    Serial.println("Begin3: " + zone.Begin3);
-    Serial.println("End3: " + zone.End3);     
+    Serial.print("Begin1: "); Serial.println(zone.Begin1);  
+    Serial.print("End1: "); Serial.println(zone.End1);    
+    Serial.print("Begin2: "); Serial.println(zone.Begin2);  
+    Serial.print("End2: "); Serial.println(zone.End2);    
+    Serial.print("Begin3: "); Serial.println(zone.Begin3);
+    Serial.print("End3: "); Serial.println(zone.End3);     
     Serial.println("Finished printing record.");
 }
 
