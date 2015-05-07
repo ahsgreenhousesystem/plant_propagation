@@ -22,14 +22,12 @@ const int NTP_PACKET_SIZE= 48; // NTP time stamp is in the first 48 bytes of the
 
 byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
 
-// A UDP instance to let us send and receive packets over UDP
-EthernetUDP Udp;
+EthernetUDP Udp; // A UDP instance to let us send and receive packets over UDP
 
 void setup()
 {
   Serial.begin(9600);
 
-  // start Ethernet and UDP
   Ethernet.begin(mac, ip);  // initialize Ethernet device
 
   Udp.begin(localPort);
@@ -42,30 +40,30 @@ void setup()
 }
 
 void  loop(){
- digitalClockDisplay();
- Alarm.delay(1000); // wait one seconds between clock display
+  digitalClockDisplay();
+  Alarm.delay(1000); // wait one second between clock display
 }
 
 // functions to be called when an alarm triggers:
 void MorningAlarm(){
- Serial.println("Alarm: - example");
+  Serial.println("Alarm: - example");
 }
 
+// digital clock display of the time
 void digitalClockDisplay()
 {
- // digital clock display of the time
- Serial.print(hour());
- printDigits(minute());
- printDigits(second());
- Serial.println();
+  Serial.print(hour());
+  printDigits(minute());
+  printDigits(second());
+  Serial.println();
 }
 
 void printDigits(int digits)
 {
- Serial.print(":");
- if(digits < 10)
-   Serial.print('0');
- Serial.print(digits);
+  Serial.print(":");
+  if(digits < 10)
+    Serial.print('0');
+  Serial.print(digits);
 }
 
 // send an NTP request to the time server at the given address
@@ -95,15 +93,17 @@ unsigned long sendNTPpacket(IPAddress& address)
 void syncNTP() {
   sendNTPpacket(timeServer); // send an NTP packet to a time server
 
-  int hour, minute, second;
   // wait to see if a reply is available
   delay(1000);
+
   if ( Udp.parsePacket() ) {
+    int hour, minute, second = 0;
+   
    // We've received a packet, read the data from it
    Udp.read(packetBuffer,NTP_PACKET_SIZE);  // read the packet into the buffer
 
    //the timestamp starts at byte 40 of the received packet and is four bytes,
-   // or two words, long. First, esxtract the two words:
+   // or two words, long. First, extract the two words:
 
    unsigned long highWord = word(packetBuffer[40], packetBuffer[41]);
    unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
@@ -121,7 +121,7 @@ void syncNTP() {
    hour   = (epoch  % 86400L) / 3600 - 5; // find the hour (86400 equals secs per day)
    minute = (epoch  % 3600) / 60; // find the minute (3600 equals secs per minute)
    second = epoch %60; // find the second
+  
+   setTime(hour, minute, second, 1, 1, 10); // sets the time for the alarms 
   }
-
-  setTime(hour,minute,second,1,1,10); // sets the time for the alarms
 }
