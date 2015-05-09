@@ -26,7 +26,7 @@ EthernetUDP Udp; // A UDP instance to let us send and receive packets over UDP
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(19200);
 
   Ethernet.begin(mac, ip);  // initialize Ethernet device
 

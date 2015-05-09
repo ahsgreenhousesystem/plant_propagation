@@ -12,6 +12,7 @@ with an Ethernet shield using the WizNet chipset.
 #include <EthernetUdp.h>
 #include <EDB.h>
 #include <Time.h>
+#include <TimeAlarms.h>
 
 #define REQ_BUF_SZ 60 // size of buffer used to capture HTTP requests
 #define NUM_ZONES 7
@@ -29,14 +30,14 @@ const int zone7 = 25; // pin 25 wire is faulty
 const int timeDelay = 1000; // delay in ms -- important -- relays wear out if driven too fast
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // MAC address from Ethernet shield sticker under board
+unsigned int localPort = 8888;      // local port to listen for UDP packets
 IPAddress ip(10, 222, 1, 250); // 10.222.1.250 is the IP address given by Ames High School Technology Director
-EthernetServer server(80);  // create a server at port 80
+EthernetServer server(localPort);  // create a server at port 80
 File webFile;
 //char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
 String HTTP_req;
 char req_index = 0;              // index into HTTP_req buffer
 
-unsigned int localPort = 8888;      // local port to listen for UDP packets
 IPAddress timeServer(132, 163, 4, 101); // time-a.timefreq.bldrdoc.gov NTP server
 const int NTP_PACKET_SIZE= 48; // NTP time stamp is in the first 48 bytes of the message
 byte packetBuffer[ NTP_PACKET_SIZE]; // buffer to hold incoming and outgoing packets
@@ -47,11 +48,6 @@ int count = 0; // for buffering packet
 byte httpBuffer[BUFFER_SIZE];
 File dbFile;
 String Http_req_full = "";
-
-int hours, minutes;
-int time_check = 0;
-char after_noon = 'A';
-String time = "";
 
 //TODO: IMPLEMENT LOG FILE AND USER LIST
 //char //log_file[LOG_SIZE][LOG_MESSAGE] = {0};
@@ -119,47 +115,52 @@ void setup()
         return;  // can't find index file
     }
     Serial.println("SUCCESS - Found website/overview.htm file.");
-
-    if (SD.exists("config.db")) {
-      Serial.println("Opening config.db ...");
-      dbFile = SD.open("config.db");
-      config_DB.open(0);
-    } else {
-        Serial.println("config.db does NOT exist! Creating it...");
-        dbFile = SD.open("config.db", FILE_WRITE);
-        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-        Serial.println("SUCCESS - Config database created."); 
-        Serial.println("Creating records...");
-        for(int i=1; i < NUM_ZONES + 1; i++) {
-          ZoneProperties zone;
-          zone.Name = "";
-          zone.Zone = i;
-          zone.Visible = 1;
-          zone.Begin1="";
-          zone.End1 = "";
-          zone.Begin2="";
-          zone.End2="";
-          zone.Begin3="";
-          zone.End3 = "";
-          config_DB.appendRec(EDB_REC zone); 
-        }
-        Serial.println("Initialized all zones in DB.");
-        Serial.print("Total records: "); Serial.println(config_DB.count());
-    }
     
-    Serial.println("Reading records into local cache.");
-    for(int i=1; i < config_DB.count() + 1; i++)
-    {
-        ZoneProperties zone;
-        config_DB.readRec(i, EDB_REC zone);
-        zones[i] = zone;
-        Serial.println(zones[i].Zone);
-        printRecord(i);
-    }
-
     Ethernet.begin(mac, ip);  // initialize Ethernet device
     server.begin();           // start to listen for clients
     Udp.begin(localPort);
+    syncNTP(); //This function syncs the local time with Internet time
+    digitalClockDisplay();
+    Alarm.alarmRepeat(17,22,0, sprinkler1On);  // 8:30am every day
+    Alarm.alarmRepeat(17,25,0, sprinkler1Off);
+    Alarm.alarmRepeat(0,0,0,syncNTP);         // Syncs the time every day at midnight
+
+//    if (SD.exists("config.db")) {
+//      Serial.println("Opening config.db ...");
+//      dbFile = SD.open("config.db");
+//      config_DB.open(0);
+//    } else {
+//        Serial.println("config.db does NOT exist! Creating it...");
+//        dbFile = SD.open("config.db", FILE_WRITE);
+//        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
+//        Serial.println("SUCCESS - Config database created."); 
+//        Serial.println("Creating records...");
+//        for(int i=1; i < NUM_ZONES + 1; i++) {
+//          ZoneProperties zone;
+//          zone.Name = "";
+//          zone.Zone = i;
+//          zone.Visible = 1;
+//          zone.Begin1="";
+//          zone.End1 = "";
+//          zone.Begin2="";
+//          zone.End2="";
+//          zone.Begin3="";
+//          zone.End3 = "";
+//          config_DB.appendRec(EDB_REC zone); 
+//        }
+//        Serial.println("Initialized all zones in DB.");
+//        Serial.print("Total records: "); Serial.println(config_DB.count());
+//    }
+//    
+//    Serial.println("Reading records into local cache.");
+//    for(int i=1; i < config_DB.count() + 1; i++)
+//    {
+//        ZoneProperties zone;
+//        config_DB.readRec(i, EDB_REC zone);
+//        zones[i] = zone;
+//        Serial.println(zones[i].Zone);
+////        printRecord(i);
+//    }
 }
 
 void loop()
@@ -284,29 +285,6 @@ void loop()
     } // end if (client)
 }
 
-unsigned long sendNTPpacket(IPAddress& address)
-{
-  // set all bytes in the buffer to 0
-  memset(packetBuffer, 0, NTP_PACKET_SIZE);
-  // Initialize values needed to form NTP request
-  // (see URL above for details on the packets)
-  packetBuffer[0] = 0b11100011;   // LI, Version, Mode
-  packetBuffer[1] = 0;     // Stratum, or type of clock
-  packetBuffer[2] = 6;     // Polling Interval
-  packetBuffer[3] = 0xEC;  // Peer Clock Precision
-  // 8 bytes of zero for Root Delay & Root Dispersion
-  packetBuffer[12]  = 49;
-  packetBuffer[13]  = 0x4E;
-  packetBuffer[14]  = 49;
-  packetBuffer[15]  = 52;
-
-  // all NTP fields have been given values, now
-  // you can send a packet requesting a timestamp:
-  Udp.beginPacket(address, 123); //NTP requests are to port 123
-  Udp.write(packetBuffer,NTP_PACKET_SIZE);
-  Udp.endPacket();
-}
-
 void log(String message, int Zone) {
      
     char logs[] = {'l', 'o','g','s',Zone,'.','h'};
@@ -384,6 +362,7 @@ String parseControl() {
       //no implementation for this yet.
       message += " was set to auto.";
     } 
+    HTTP_req = "";
     return message;   
 }
 
@@ -503,4 +482,138 @@ void sprinklerOff(int pin) {
 void sprinklerOn(int pin) {
   digitalWrite(pin, LOW);
   delay(timeDelay);
+}
+
+void sprinkler1On() {
+  sprinklerOn(zone1);
+}
+
+void sprinkler1Off() {
+  sprinklerOff(zone1);
+}
+
+void sprinkler2On() {
+  Serial.println("sprinkler2On");
+//  sprinklerOn(zone2);
+}
+
+void sprinkler2Off() {
+  sprinklerOff(zone2);
+}
+
+void sprinkler3On() {
+  sprinklerOn(zone3);
+}
+
+void sprinkler3Off() {
+  sprinklerOff(zone3);
+}
+
+void sprinkler4On() {
+  sprinklerOn(zone4);
+}
+
+void sprinkler4Off() {
+  sprinklerOff(zone4);
+}
+
+void sprinkler5On() {
+  sprinklerOn(zone5);
+}
+
+void sprinkler5Off() {
+  sprinklerOff(zone5);
+}
+
+void sprinkler6On() {
+  sprinklerOn(zone6);
+}
+
+void sprinkler6Off() {
+  sprinklerOff(zone6);
+}
+
+void sprinkler7On() {
+  sprinklerOn(zone7);
+}
+
+void sprinkler7Off() {
+  sprinklerOff(zone7);
+}
+
+// send an NTP request to the time server at the given address
+unsigned long sendNTPpacket(IPAddress& address)
+{
+  // set all bytes in the buffer to 0
+  memset(packetBuffer, 0, NTP_PACKET_SIZE);
+  // Initialize values needed to form NTP request
+  // (see URL above for details on the packets)
+  packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+  packetBuffer[1] = 0;     // Stratum, or type of clock
+  packetBuffer[2] = 6;     // Polling Interval
+  packetBuffer[3] = 0xEC;  // Peer Clock Precision
+  // 8 bytes of zero for Root Delay & Root Dispersion
+  packetBuffer[12]  = 49;
+  packetBuffer[13]  = 0x4E;
+  packetBuffer[14]  = 49;
+  packetBuffer[15]  = 52;
+
+  // all NTP fields have been given values, now
+  // you can send a packet requesting a timestamp:
+  Udp.beginPacket(address, 123); //NTP requests are to port 123
+  Udp.write(packetBuffer,NTP_PACKET_SIZE);
+  Udp.endPacket();
+}
+
+void syncNTP() {
+  sendNTPpacket(timeServer); // send an NTP packet to a time server
+
+  // wait to see if a reply is available
+  delay(1000);
+
+  if ( Udp.parsePacket() ) {
+    int hour, minute, second = 0;
+   
+   // We've received a packet, read the data from it
+   Udp.read(packetBuffer,NTP_PACKET_SIZE);  // read the packet into the buffer
+
+   //the timestamp starts at byte 40 of the received packet and is four bytes,
+   // or two words, long. First, extract the two words:
+
+   unsigned long highWord = word(packetBuffer[40], packetBuffer[41]);
+   unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
+   // combine the four bytes (two words) into a long integer
+   // this is NTP time (seconds since Jan 1 1900):
+   unsigned long secsSince1900 = highWord << 16 | lowWord;
+
+   // now convert NTP time into everyday time:
+   // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
+   const unsigned long seventyYears = 2208988800UL;
+   // subtract seventy years:
+   unsigned long epoch = secsSince1900 - seventyYears;
+
+   // Find the hour, minute and second:
+   hour   = (epoch  % 86400L) / 3600 - 5; // find the hour (86400 equals secs per day)
+   minute = (epoch  % 3600) / 60; // find the minute (3600 equals secs per minute)
+   second = epoch %60; // find the second
+  
+   setTime(hour, minute, second, 1, 1, 10); // sets the time for the alarms 
+  }
+}
+
+// digital clock display of the time
+void digitalClockDisplay()
+{
+  Serial.print(hour());
+  printDigits(minute());
+  printDigits(second());
+  Serial.println();
+}
+
+void printDigits(int digits)
+{
+  Serial.print(":");
+  if(digits < 10)
+    Serial.print('0');
+  Serial.print(digits);
 }
