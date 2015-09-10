@@ -59,27 +59,27 @@ a {
 }
 
 a:focus, a:hover {
-  color: #000033;
+  color: #000000;
   text-decoration: underline;
 }
 
 .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
-  color: #000033;
+  color: #000000;
   background-color: transparent;
 }
 
 .navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
-  color: #000033;
+  color: #000000;
   background-color: transparent;
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover { 
   color: #FF6600;
-  background-color: #000033;
+  background-color: #000000;
 }
 
 .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
-  background-color: #000033;
+  background-color: #000000;
 }
 
 .navbar-default .navbar-toggle {
@@ -92,13 +92,13 @@ a:focus, a:hover {
 
 .btn-primary {
   color: #fff;
-  background-color: #000033;
+  background-color: #000000;
 }
 
 .btn-success {
 	color: #fff;
 	background-color: #FF6600;
-  border-color: #000033;
+  border-color: #000000;
 }
 
 .btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
@@ -108,7 +108,7 @@ a:focus, a:hover {
 
 .btn-success.active, .btn-success.focus, .btn-success:active, .btn-success:focus, .btn-success:hover, .open>.dropdown-toggle.btn-success {
   color: #fff;
-  background-color: #000033;
+  background-color: #000000;
   border-color: #FF6600;
 }
 
@@ -122,7 +122,7 @@ a:focus, a:hover {
 }
 
 .panel-heading {
-	background-color: #000033!important;
+	background-color: #000000!important;
 	text-align:center;
 }
 
