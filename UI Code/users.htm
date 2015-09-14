@@ -125,6 +125,12 @@ a:focus, a:hover {
 .panel-heading > h3 {
 	color:white
 }
+@media screen and (max-width: 568px) {
+	.fullNameField, .emailField, .phoneField {
+		font-size: 75%;
+	}
+}
+
 	</style>
   </head>
   <body>
@@ -184,7 +190,7 @@ a:focus, a:hover {
     </div>
     </div>
       <br>
-      <table id="userTable" class="table table-striped table-hover">
+      <table id="userTable" class="table table-striped table-condensed table-hover">
         <thead>
           <th style="text-align:center">Name</th>
           <th style="text-align:center">Email</th>
@@ -194,11 +200,11 @@ a:focus, a:hover {
         </thead>
         <tbody>
           <tr>
-            <td><input type="text" class="form-control" placeholder="Full Name" value="Mike Todd" /></td>
-            <td><input type="text" class="form-control" placeholder="Email Address" value="mike.todd@ames.k12.ia.us" /></td>
-            <td><input type="text" class="form-control" placeholder="Phone Number" value="(515) 123-4567" /></td>
-            <td><button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+            <td><div class="form-group"><input type="text" class="form-control fullNameField" placeholder="Full Name" value="Mike Todd" /></div></td>
+            <td><div class="form-group"><input type="text" class="form-control emailField" placeholder="Email Address" value="mike.todd@ames.k12.ia.us" /></div></td>
+            <td><div class="form-group"><input type="text" class="form-control phoneField" placeholder="Phone Number" value="515-123-4567" /></div></td>
+            <td><button type="button" class="btn btn-primary btn-sm" onclick="updateUser(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="removeUser(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
           </tr>
         </tbody>
       </table>
@@ -207,10 +213,21 @@ a:focus, a:hover {
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script>
-		$('#newUserModal').on('shown.bs.modal', function (e) {
+		$('#newUserModal').on('hidden.bs.modal', function (e) {
 			clearNewUserModalFields();
 			clearValidation();
 		});
+		function removeUser(btn) {
+			$(btn).closest("tr").remove();
+		}
+		function updateUser(btn) {
+			var fullName = $(btn).closest("tr").find(".fullNameField");
+			var email = $(btn).closest("tr").find(".emailField");
+			var phone = $(btn).closest("tr").find(".phoneField");
+			if(validateFields(fullName, email, phone)){
+				//update user
+			} 
+		}
 		function clearNewUserModalFields() {
 			$("#newUserFullName").val("");
 			$("#newUserEmail").val("");
@@ -220,58 +237,61 @@ a:focus, a:hover {
 			$("#newUserFullName").parent().removeClass("has-error");
 			$("#newUserEmail").parent().removeClass("has-error");
 			$("#newUserPhoneNumber").parent().removeClass("has-error");
+			$(".fullNameField").parent().removeClass("has-error");
+			$(".emailField").parent().removeClass("has-error");
+			$(".phoneField").parent().removeClass("has-error");
 		}
-		$("#saveUser").bind("click", function() {
+		function validateFields(fullName, email, phone) {
 			clearValidation();
 			var allValid = true;
-			if(!isUserNameValid()) {
-				$("#newUserFullName").parent().addClass("has-error");
+			if(!isUserNameValid(fullName)) {
+				fullName.parent().addClass("has-error");
 				allValid = false;
 			} 
-			if(!isEmailValid()) {
-				$("#newUserEmail").parent().addClass("has-error");
+			if(!isEmailValid(email)) {
+				email.parent().addClass("has-error");
 				allValid = false;
 			} 
-			if(!isPhoneValid()) {
-				$("#newUserPhoneNumber").parent().addClass("has-error");
+			if(!isPhoneValid(phone)) {
+				phone.parent().addClass("has-error");
 				allValid = false;
-			} 
-			if(allValid){
+			}
+			return allValid;
+		}
+		$("#saveUser").bind("click", function() {
+			var fullName = $("#newUserFullName");
+			var email = $("#newUserEmail");
+			var phone = $("#newUserPhoneNumber");
+			if(validateFields(fullName, email, phone)){
 				$("#userTable").append(addUser());
 				$("#newUserModal").modal("hide");
 				//Add new user to db
 			}
 		});
-		function isUserNameValid() {
-			var fullName = $("#newUserFullName").val();
+		function isUserNameValid(obj) {
+			var fullName = obj.val();
 			if(fullName.length < 1) {
 				return false;
 			}
 			return true;
 		}
-		function isEmailValid() {
-			var emailAddress = $("#newUserEmail").val();
+		function isEmailValid(obj) {
+			var emailAddress = obj.val();
 			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
 			return pattern.test(emailAddress);
 		}
-		/* Valid phone number formats:
-				(123) 456 7899
-				(123).456.7899
-				(123)-456-7899
-				123-456-7899
-				123 456 7899 */
-		function isPhoneValid() {
-			var phoneNumber = $("#newUserPhoneNumber").val();
+		function isPhoneValid(obj) {
+			var phoneNumber = obj.val();
 			var pattern = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/
 			return pattern.test(phoneNumber);
 		}
 		function addUser() {
 			var userHtml = '<tr>';
-			userHtml += '<td><input type="text" class="form-control" placeholder="Full Name" value="'+ $("#newUserFullName").val() +'" /></td>';
-            userHtml += '<td><input type="text" class="form-control" placeholder="Email Address" value="'+ $("#newUserEmail").val() +'" /></td>';
-            userHtml += '<td><input type="text" class="form-control" placeholder="Phone Number" value="'+ $("#newUserPhoneNumber").val() +'" /></td>';
-            userHtml += '<td><button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>';
-            userHtml += '<td><button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>';
+			userHtml += '<td><input type="text" class="form-control fullNameField" placeholder="Full Name" value="'+ $("#newUserFullName").val() +'" /></td>';
+            userHtml += '<td><input type="text" class="form-control emailField" placeholder="Email Address" value="'+ $("#newUserEmail").val() +'" /></td>';
+            userHtml += '<td><input type="text" class="form-control phoneField" placeholder="Phone Number" value="'+ $("#newUserPhoneNumber").val() +'" /></td>';
+            userHtml += '<td><button type="button" class="btn btn-primary btn-sm" onclick="updateUser(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>';
+            userHtml += '<td><button type="button" class="btn btn-success btn-sm" onclick="removeUser(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>';
             userHtml += '</tr>';
 			return userHtml;
 		}
