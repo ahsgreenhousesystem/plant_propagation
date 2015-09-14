@@ -166,9 +166,15 @@ a:focus, a:hover {
             <h4 class="modal-title" id="newUserModalLabel">New User</h4>
             </div>
             <div class="modal-body" style="text-align:center">
-                <input id="newUserFullName" type="text" placeholder="Full Name" class="form-control" /><br>
-                <input id="newUserEmail" type="text" placeholder="Email Address" class="form-control" /><br>
-                <input id="newUserPhoneNumber" type="text" placeholder="Phone Number" class="form-control" />
+				<div class="form-group">
+					<input id="newUserFullName" type="text" placeholder="Full Name" class="form-control" />
+				</div>
+				<div class="form-group">
+					<input id="newUserEmail" type="text" placeholder="Email Address" class="form-control" />
+				</div>
+				<div class="form-group">
+					<input id="newUserPhoneNumber" type="text" placeholder="Phone Number" class="form-control" />
+				</div>
             </div>
             <div class="modal-footer">
 				<button id="saveUser" type="button" class="btn btn-success">Save</button>
@@ -194,13 +200,6 @@ a:focus, a:hover {
             <td><button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
             <td><button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
           </tr>
-          <tr>
-            <td><input type="text" class="form-control" placeholder="Full Name" /></td>
-            <td><input type="text" class="form-control" placeholder="Email Address" /></td>
-            <td><input type="text" class="form-control" placeholder="Phone Number" /></td>
-            <td><button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
-          </tr>
         </tbody>
       </table>
     </div>
@@ -210,20 +209,35 @@ a:focus, a:hover {
 	<script>
 		$('#newUserModal').on('shown.bs.modal', function (e) {
 			clearNewUserModalFields();
+			clearValidation();
 		});
 		function clearNewUserModalFields() {
 			$("#newUserFullName").val("");
 			$("#newUserEmail").val("");
 			$("#newUserPhoneNumber").val("");
 		}
+		function clearValidation() {
+			$("#newUserFullName").parent().removeClass("has-error");
+			$("#newUserEmail").parent().removeClass("has-error");
+			$("#newUserPhoneNumber").parent().removeClass("has-error");
+		}
 		$("#saveUser").bind("click", function() {
+			clearValidation();
+			var allValid = true;
 			if(!isUserNameValid()) {
-				alert("Not a valid user name");
-			} else if(!isEmailValid()) {
-				alert("Email is not valid");
-			} else if(!isPhoneValid()) {
-				alert("Phone Number is not valid.");
-			} else {
+				$("#newUserFullName").parent().addClass("has-error");
+				allValid = false;
+			} 
+			if(!isEmailValid()) {
+				$("#newUserEmail").parent().addClass("has-error");
+				allValid = false;
+			} 
+			if(!isPhoneValid()) {
+				$("#newUserPhoneNumber").parent().addClass("has-error");
+				allValid = false;
+			} 
+			if(allValid){
+				$("#userTable").append(addUser());
 				$("#newUserModal").modal("hide");
 				//Add new user to db
 			}
@@ -250,6 +264,16 @@ a:focus, a:hover {
 			var phoneNumber = $("#newUserPhoneNumber").val();
 			var pattern = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/
 			return pattern.test(phoneNumber);
+		}
+		function addUser() {
+			var userHtml = '<tr>';
+			userHtml += '<td><input type="text" class="form-control" placeholder="Full Name" value="'+ $("#newUserFullName").val() +'" /></td>';
+            userHtml += '<td><input type="text" class="form-control" placeholder="Email Address" value="'+ $("#newUserEmail").val() +'" /></td>';
+            userHtml += '<td><input type="text" class="form-control" placeholder="Phone Number" value="'+ $("#newUserPhoneNumber").val() +'" /></td>';
+            userHtml += '<td><button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>';
+            userHtml += '<td><button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>';
+            userHtml += '</tr>';
+			return userHtml;
 		}
 	</script>
   </body>
