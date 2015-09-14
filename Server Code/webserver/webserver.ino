@@ -125,42 +125,42 @@ void setup()
     Alarm.alarmRepeat(17,25,0, sprinkler1Off);
     Alarm.alarmRepeat(0,0,0,syncNTP);         // Syncs the time every day at midnight
 
-//    if (SD.exists("config.db")) {
-//      Serial.println("Opening config.db ...");
-//      dbFile = SD.open("config.db");
-//      config_DB.open(0);
-//    } else {
-//        Serial.println("config.db does NOT exist! Creating it...");
-//        dbFile = SD.open("config.db", FILE_WRITE);
-//        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-//        Serial.println("SUCCESS - Config database created."); 
-//        Serial.println("Creating records...");
-//        for(int i=1; i < NUM_ZONES + 1; i++) {
-//          ZoneProperties zone;
-//          zone.Name = "";
-//          zone.Zone = i;
-//          zone.Visible = 1;
-//          zone.Begin1="";
-//          zone.End1 = "";
-//          zone.Begin2="";
-//          zone.End2="";
-//          zone.Begin3="";
-//          zone.End3 = "";
-//          config_DB.appendRec(EDB_REC zone); 
-//        }
-//        Serial.println("Initialized all zones in DB.");
-//        Serial.print("Total records: "); Serial.println(config_DB.count());
-//    }
-//    
-//    Serial.println("Reading records into local cache.");
-//    for(int i=1; i < config_DB.count() + 1; i++)
-//    {
-//        ZoneProperties zone;
-//        config_DB.readRec(i, EDB_REC zone);
-//        zones[i] = zone;
-//        Serial.println(zones[i].Zone);
-////        printRecord(i);
-//    }
+    if (SD.exists("config.db")) {
+      Serial.println("Opening config.db ...");
+      dbFile = SD.open("config.db");
+      config_DB.open(0);
+    } else {
+        Serial.println("config.db does NOT exist! Creating it...");
+        dbFile = SD.open("config.db", FILE_WRITE);
+        config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
+        Serial.println("SUCCESS - Config database created."); 
+        Serial.println("Creating records...");
+        for(int i=1; i < NUM_ZONES + 1; i++) {
+          ZoneProperties zone;
+          zone.Name = "";
+          zone.Zone = i;
+          zone.Visible = 1;
+          zone.Begin1="";
+          zone.End1 = "";
+          zone.Begin2="";
+          zone.End2="";
+          zone.Begin3="";
+          zone.End3 = "";
+          config_DB.appendRec(EDB_REC zone); 
+        }
+        Serial.println("Initialized all zones in DB.");
+        Serial.print("Total records: "); Serial.println(config_DB.count());
+    }
+    
+    Serial.println("Reading records into local cache.");
+    for(int i=1; i < config_DB.count() + 1; i++)
+    {
+        ZoneProperties zone;
+        config_DB.readRec(i, EDB_REC zone);
+        zones[i] = zone;
+        Serial.println(zones[i].Zone);
+        printRecord(i); //Testing purposes
+    }
 }
 
 void loop()
@@ -207,9 +207,9 @@ void loop()
                         Serial.println("Recieved config post");
                         client.println("Connnection: close");          
                         Serial.println(HTTP_req);
-                        int recno = parseConfig() + 1;
-                        Serial.print("Updating record for Zone "); Serial.println(recno);
-                        EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno-1]);
+                        int recno = parseConfig();
+                        Serial.print("Updating record for Zone "); Serial.println(recno + 1);
+                        EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno]);
                         printStatus(result);
                         //for testing purposes
                         printRecord(recno);                       
@@ -217,11 +217,11 @@ void loop()
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");            
                         client.println("Connection: close");          
-                      /*  int zone_update = parsed_GET[1].toInt();
+                        int zone_update = parsed_GET[1].toInt();
                         zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
                         zone[zone_update].Name = parsed_GET[2];
                         zone[zone_update].Visible = parsed_GET[3].toInt();
-                        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]); */
+                        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]);
                     } else if (HTTP_req.indexOf("GET /zones.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
