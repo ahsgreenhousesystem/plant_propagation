@@ -712,7 +712,7 @@ a:focus, a:hover {
       	</div>
       <br>
       <div class="submitDiv">
-        <button type="button" class="btn btn-default btn-sm" onclick="setupClick()">Update ALL Times</button>
+        <button type="button" class="btn btn-default btn-sm">Update ALL Times</button>
       </div>
 </div>
     </div>
@@ -725,6 +725,8 @@ a:focus, a:hover {
                 $('.input-sm').datetimepicker({
                     format: 'LT'
                 });
+
+                //TODO - change to only buttons for individual zones, add another for 'Update All'
         	 	$("button").click(function(){
     	    	 	var zone = $(this).attr("id");
     	       		var	begin1 = $("#Z"+zone+"T1").val();
@@ -739,6 +741,8 @@ a:focus, a:hover {
     	   			 }); 
     			});
         	});
+
+        	
 	</script>
   </body>
 </html>

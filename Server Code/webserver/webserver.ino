@@ -60,7 +60,7 @@ EDB config_DB(&writer, &reader);
 struct ZoneProperties
 {
   String Name; 
-  int Visible; 
+  boolean Active; 
   int Zone;
   String Begin1; 
   String  End1;
@@ -139,7 +139,7 @@ void setup()
           ZoneProperties zone;
           zone.Name = "";
           zone.Zone = i;
-          zone.Visible = 1;
+          zone.Active = 1;
           zone.Begin1="";
           zone.End1 = "";
           zone.Begin2="";
@@ -217,11 +217,8 @@ void loop()
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");            
                         client.println("Connection: close");          
-                        int zone_update = parsed_GET[1].toInt();
-                        zone_update = zone_update-1; //CONVERT TO 0 BASED NUMBERING
-                        zone[zone_update].Name = parsed_GET[2];
-                        zone[zone_update].Visible = parsed_GET[3].toInt();
-                        config_DB.updateRec(zone_update, EDB_REC zone[zone_update]);
+                        int zone_update = parseSetup();
+                        config_DB.updateRec(zone_update, EDB_REC zones[zone_update]);
                     } else if (HTTP_req.indexOf("GET /zones.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
@@ -388,7 +385,7 @@ void printRecord(int recno) {
     
     Serial.print("Name: "); Serial.println(zone.Name);
     Serial.print("Zone: "); Serial.println(zone.Zone);
-    Serial.print("Visible: "); Serial.println(zone.Visible);
+    Serial.print("Active: "); Serial.println(zone.Active);
     Serial.print("Begin1: "); Serial.println(zone.Begin1);  
     Serial.print("End1: "); Serial.println(zone.End1);    
     Serial.print("Begin2: "); Serial.println(zone.Begin2);  
@@ -396,6 +393,35 @@ void printRecord(int recno) {
     Serial.print("Begin3: "); Serial.println(zone.Begin3);
     Serial.print("End3: "); Serial.println(zone.End3);     
     Serial.println("Finished printing record.");
+}
+
+int parseSetup() 
+{
+    //$.post("/?setup" + "&zone="+zone+"&name="+name+"&active="+active,
+    int beginIndex = HTTP_req.indexOf("&zone=")+6;
+    int endIndex = HTTP_req.indexOf("&name=");
+    int zone_update = HTTP_req.substring(beginIndex, endIndex).toInt() - 1;
+    
+    //grab name
+    beginIndex = endIndex + 6;
+    endIndex = HTTP_req.indexOf("&active=");
+    Serial.println(HTTP_req.substring(beginIndex, endIndex));
+    zones[zone_update].Name = HTTP_req.substring(beginIndex, endIndex);
+    
+    //grab active status
+    beginIndex = endIndex + 4;
+    endIndex = HTTP_req.indexOf(" HTTP/1.1");
+    String active = HTTP_req.substring(beginIndex, endIndex);
+    if(active.equals("true"))
+    {
+      zones[zone_update].Active = true;
+    }
+    else {
+      zones[zone_update].Active = false;
+    }
+    
+    Serial.println(HTTP_req.substring(beginIndex, endIndex));
+    
 }
 
 int parseConfig() {    
