@@ -139,7 +139,7 @@ void setup()
           ZoneProperties zone;
           zone.Name = "";
           zone.Zone = i;
-          zone.Active = 1;
+          zone.Active = false;
           zone.Begin1="";
           zone.End1 = "";
           zone.Begin2="";
@@ -419,8 +419,9 @@ int parseSetup()
     else {
       zones[zone_update].Active = false;
     }
-    
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
+    
+    return zone_update;
     
 }
 
