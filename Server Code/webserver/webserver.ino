@@ -31,7 +31,7 @@ const int timeDelay = 1000; // delay in ms -- important -- relays wear out if dr
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // MAC address from Ethernet shield sticker under board
 unsigned int localPort = 8888;      // local port to listen for UDP packets
-IPAddress ip(10, 222, 1, 250); // 10.222.1.250 is the IP address given by Ames High School Technology Director
+IPAddress ip(192, 168, 0, 1); // 10.222.1.250 is the IP address given by Ames High School Technology Director
 EthernetServer server(localPort);  // create a server at port 80
 File webFile;
 //char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
@@ -71,7 +71,7 @@ struct ZoneProperties
 } zone_config;
 
 struct LogEvent {
-   int ID;
+   //int ID;
    int Zone;
    String Message;  
 } logEvent;
@@ -207,7 +207,7 @@ void loop()
                         Serial.println("Recieved config post");
                         client.println("Connnection: close");          
                         Serial.println(HTTP_req);
-                        int recno = parseConfig();
+                        int recno = handleConfigCall();
                         Serial.print("Updating record for Zone "); Serial.println(recno + 1);
                         EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno]);
                         printStatus(result);
@@ -217,7 +217,7 @@ void loop()
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");            
                         client.println("Connection: close");          
-                        int zone_update = parseSetup();
+                        int zone_update = handleSetupCall();
                         config_DB.updateRec(zone_update, EDB_REC zones[zone_update]);
                     } else if (HTTP_req.indexOf("GET /zones.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
@@ -335,6 +335,36 @@ void log(String message, int Zone) {
   
 }*/
 
+//void logMessage(int zone, String message)
+//{
+//    LogEvent l;
+//    l.Zone = zone;
+//    l.Message = message;
+//    Serial.println(message);
+//    
+//    //store in DB table or log files? 
+//     EDB_Status result = log_DB.insertRec(EDB_REC l);
+//     printStatus(result);
+//    
+//    
+//}
+
+void setWaterAlarm(int zone)
+{
+   //grab time and set alarm(s)
+   String time1 = zones[zone-1].Begin1;
+   String time2 = zones[zone-1].End2;
+   int hour;
+   int minutes;
+   if(time1) {
+     int beginIndex = 0;
+     int endIndex = time1.indexOf(":");
+     hour = time1.substring(beginIndex, endIndex).toInt();
+   }
+   
+    
+}
+
 String parseControl() {
   // "/?control" + "&zone="+zone.substring(4) + "&action=" + action 
   
@@ -395,7 +425,7 @@ void printRecord(int recno) {
     Serial.println("Finished printing record.");
 }
 
-int parseSetup() 
+int handleSetupCall() 
 {
     //$.post("/?setup" + "&zone="+zone+"&name="+name+"&active="+active,
     int beginIndex = HTTP_req.indexOf("&zone=")+6;
@@ -425,7 +455,7 @@ int parseSetup()
     
 }
 
-int parseConfig() {    
+int handleConfigCall() {    
     //grab zone that is to be updated
     int beginIndex = HTTP_req.indexOf("&zone=")+6;
     int endIndex = HTTP_req.indexOf("&b1=");
