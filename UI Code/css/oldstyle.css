@@ -133,3 +133,11 @@ a:focus, a:hover {
 .panel-heading > h3 {
 	color:white
 }
+
+::selection {
+  background: #FF6600;
+}
+
+::-moz-selection {
+  background: #FF6600;
+}
