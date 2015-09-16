@@ -31,7 +31,7 @@ const int timeDelay = 1000; // delay in ms -- important -- relays wear out if dr
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // MAC address from Ethernet shield sticker under board
 unsigned int localPort = 8888;      // local port to listen for UDP packets
-IPAddress ip(192, 168, 0, 1); // 10.222.1.250 is the IP address given by Ames High School Technology Director
+IPAddress ip(192, 168, 0, 2); // 10.222.1.250 is the IP address given by Ames High School Technology Director
 EthernetServer server(localPort);  // create a server at port 80
 File webFile;
 //char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
@@ -57,26 +57,28 @@ EDB config_DB(&writer, &reader);
 
 // Define all zone structs
 
-struct ZoneProperties
+typedef struct TimePair {
+  time_t start;
+  time_t finish;
+} t_pair;
+
+typedef struct ZoneProperties
 {
-  String Name; 
-  boolean Active; 
-  int Zone;
-  String Begin1; 
-  String  End1;
-  String Begin2; 
-  String  End2;
-  String Begin3; 
-  String  End3;
+  String name; 
+  boolean active;
+  int zone;
+  t_pair first;
+  t_pair middle;
+  t_pair last;
 } zone_config;
 
-struct LogEvent {
-   //int ID;
-   int Zone;
-   String Message;  
-} logEvent;
+ZoneProperties zones[NUM_ZONES + 9];
 
-ZoneProperties zones[NUM_ZONES];
+//struct LogEvent {
+//   //int ID;
+//   int Zone;
+//   String Message;  
+//} logEvent;
 
 void setup()
 {
@@ -117,14 +119,15 @@ void setup()
     Serial.println("SUCCESS - Found website/overview.htm file.");
     
     Ethernet.begin(mac, ip);  // initialize Ethernet device
-    server.begin();           // start to listen for clients
+                             // start to listen for clients
     Udp.begin(localPort);
     syncNTP(); //This function syncs the local time with Internet time
     digitalClockDisplay();
-    Alarm.alarmRepeat(17,22,0, sprinkler1On);  // 8:30am every day
-    Alarm.alarmRepeat(17,25,0, sprinkler1Off);
-    Alarm.alarmRepeat(0,0,0,syncNTP);         // Syncs the time every day at midnight
-
+//    Alarm.alarmRepeat(0,0,0,syncNTP);         // Syncs the time every day at midnight
+//    if(SD.exists("config.db"))
+//    {
+//       SD.remove("config.db"); 
+//    }
     if (SD.exists("config.db")) {
       Serial.println("Opening config.db ...");
       dbFile = SD.open("config.db");
@@ -137,30 +140,34 @@ void setup()
         Serial.println("Creating records...");
         for(int i=1; i < NUM_ZONES + 1; i++) {
           ZoneProperties zone;
-          zone.Name = "";
-          zone.Zone = i;
-          zone.Active = false;
-          zone.Begin1="";
-          zone.End1 = "";
-          zone.Begin2="";
-          zone.End2="";
-          zone.Begin3="";
-          zone.End3 = "";
+          zone.name = "";
+          zone.zone = i;
+          zone.active = false;
           config_DB.appendRec(EDB_REC zone); 
+          Serial.print("Created record for zone "); Serial.println(i);
         }
         Serial.println("Initialized all zones in DB.");
         Serial.print("Total records: "); Serial.println(config_DB.count());
     }
     
-    Serial.println("Reading records into local cache.");
-    for(int i=1; i < config_DB.count() + 1; i++)
-    {
-        ZoneProperties zone;
-        config_DB.readRec(i, EDB_REC zone);
-        zones[i] = zone;
-        Serial.println(zones[i].Zone);
-        printRecord(i); //Testing purposes
+    Serial.print("Record Count: "); Serial.println(config_DB.count());
+    
+    if(config_DB.count() > 0)  {  
+      Serial.println("Reading records.");
+      
+      for(int i=1; i < config_DB.count() + 1; i++)
+      {
+  //        ZoneProperties zone; 
+  //        config_DB.readRec(i, EDB_REC zone);
+  //        zones[i-1] = zone;
+  //        Serial.print("Cached zone "); Serial.println(zones[i-1].zone);
+          printRecord(i); //Testing purposes
+      }
+    
     }
+    
+    
+    server.begin(); 
 }
 
 void loop()
@@ -282,87 +289,50 @@ void loop()
     } // end if (client)
 }
 
-void log(String message, int Zone) {
-     
-    char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+/* Something to think about : What happens after we set an alarm for a certain time and 
+    then the user changes that configuration.  How do we 'clear' old alarms so they don't
+    keep happening? 
+    
+     * Possibilites: 
+           - Storing current alarms and verifying at a certain point ? 
+           - Other suggestions? 
+*/
+void setWaterAlarm(int zone, int setting)
+{
+  time_t start;
+  time_t finish;
   
-        if(!SD.exists(logs))
-        {
-            Serial.println("Creating a new log file for zone " + Zone);
-        }        
-        File logFile = SD.open(logs, FILE_WRITE);
-          
-        //need to install time library 
-       if(logFile) {
-        // logFile.println(now() + ": " + message);
-         logFile.close();
-       }
- 
+  switch(setting) {
+      case 1: 
+        start = zones[zone-1].first.start;
+        finish = zones[zone-1].first.finish;
+        break;
+      case 2: 
+        start = zones[zone-1].middle.start;
+        finish = zones[zone-1].middle.finish;
+        break;
+      case 3: 
+        start = zones[zone-1].last.start;
+        finish = zones[zone-1].last.finish;
+        break;
+  }
+  
+  setAlarm(zone, hour(start), minute(start), true);
+  setAlarm(zone, hour(finish), minute(finish), false);    
 }
 
-/*String readLine(int Zone) {
-   char logs[] = {'l', 'o','g','s',Zone,'.','h'};
-    if(!SD.exists(logs)) {
-        Serial.println("Could not find log file.");
-        return "Could not find log file.";
-    }
-    
-    File logFile = SD.open(logs);
-    
-    String line = "Could not read line in log file.";
-    if(logFile.available()) {
-       // line = logFile.read();
-    }
-    
-    return line;
-}*/
-
-/*void readLog(int Zone) {
-  
-    //change this to return a large string to display whole log?
-    char logs[] = {'l', 'o','g','s',Zone,'.','h'};
-    if(!SD.exists(logs)) {
-        Serial.println("Could not find log file.");
-        return;
-    }
-    
-    File logFile = SD.open("logs" + Zone + ".h");
-    
-    
-    while(logFile.available()) {
-        Serial.println(logFile.read());
-    }
-  
-}*/
-
-//void logMessage(int zone, String message)
-//{
-//    LogEvent l;
-//    l.Zone = zone;
-//    l.Message = message;
-//    Serial.println(message);
-//    
-//    //store in DB table or log files? 
-//     EDB_Status result = log_DB.insertRec(EDB_REC l);
-//     printStatus(result);
-//    
-//    
-//}
-
-void setWaterAlarm(int zone)
-{
-   //grab time and set alarm(s)
-   String time1 = zones[zone-1].Begin1;
-   String time2 = zones[zone-1].End2;
-   int hour;
-   int minutes;
-   if(time1) {
-     int beginIndex = 0;
-     int endIndex = time1.indexOf(":");
-     hour = time1.substring(beginIndex, endIndex).toInt();
-   }
-   
-    
+void setAlarm(int zone, int hr, int mins, boolean water) {
+   switch(zone) {
+      case 1: if(water) Alarm.alarmRepeat(hr, mins, 0, sprinkler1On);
+              else Alarm.alarmRepeat(hr, mins, 0, sprinkler1Off);
+              break;
+       /* continue cases.
+          .
+          .
+          .
+         */
+          
+   } 
 }
 
 String parseControl() {
@@ -411,18 +381,29 @@ void printRecord(int recno) {
    // ZoneProperties zone = zones[recno-1];
     
     ZoneProperties zone;
-    config_DB.readRec(recno, EDB_REC zone);
-    
-    Serial.print("Name: "); Serial.println(zone.Name);
-    Serial.print("Zone: "); Serial.println(zone.Zone);
-    Serial.print("Active: "); Serial.println(zone.Active);
-    Serial.print("Begin1: "); Serial.println(zone.Begin1);  
-    Serial.print("End1: "); Serial.println(zone.End1);    
-    Serial.print("Begin2: "); Serial.println(zone.Begin2);  
-    Serial.print("End2: "); Serial.println(zone.End2);    
-    Serial.print("Begin3: "); Serial.println(zone.Begin3);
-    Serial.print("End3: "); Serial.println(zone.End3);     
-    Serial.println("Finished printing record.");
+    EDB_Status result = config_DB.readRec(recno, EDB_REC zone);
+    if(result == EDB_OK) {
+      Serial.print("Name: "); Serial.println(zone.name);
+      Serial.print("Zone: "); Serial.println(zone.zone);
+      Serial.print("Active: "); Serial.println(zone.active);
+      Serial.print("First: start -  "); Serial.println(zone.first.start);  
+      Serial.print("First: finish - "); Serial.println(zone.first.finish);    
+      Serial.print("Middle: start - "); Serial.println(zone.middle.start);  
+      Serial.print("Middle: finish - "); Serial.println(zone.middle.finish);    
+      Serial.print("Last: start - "); Serial.println(zone.last.start);
+      Serial.print("Last: finish - "); Serial.println(zone.last.finish);     
+      Serial.println("Finished printing record.");
+    } else 
+    {
+       Serial.print("Error reading record "); Serial.println(recno);
+    }
+}
+
+struct ZoneProperties getRecord(int recno)
+{
+   ZoneProperties zone; 
+   config_DB.readRec(recno, EDB_REC zone);
+   return zone; 
 }
 
 int handleSetupCall() 
@@ -436,7 +417,7 @@ int handleSetupCall()
     beginIndex = endIndex + 6;
     endIndex = HTTP_req.indexOf("&active=");
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
-    zones[zone_update].Name = HTTP_req.substring(beginIndex, endIndex);
+    zones[zone_update].name = HTTP_req.substring(beginIndex, endIndex);
     
     //grab active status
     beginIndex = endIndex + 4;
@@ -444,10 +425,10 @@ int handleSetupCall()
     String active = HTTP_req.substring(beginIndex, endIndex);
     if(active.equals("true"))
     {
-      zones[zone_update].Active = true;
+      zones[zone_update].active = true;
     }
     else {
-      zones[zone_update].Active = false;
+      zones[zone_update].active = false;
     }
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
     
@@ -461,43 +442,77 @@ int handleConfigCall() {
     int endIndex = HTTP_req.indexOf("&b1=");
     int zone_update = HTTP_req.substring(beginIndex, endIndex).toInt() - 1;
     
-    //grab Begin1 time
+    //grab first.start time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&e1=");
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
-    zones[zone_update].Begin1 = HTTP_req.substring(beginIndex, endIndex);
+    zones[zone_update].first.start = parseTime(HTTP_req.substring(beginIndex, endIndex));
     
-    //grab End1 time
+    //grab first.finish time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&b2=");
-    zones[zone_update].End1 = HTTP_req.substring(beginIndex, endIndex);
-    Serial.println(zones[zone_update].End1);
+    zones[zone_update].first.finish = parseTime(HTTP_req.substring(beginIndex, endIndex));
+   // Serial.println(zones[zone_update].End1);
     
-    //grab Begin2 time
+    //grab middle.start time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&e2=");
     Serial.println(HTTP_req.substring(beginIndex, endIndex));
-    zones[zone_update].Begin2 = HTTP_req.substring(beginIndex, endIndex);
+    zones[zone_update].middle.start = parseTime(HTTP_req.substring(beginIndex, endIndex));
     
-    //grab End2 time
+    //grab middle.finish time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&b3=");
-    zones[zone_update].End2 = HTTP_req.substring(beginIndex, endIndex);
-    Serial.println(zones[zone_update].End2);
+    zones[zone_update].middle.finish = parseTime(HTTP_req.substring(beginIndex, endIndex));
+ //   Serial.println(zones[zone_update].End2);
     
-    //grab Begin3 time
+    //grab last.start time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf("&e3=");
-    Serial.println(HTTP_req.substring(beginIndex, endIndex));
-    zones[zone_update].Begin3 = HTTP_req.substring(beginIndex, endIndex);
+   // Serial.println(HTTP_req.substring(beginIndex, endIndex));
+    zones[zone_update].last.start = parseTime(HTTP_req.substring(beginIndex, endIndex));
     
-    //grab End3 time
+    //grab last.finish time
     beginIndex = endIndex + 4;
     endIndex = HTTP_req.indexOf(" HTTP/1.1");
-    zones[zone_update].End3 = HTTP_req.substring(beginIndex, endIndex);
-    Serial.println(zones[zone_update].End3);
+    zones[zone_update].last.finish = parseTime(HTTP_req.substring(beginIndex, endIndex));
+   // Serial.println(zones[zone_update].End3);
     
     return zone_update;
+}
+
+time_t parseTime(String in) {
+  //String form: 10:30 PM or 10:30 AM or 10:30%20PM - TESTING NEEDED, Assuming first scenario
+  tmElements_t tm; 
+  tm.Second = 0;
+  
+  int beginIndex = 0;
+  int endIndex = in.indexOf(":");
+  int hrs = in.substring(beginIndex, endIndex).toInt();
+  
+  //this area is questionable.
+  beginIndex = endIndex + 1;
+  endIndex = in.indexOf(" ");
+  int mins = in.substring(beginIndex, endIndex).toInt();
+  
+  boolean evening = false;
+  beginIndex = endIndex + 1;
+  endIndex = in.length();
+  String meridiem = in.substring(beginIndex, endIndex);
+  if(meridiem.equals("PM")) {
+    evening = true;
+  }
+  
+  if(evening && hrs != 12) {
+      hrs += 12;
+  } else if(hrs == 12) {
+     hrs = 0; 
+  }
+  
+  tm.Hour = hrs;
+  tm.Minute = mins;
+  
+  return makeTime(tm);
 }
 
 void printStatus(EDB_Status result) {
@@ -674,3 +689,73 @@ void printDigits(int digits)
     Serial.print('0');
   Serial.print(digits);
 }
+
+
+/* void log(String message, int Zone) {
+     
+    char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+  
+        if(!SD.exists(logs))
+        {
+            Serial.println("Creating a new log file for zone " + Zone);
+        }        
+        File logFile = SD.open(logs, FILE_WRITE);
+          
+        //need to install time library 
+       if(logFile) {
+        // logFile.println(now() + ": " + message);
+         logFile.close();
+       }
+ 
+}
+
+*/
+
+/*String readLine(int Zone) {
+   char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+    if(!SD.exists(logs)) {
+        Serial.println("Could not find log file.");
+        return "Could not find log file.";
+    }
+    
+    File logFile = SD.open(logs);
+    
+    String line = "Could not read line in log file.";
+    if(logFile.available()) {
+       // line = logFile.read();
+    }
+    
+    return line;
+}*/
+
+/*void readLog(int Zone) {
+  
+    //change this to return a large string to display whole log?
+    char logs[] = {'l', 'o','g','s',Zone,'.','h'};
+    if(!SD.exists(logs)) {
+        Serial.println("Could not find log file.");
+        return;
+    }
+    
+    File logFile = SD.open("logs" + Zone + ".h");
+    
+    
+    while(logFile.available()) {
+        Serial.println(logFile.read());
+    }
+  
+}*/
+
+//void logMessage(int zone, String message)
+//{
+//    LogEvent l;
+//    l.Zone = zone;
+//    l.Message = message;
+//    Serial.println(message);
+//    
+//    //store in DB table or log files? 
+//     EDB_Status result = log_DB.insertRec(EDB_REC l);
+//     printStatus(result);
+//    
+//    
+//}
