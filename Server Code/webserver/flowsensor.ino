@@ -6,16 +6,13 @@
 volatile int pulseCounter = 0; //counts rising edge of signal
 float flowRate = 0; //water flow rate in liters/hour
 
-void setup() {
-  Serial.begin(9600);
-  Serial.println("Flow sensor test");
-  
+void setupFlowSensors() {
   pinMode(FLOWSENSORPINZONE1, INPUT); //initializes sensor pin as input
   //digitalWrite(FLOWSENSORPINZONE1, HIGH); //Note: may not need
   attachInterrupt(SENSORINTERRUPTZONE1, pulseCount, RISING); //attach interrupt
 }
 
-void loop() {
+void flowSensorCode() {
   pulseCounter = 0; //reset counter
   sei(); //enable interrupts
   delay(1000); //1 second wait

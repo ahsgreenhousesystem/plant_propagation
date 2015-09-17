@@ -85,6 +85,7 @@ void setup()
   checkSDCard();
   setupTimeAlarms();
   setupDatabase();
+//  setupFlowSensors();
 
   // disable Ethernet chip
   pinMode(10, OUTPUT);
