@@ -110,11 +110,25 @@ void loop()
         // respond to client only after last line received
         if (c == '\n' && currentLineIsBlank) {
           webFile = determineWebPage(HTTP_req, client); // open requested web page file
+          if (HTTP_req.indexOf("POST /&setup") > -1) {
+            sendOkayStatus(client);
+            int zone_update = handleSetupCall();
+            config_DB.updateRec(zone_update, EDB_REC zones[zone_update]);
+          }
           if (HTTP_req.indexOf("POST /?control") > -1) {
             sendOkayStatus(client);
             String message = parseControl();
             client.println(message);
             //log(message);
+          }
+          if (HTTP_req.indexOf("POST /?config") > -1) {
+            sendOkayStatus(client);
+            int recno = handleConfigCall();
+            Serial.print("Updating record for Zone "); Serial.println(recno + 1);
+            EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno]);
+            printStatus(result);
+            //for testing purposes
+            printRecord(recno);
           }
           if (HTTP_req.indexOf("GET /zones.png") > -1) {
             webFile = SD.open("website/zones.png");
@@ -163,18 +177,6 @@ File determineWebPage(String request, EthernetClient client) {
   } else if (request.indexOf("GET /config.htm") > -1) {
     sendOkayStatus(client);
     webFile = SD.open("website/config.htm");
-  } else if (request.indexOf("POST /?config") > -1) {
-    sendOkayStatus(client);
-    int recno = handleConfigCall();
-    Serial.print("Updating record for Zone "); Serial.println(recno + 1);
-    EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno]);
-    printStatus(result);
-    //for testing purposes
-    printRecord(recno);
-  } else if (request.indexOf("POST /&setup") > -1) {
-    sendOkayStatus(client);
-    int zone_update = handleSetupCall();
-    config_DB.updateRec(zone_update, EDB_REC zones[zone_update]);
   } else if (request.indexOf("GET /zones.htm") > -1) {
     sendOkayStatus(client);
     webFile = SD.open("website/zones.htm");
