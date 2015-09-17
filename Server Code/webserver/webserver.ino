@@ -105,18 +105,15 @@ void setup()
     Serial.begin(19200);       // for debugging
 
     // initialize SD card
-    Serial.println("Initializing SD card...");
     if (!SD.begin(4)) {
         Serial.println("ERROR - SD card initialization failed!");
         return;    // init failed
     }
-    Serial.println("SUCCESS - SD card initialized.");
     // check for index.htm file
     if (!SD.exists("website/overview.htm")) {
         Serial.println("ERROR - Can't find website/overview.htm file!");
         return;  // can't find index file
     }
-    Serial.println("SUCCESS - Found website/overview.htm file.");
     
     Ethernet.begin(mac, ip);  // initialize Ethernet device
                              // start to listen for clients
@@ -129,15 +126,13 @@ void setup()
 //       SD.remove("config.db"); 
 //    }
     if (SD.exists("config.db")) {
-      Serial.println("Opening config.db ...");
       dbFile = SD.open("config.db");
       config_DB.open(0);
     } else {
         Serial.println("config.db does NOT exist! Creating it...");
         dbFile = SD.open("config.db", FILE_WRITE);
         config_DB.create(0, TABLE_SIZE, sizeof(zone_config));
-        Serial.println("SUCCESS - Config database created."); 
-        Serial.println("Creating records...");
+        Serial.println("SUCCESS: Config database created. Creating records...");
         for(int i=1; i < NUM_ZONES + 1; i++) {
           ZoneProperties zone;
           zone.name = "";
@@ -165,8 +160,6 @@ void setup()
       }
     
     }
-    
-    
     server.begin(); 
 }
 
@@ -194,26 +187,23 @@ void loop()
                 // respond to client only after last line received
                 if (c == '\n' && currentLineIsBlank) {
                     // open requested web page file
-                    if (HTTP_req.indexOf("GET / ") > -1
-                                 || HTTP_req.indexOf("GET /overview.htm") > -1) {
+                    if (HTTP_req.indexOf("GET / ") > -1 || HTTP_req.indexOf("GET /overview.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("website/overview.htm");        // open overview page
+                        webFile = SD.open("website/overview.htm");
                     } else if (HTTP_req.indexOf("GET /config.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();                  
-                        webFile = SD.open("website/config.htm");        // open web page file
+                        webFile = SD.open("website/config.htm");
                     } else if(HTTP_req.indexOf("POST /?config") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
-                        client.println("Recieved config");
-                        Serial.println("Recieved config post");
-                        client.println("Connnection: close");          
-                        Serial.println(HTTP_req);
+                        client.println("Received config");
+                        client.println("Connnection: close");
                         int recno = handleConfigCall();
                         Serial.print("Updating record for Zone "); Serial.println(recno + 1);
                         EDB_Status result = config_DB.updateRec(recno, EDB_REC zones[recno]);
@@ -231,20 +221,19 @@ void loop()
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("website/zones.htm"); 
-                           // open zones page
+                        webFile = SD.open("website/zones.htm");
                    } else if (HTTP_req.indexOf("GET /log.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("website/log.htm");        // open log page
+                        webFile = SD.open("website/log.htm");
                     } else if (HTTP_req.indexOf("GET /users.htm") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
                         client.println("Connnection: close");
                         client.println();
-                        webFile = SD.open("website/users.htm");        // open users page
+                        webFile = SD.open("website/users.htm");
                     } else if (HTTP_req.indexOf("POST /?control") > -1) {
                         client.println("HTTP/1.1 200 OK");
                         client.println("Content-Type: text/html");
@@ -516,19 +505,16 @@ time_t parseTime(String in) {
 }
 
 void printStatus(EDB_Status result) {
-    Serial.println("Printing database status.");
     if (result != EDB_OK) {
-      Serial.print("ERROR: ");
       switch (result)
       {
         case EDB_OUT_OF_RANGE:
-          Serial.println("Recno out of range");
+          Serial.println("Database Status ERROR: Recno out of range!");
           break;
         case EDB_TABLE_FULL:
-          Serial.println("Table full");
+          Serial.println("Database Status ERROR: Table full!");
           break;
         default:
-          Serial.println("OK.");
           break;
       } 
   } 
@@ -565,8 +551,7 @@ void sprinkler1Off() {
 }
 
 void sprinkler2On() {
-  Serial.println("sprinkler2On");
-//  sprinklerOn(zone2);
+  sprinklerOn(zone2);
 }
 
 void sprinkler2Off() {
