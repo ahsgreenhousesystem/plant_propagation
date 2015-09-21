@@ -171,12 +171,12 @@ a:focus, a:hover {
             <h4 class="modal-title" id="newZoneModalLabel">New Zone</h4>
             </div>
             <div class="modal-body" style="text-align:center">
-                <input type="text" placeholder="Which Zone?" class="form-control" /><br>
+                <input type="number" placeholder="Zone Number" class="form-control" /><br>
                 <input type="text" placeholder="Zone Name" class="form-control" maxlength="20" /><br>
-                <input type="button" value="Save" class="btn btn-md btn-success" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				<button id="addZone" type="button" class="btn btn-primary">Add Zone</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
         </div>
     </div>
     </div>
@@ -187,50 +187,50 @@ a:focus, a:hover {
     		<td>Zone 1</td>
     		<td style="text-align:right;"><label>Active:&nbsp;</label><input id="A1" type="checkbox" class="visible" value="1"></td>
     		<td><input id="N1" placeholder="Name" class="name form-control" maxlength="20" /></td>
-    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('1')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick('1')"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
     	</tr>
     	<tr>
     		<td>Zone 2</td>
     		<td style="text-align:right;"><label>Active:&nbsp;</label><input id="A2" type="checkbox" class="visible" value="1"></td>
     		<td><input id="N2" placeholder="Name" class="name form-control" maxlength="20" /></td>
-    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('2')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick('2')"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
     	</tr>
     	<tr>
     		<td>Zone 3</td>
     		<td style="text-align:right;"><label>Active:&nbsp;</label><input id="A3" type="checkbox" class="visible" value="1"></td>
     		<td><input id="N3" placeholder="Name" class="name form-control" maxlength="20" /></td>
-    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('3')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick('3')"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
     	</tr>
     	<tr>
     		<td>Zone 4</td>
     		<td style="text-align:right;"><label>Active:&nbsp;</label><input id="A4" type="checkbox" class="visible" value="1"></td>
     		<td><input id="N4" placeholder="Name" class="name form-control" maxlength="20" /></td>
-    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('4')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick('4')"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
     	</tr>
     	<tr>
     		<td>Zone 5</td>
     		<td style="text-align:right;"><label>Active:&nbsp;</label><input id="A5" type="checkbox" class="visible" value="1"></td>
     		<td><input id="N5" placeholder="Name" class="name form-control" maxlength="20" /></td>
-    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('5')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick('5')"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
     	</tr>
     	<tr>
     		<td>Zone 6</td>
     		<td style="text-align:right;"><label>Active:&nbsp;</label><input id="A6" type="checkbox" class="visible" value="1"></td>
     		<td><input id="N6" placeholder="Name" class="name form-control" maxlength="20" /></td>
-    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('6')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick('6')"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
     	</tr>
     	<tr>
     		<td>Zone 7</td>
     		<td style="text-align:right;"><label>Active:&nbsp;</label><input id="A7" type="checkbox" class="visible" checked></td>
     		<td><input id="N7" placeholder="Name" class="name form-control" maxlength="20" /></td>
-    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('7')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
-            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick('7')"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
+    		<td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
+            <td><button type="button" class="btn btn-success btn-sm" onclick="deleteClick(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>
     	</tr>
     </table>
       <div class="submitDiv">
@@ -256,6 +256,15 @@ a:focus, a:hover {
                }); 
             }
         };
+		function deleteClick(btn) {
+			if(confirm("Are you sure you want to delete this zone?")) {
+				$(btn).closest("tr").remove();
+				//TODO: remove zone from db
+			}
+		}
+		$("#addZone").bind("click", function() {
+			//TODO: add zone to table and store in db
+		});
     </script>
   </body>
 </html>
