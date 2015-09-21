@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="" />
+    <meta name="description" content="Log for Environmental Controls">
+    <meta name="author" content="ISU Senior Design Dec15-01">
+    <title>Environmental Controls Log | Ames High School</title>
+    <link type="text/css" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <style>
+    	html {
+  position: relative;
+  min-height: 100%;
+}
+
+body > .container {
+  padding: 60px 15px 0;
+  margin-bottom:60px;
+}
+.container .text-muted {
+  margin: 20px 0;
+  color: #FFF;
+}
+
+code {
+  font-size: 80%;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+  border-color: #FF6600;
+}
+
+.navbar-default {
+  background-color: #4C4D4F;
+  border-color: #4C4D4F;
+}
+
+.navbar-default .navbar-brand {
+  color: #D1D2D4;
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: #D1D2D4;
+}
+
+a {
+  color: #FF6600;
+  text-decoration: none;
+}
+
+a:focus, a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+  color: #FF6600;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+  color: #FF6600;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover { 
+  color: #FF6600;
+  background-color: #3C3C3C;
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+  background-color: #3C3C3C;
+}
+
+.navbar-default .navbar-toggle {
+  border-color: #FFF;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFF;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #4C4D4F;
+  border-color: #4C4D4F;
+}
+
+.btn-success {
+	color: #fff;
+	background-color: #FF6600;
+	border-color: #FF6600;
+}
+
+.btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #303031;
+  border-color: #303031; 
+}
+
+.btn-success.active, .btn-success.focus, .btn-success:active, .btn-success:focus, .btn-success:hover, .open>.dropdown-toggle.btn-success {
+  color: #fff;
+  background-color: #f68428;
+  border-color: #f68428;
+}
+
+.panel-heading > h4 > a {
+	color: #fff;	
+}
+
+.panel-heading {
+	background-color: #3C3C3C!important;
+	text-align:center;
+}
+
+.panel-body {
+	text-align:center;
+}
+
+.panel-heading > h3 {
+	color:white
+}
+
+::selection {
+  background: #FF6600;
+}
+
+::-moz-selection {
+  background: #FF6600;
+}
+
+.panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+}
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}
+	</style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Ames High School</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li id="overview"><a href="index.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
+            <li id="config"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
+            <li id="zones"><a href="zones.html"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Setup</a></li>
+            <li id="log" class="active"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Log</a></li>
+            <li id="users"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+ <div class="container">
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default" id="panel1">
+        <div class="panel-heading">
+             <h4 class="panel-title">
+        <a data-toggle="collapse" data-target="#collapseOne" 
+           href="#collapseOne">
+          Zone 1
+        </a>
+      </h4>
+
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+            	Log...
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel2">
+        <div class="panel-heading">
+             <h4 class="panel-title">
+        <a data-toggle="collapse" data-target="#collapseTwo" 
+           href="#collapseTwo" class="collapsed">
+          Zone 2
+        </a>
+      </h4>
+
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse">
+            <div class="panel-body">
+            	Log...
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel3">
+        <div class="panel-heading">
+             <h4 class="panel-title">
+        <a data-toggle="collapse" data-target="#collapseThree"
+           href="#collapseThree" class="collapsed">
+          Zone 3
+        </a>
+      </h4>
+
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse">
+            <div class="panel-body">
+            	Log..
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel4">
+        <div class="panel-heading">
+             <h4 class="panel-title">
+        <a data-toggle="collapse" data-target="#collapseFour"
+           href="#collapseFour" class="collapsed">
+          Zone 4
+        </a>
+      </h4>
+
+        </div>
+        <div id="collapseFour" class="panel-collapse collapse">
+            <div class="panel-body">
+              Log..
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel5">
+        <div class="panel-heading">
+             <h4 class="panel-title">
+        <a data-toggle="collapse" data-target="#collapseFive"
+           href="#collapseFive" class="collapsed">
+          Zone 5
+        </a>
+      </h4>
+
+        </div>
+        <div id="collapseFive" class="panel-collapse collapse">
+            <div class="panel-body">
+              Log..
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel6">
+        <div class="panel-heading">
+             <h4 class="panel-title">
+        <a data-toggle="collapse" data-target="#collapseSix"
+           href="#collapseSix" class="collapsed">
+          Zone 6
+        </a>
+      </h4>
+
+        </div>
+        <div id="collapseSix" class="panel-collapse collapse">
+            <div class="panel-body">
+              Log..
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel7">
+        <div class="panel-heading">
+             <h4 class="panel-title">
+        <a data-toggle="collapse" data-target="#collapseSeven"
+           href="#collapseSeven" class="collapsed">
+          Zone 7
+        </a>
+      </h4>
+
+        </div>
+        <div id="collapseSeven" class="panel-collapse collapse">
+            <div class="panel-body">
+              Log..
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="" />
+    <meta name="description" content="Configuration for Environmental Controls">
+    <meta name="author" content="ISU Senior Design Dec15-01">
+    <title>Environmental Controls Configuration | Ames High School</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css" />
+    <style>
+    	html {
+  position: relative;
+  min-height: 100%;
+}
+
+body > .container {
+  padding: 60px 15px 0;
+  margin-bottom:60px;
+}
+.container .text-muted {
+  margin: 20px 0;
+  color: #FFF;
+}
+
+code {
+  font-size: 80%;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+  border-color: #FF6600;
+}
+
+.navbar-default {
+  background-color: #4C4D4F;
+  border-color: #4C4D4F;
+}
+
+.navbar-default .navbar-brand {
+  color: #D1D2D4;
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: #D1D2D4;
+}
+
+a {
+  color: #FF6600;
+  text-decoration: none;
+}
+
+a:focus, a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+  color: #FF6600;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+  color: #FF6600;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover { 
+  color: #FF6600;
+  background-color: #3C3C3C;
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+  background-color: #3C3C3C;
+}
+
+.navbar-default .navbar-toggle {
+  border-color: #FFF;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFF;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #4C4D4F;
+  border-color: #4C4D4F;
+}
+
+.btn-success {
+	color: #fff;
+	background-color: #FF6600;
+	border-color: #FF6600;
+}
+
+.btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #303031;
+  border-color: #303031; 
+}
+
+.btn-success.active, .btn-success.focus, .btn-success:active, .btn-success:focus, .btn-success:hover, .open>.dropdown-toggle.btn-success {
+  color: #fff;
+  background-color: #f68428;
+  border-color: #f68428;
+}
+
+.panel-heading > h4 > a {
+	color: #fff;	
+}
+
+.panel-heading {
+	background-color: #3C3C3C!important;
+	text-align:center;
+}
+
+.panel-body {
+	text-align:center;
+}
+
+.panel-heading > h3 {
+	color:white
+}
+
+::selection {
+  background: #FF6600;
+}
+
+::-moz-selection {
+  background: #FF6600;
+}
+	</style>
+  </head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">Ames High School</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li id="overviewTab"><a href="index.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
+          <li id="configTab" class="active"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
+          <li id="zonesTab"><a href="zones.html"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Setup</a></li>
+          <li id="logTab"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Log</a></li>
+          <li id="usersTab"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
+        </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container" style="text-align: center">
+      <div class="page-header">
+        <h1>Configuration</h1>
+      </div>
+      <div id="dvConfig">
+      	<div class="row">
+      		<div class="col-lg-6 col-md-6">
+		    	<div class="panel panel-default">
+		  			<div class="panel-heading">
+		    			<h3 class="panel-title">Zone 1</h3>
+		  			</div>
+		  			<div class="panel-body">
+		  			    <div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker1'>
+					                    <input id="Z1T1" type='text' class="form-control input-sm time1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker2'>
+					                    <input id="Z1T2" type='text' class="form-control input-sm time2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker3'>
+					                    <input id="Z1T3" type='text' class="form-control input-sm time3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker4'>
+					                    <input id="Z1D1" type='text' class="form-control input-sm duration1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker5'>
+					                    <input id="Z1D2" type='text' class="form-control input-sm duration2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker6'>
+					                    <input id="Z1D3" type='text' class="form-control input-sm duration3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+			          	<div class="row" style="padding-top:15px;">
+				          	<div class="submitDiv">
+				            	<button id="1" type="button" class="updateTimes btn btn-success btn-sm">Update Times</button>
+				          	</div>
+			          	</div>
+		  			</div>
+				</div>
+			</div>
+      		<div class="col-lg-6 col-md-6">
+		    	<div class="panel panel-default">
+		  			<div class="panel-heading">
+		    			<h3 class="panel-title">Zone 2</h3>
+		  			</div>
+		  			<div class="panel-body">
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker7'>
+					                    <input id="Z2T1" type='text' class="form-control input-sm time1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker8'>
+					                    <input id="Z2T2" type='text' class="form-control input-sm time2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker9'>
+					                    <input id="Z2T3" type='text' class="form-control input-sm time3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker10'>
+					                    <input id="Z2D1" type='text' class="form-control input-sm duration1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker11'>
+					                    <input id="Z2D2" type='text' class="form-control input-sm duration2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker12'>
+					                    <input id="Z2D3" type='text' class="form-control input-sm duration3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+			          	<div class="row" style="padding-top:15px;">
+				          	<div class="submitDiv">
+				            	<button id="2" type="button" class="updateTimes btn btn-success btn-sm">Update Times</button>
+				          	</div>
+			          	</div>
+		  			</div>
+				</div>
+			</div>
+      	</div>
+      	<div class="row">
+      		<div class="col-lg-6 col-md-6">
+		    	<div class="panel panel-default">
+		  			<div class="panel-heading">
+		    			<h3 class="panel-title">Zone 3</h3>
+		  			</div>
+		  			<div class="panel-body">
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker13'>
+					                    <input id="Z3T1" type='text' class="form-control input-sm time1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker14'>
+					                    <input id="Z3T2" type='text' class="form-control input-sm time2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker15'>
+					                    <input id="Z3T3" type='text' class="form-control input-sm time3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker16'>
+					                    <input id="Z3D1" type='text' class="form-control input-sm duration1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker17'>
+					                    <input id="Z3D2" type='text' class="form-control input-sm duration2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker18'>
+					                    <input id="Z3D3" type='text' class="form-control input-sm duration3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+			          	<div class="row" style="padding-top:15px;">
+				          	<div class="submitDiv">
+				            	<button id="3" type="button" class="updateTimes btn btn-success btn-sm">Update Times</button>
+				          	</div>
+			          	</div>
+		  			</div>
+				</div>
+			</div>
+      		<div class="col-lg-6 col-md-6">
+		    	<div class="panel panel-default">
+		  			<div class="panel-heading">
+		    			<h3 class="panel-title">Zone 4</h3>
+		  			</div>
+		  			<div class="panel-body">
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker19'>
+					                    <input id="Z4D1" type='text' class="form-control input-sm time1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker20'>
+					                    <input type='text' class="form-control input-sm time2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker21'>
+					                    <input type='text' class="form-control input-sm time3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker22'>
+					                    <input type='text' class="form-control input-sm duration1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker23'>
+					                    <input id="Z4D2" type='text' class="form-control input-sm duration2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker24'>
+					                    <input id="Z4D3" type='text' class="form-control input-sm duration3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+			          	<div class="row" style="padding-top:15px;">
+				          	<div class="submitDiv">
+				            	<button id = "4" type="button" class="updateTimes btn btn-success btn-sm">Update Times</button>
+				          	</div>
+			          	</div>
+		  			</div>
+				</div>
+			</div>
+      	</div>
+      	<div class="row">
+      		<div class="col-lg-6 col-md-6">
+		    	<div class="panel panel-default">
+		  			<div class="panel-heading">
+		    			<h3 class="panel-title">Zone 5</h3>
+		  			</div>
+		  			<div class="panel-body">
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker25'>
+					                    <input id="Z5T1" type='text' class="form-control input-sm time1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker26'>
+					                    <input id="Z5T2" type='text' class="form-control input-sm time2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker27'>
+					                    <input id="Z5T3" type='text' class="form-control input-sm time3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker28'>
+					                    <input id="Z5D1" type='text' class="form-control input-sm duration1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker29'>
+					                    <input id="Z5D2" type='text' class="form-control input-sm duration2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker30'>
+					                    <input id="Z5D3" type='text' class="form-control input-sm duration3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+			          	<div class="row" style="padding-top:15px;">
+				          	<div class="submitDiv">
+				            	<button id = "5" type="button" class="updateTimes btn btn-success btn-sm">Update Times</button>
+				          	</div>
+			          	</div>
+		  			</div>
+				</div>
+			</div>
+      		<div class="col-lg-6 col-md-6">
+		    	<div class="panel panel-default">
+		  			<div class="panel-heading">
+		    			<h3 class="panel-title">Zone 6</h3>
+		  			</div>
+		  			<div class="panel-body">
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker31'>
+					                    <input id="Z6D1" type='text' class="form-control input-sm time1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker32'>
+					                    <input type='text' class="form-control input-sm time2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker33'>
+					                    <input type='text' class="form-control input-sm time3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker34'>
+					                    <input type='text' class="form-control input-sm duration1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker35'>
+					                    <input id="Z6D2" type='text' class="form-control input-sm duration2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker36'>
+					                    <input id="Z6D3" type='text' class="form-control input-sm duration3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+			          	<div class="row" style="padding-top:15px;">
+				          	<div class="submitDiv">
+				            	<button id = "6" type="button" class="updateTimes btn btn-success btn-sm" >Update Times</button>
+				          	</div>
+			          	</div>
+		  			</div>
+				</div>
+			</div>
+      	</div>
+      	<div class="row">
+      		<div class="col-lg-6 col-md-6">
+		    	<div class="panel panel-default">
+		  			<div class="panel-heading">
+		    			<h3 class="panel-title">Zone 7</h3>
+		  			</div>
+		  			<div class="panel-body">
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker37'>
+					                    <input id="Z7T1" type='text' class="form-control input-sm time1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker38'>
+					                    <input id="Z7T2" type='text' class="form-control input-sm time2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker39'>
+					                    <input id="Z7T3" type='text' class="form-control input-sm time3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+		  				<div class="row">
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker40'>
+					                    <input id="Z7D1" type='text' class="form-control input-sm duration1" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker41'>
+					                    <input id="Z7D2" type='text' class="form-control input-sm duration2" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<div class="form-group">
+					                <div class='input-group date' id='datetimepicker42'>
+					                    <input id="Z7D3" type='text' class="form-control input-sm duration3" />
+					                    <span class="input-group-addon">
+					                        <span class="glyphicon glyphicon-time"></span>
+					                    </span>
+					                </div>
+					            </div>
+		  					</div>
+		  				</div>
+			          	<div class="row" style="padding-top:15px;">
+				          	<div class="submitDiv">
+				            	<button id = "7" type="button" class="updateTimes btn btn-success btn-sm">Update Times</button>
+				          	</div>
+			          	</div>
+		  			</div>
+				</div>
+			</div>
+      	</div>
+      <br>
+      <div class="submitDiv">
+        <button type="button" class="btn btn-default btn-sm">Update ALL Times</button>
+      </div>
+</div>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+            $(document).ready(function() { 
+                $('.input-sm').datetimepicker({
+                    format: 'LT'
+                });
+
+                //TODO - change to only buttons for individual zones, add another for 'Update All'
+        	 	$("button").click(function(){
+    	    	 	var zone = $(this).attr("id");
+    	       		var	begin1 = $("#Z"+zone+"T1").val();
+    	       		var	end1 = $('#Z'+zone+"D1").val();
+    	       		var	begin2 = $('#Z'+zone+"T2").val();
+    	       		var	end2 = $('#Z'+zone+"D2").val();
+    	       		var	begin3 = $('#Z'+zone+"T3").val();
+    	       		var	end3 = $('#Z'+zone+"D3").val();
+    	       		
+    	    		$.post("/?config" + "&zone="+zone+"&b1="+begin1+"&e1="+end1+"&b2="+begin2+"&e2="+end2+"&b3="+begin3+"&e3="+end3,
+    	    		function(response){
+    	   			 }); 
+    			});
+        	});
+
+        	
+	</script>
+  </body>
+</html>
