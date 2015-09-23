@@ -14,13 +14,26 @@ app.post('/', (request, response) ->
   response.end()
 )
 
+###
 # set pins
-# zone1 = udoo.outputPin(23)
-# zone2 = udoo.outputPin(25)
-# zone3 = udoo.outputPin(27)
-# zone4 = udoo.outputPin(29)
-# zone5 = udoo.outputPin(31)
-# zone6 = udoo.outputPin(33)
-# zone7 = udoo.outputPin(35)
+zone1 = udoo.outputPin(23)
+zone2 = udoo.outputPin(25)
+zone3 = udoo.outputPin(27)
+zone4 = udoo.outputPin(29)
+zone5 = udoo.outputPin(31)
+zone6 = udoo.outputPin(33)
+zone7 = udoo.outputPin(35)
+timeDelay = 1000
 
-# zone1.setHigh()
+# turn on sprinkler
+sprinklerOn = (zone) ->
+  setTimeout( ->
+    zone.setHigh()
+  timeDelay)
+
+# turn off sprinkler
+sprinklerOff = (zone) ->
+  setTimeout( ->
+    zone.setLow()
+  timeDelay)
+###
