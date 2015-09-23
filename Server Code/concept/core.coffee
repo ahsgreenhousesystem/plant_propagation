@@ -11,6 +11,7 @@ http.listen 3000, ->
 
 app.post('/', (request, response) ->
   console.log("Zone: " + request.query.zone + " Action: " + request.query.action)
+  response.end()
 )
 
 # set pins
