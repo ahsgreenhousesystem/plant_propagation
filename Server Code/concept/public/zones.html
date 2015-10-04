@@ -148,7 +148,6 @@ a:focus, a:hover {
         <ul class="nav navbar-nav">
           <li id="overviewTab"><a href="index.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
           <li id="configTab"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
-          <li id="zonesTab" class="active"><a href="zones.html"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Setup</a></li>
           <li id="logTab"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Log</a></li>
           <li id="usersTab"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
         </ul>
@@ -250,9 +249,14 @@ a:focus, a:hover {
               var name = $("#N"+zone).val();
               var active = $("#A"+zone).prop("checked");
 
-              $.post("/?setup" + "&zone="+zone+"&name="+name+"&active="+active,
-
+              $.post("/setup",
+              {
+                "zone": zone, 
+                "name": name,
+                "active": active
+              }
               function(response){
+                //handle server response
                });
             }
         };
