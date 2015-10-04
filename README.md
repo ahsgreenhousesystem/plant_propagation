@@ -4,12 +4,6 @@
 | Navigation between pages |
 | Ability to turn sprinklers on/off from web interface |
 
-| TODO |
-| ----- |
-| Use pinout from excel spreadsheet to define zones |
-| Write config file after "Update zones" button pressed |
-| Handle GET requests from html for changing zone states |
-
 | HOW TO USE |
 | ----- |
 | 1) Load web interface files onto SD card |
@@ -20,3 +14,9 @@
 | 4) Navigate to "Config > Setup Zones" to choose which zones to make visible and name specific zones |
 | 5) Assign start times and durations to each zone |
 | 6) Verify IO pinout with relays |
+
+| HOW TO USE - UDOO Server |
+| ----- |
+| Navigate to folder with core.coffee using Terminal |
+| Type "coffee core.coffee" to start the server |
+| Go to homepage in your browser on port 3000 at http://localhost:3000/index.html |
