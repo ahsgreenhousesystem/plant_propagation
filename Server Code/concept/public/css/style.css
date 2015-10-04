@@ -1,0 +1,136 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body > .container {
+  padding: 60px 15px 0;
+  margin-bottom:60px;
+}
+.container .text-muted {
+  margin: 20px 0;
+  color: #FFF;
+}
+
+code {
+  font-size: 80%;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+  border-color: #FF6600;
+}
+
+.navbar-default {
+  background-color: #4C4D4F;
+  border-color: #4C4D4F;
+}
+
+.navbar-default .navbar-brand {
+  color: #D1D2D4;
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: #D1D2D4;
+}
+
+a {
+  color: #FF6600;
+  text-decoration: none;
+}
+
+a:focus, a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+  color: #FF6600;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+  color: #FF6600;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+  color: #FF6600;
+  background-color: #3C3C3C;
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+  background-color: #3C3C3C;
+}
+
+.navbar-default .navbar-toggle {
+  border-color: #FFF;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFF;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #4C4D4F;
+  border-color: #4C4D4F;
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #FF6600;
+  border-color: #FF6600;
+}
+
+.btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #303031;
+  border-color: #303031;
+}
+
+.btn-success.active, .btn-success.focus, .btn-success:active, .btn-success:focus, .btn-success:hover, .open>.dropdown-toggle.btn-success {
+  color: #fff;
+  background-color: #f68428;
+  border-color: #f68428;
+}
+
+.panel-heading > h4 > a {
+  color: #fff;
+}
+
+.panel-heading {
+  background-color: #3C3C3C!important;
+  text-align:center;
+}
+
+.panel-body {
+  text-align:center;
+}
+
+.panel-heading > h3 {
+  color:white
+}
+
+::selection {
+  background: #FF6600;
+}
+
+::-moz-selection {
+  background: #FF6600;
+}
+
+@media screen and (max-width: 568px) {
+  .fullNameField, .emailField, .phoneField {
+    font-size: 75%;
+  }
+}
+
+.panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+}
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}
