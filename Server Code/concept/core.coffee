@@ -2,9 +2,18 @@
 app = require('express')()
 express = require('express')
 http = require('http').Server(app)
+path = require('path')
 # udoo = require('udoo')
 
 app.use(express.static(__dirname + '/public'))
+
+routes = require('./routes/index')
+#users = require('./routes/users')
+
+#hooking up Mongo DB
+mongo = require('mongodb')
+monk = require('monk')
+db = monk('localhost:27017/plant_propogation')
 
 http.listen 3000, ->
   console.log('listening on *:3000')
@@ -13,6 +22,12 @@ app.post('/', (request, response) ->
   console.log("Zone: " + request.query.zone + " Action: " + request.query.action)
   response.end()
 )
+# Make our db accessible to our route
+app.use((req, res, next)-> 
+	req.db = db
+	next
+	)
+app.use('/', routes)
 
 ###
 # set pins

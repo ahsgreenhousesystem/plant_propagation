@@ -148,6 +148,7 @@
             </div>
         </div>
       </div>
+      <div class="row" id="zone1response"> </div>
       </div>
       <div class ="row">
           <div class="col-lg-12 col-md-12">
@@ -234,6 +235,7 @@
             </div>
         </div>
       </div>
+      <div class="row" id="zone2response"> </div>
         </div>
         <div class="row">
           <div class="col-lg-12 col-md-12">
@@ -319,6 +321,7 @@
             </div>
         </div>
       </div>
+      <div class="row" id="zone3response"> </div>
       </div>
       <div class ="row">
           <div class="col-lg-12 col-md-12">
@@ -404,6 +407,7 @@
             </div>
         </div>
       </div>
+      <div class="row" id="zone4response"> </div>
         </div>
         <div class="row">
           <div class="col-lg-12 col-md-12">
@@ -489,6 +493,7 @@
             </div>
         </div>
       </div>
+      <div class="row" id="zone5response"> </div>
       </div>
       <div class ="row">
           <div class="col-lg-12 col-md-12">
@@ -574,6 +579,7 @@
             </div>
         </div>
       </div>
+      <div class="row" id="zone6response"> </div>
         </div>
         <div class="row">
           <div class="col-lg-12 col-md-12">
@@ -656,40 +662,14 @@
                       </div>
                 </div>
               </div>
-                  <div class="row" style="padding-top:15px;">
-                  </div>
             </div>
         </div>
       </div>
+      <div class="row" id="zone7response"> </div>
         </div>
-      <br>
       <div class="submitDiv">
         <button type="button" class="btn btn-default btn-sm">Update ALL Times</button>
       </div>
-      <div id="dvZones" style="margin-left:auto; margin-right:auto;">
-    <div class="newDiv">
-        <a href="#" data-toggle="modal" data-target="#newZoneModal" class="btn btn-default btn-sm">New Zone</a>
-    </div>
-    <div class="modal fade" id="newZoneModal" tabindex="-1" role="dialog" aria-labelledby="newZoneModal" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h4 class="modal-title" id="newZoneModalLabel">New Zone</h4>
-            </div>
-            <div class="modal-body" style="text-align:center">
-                <input type="text" placeholder="Which Zone?" class="form-control" /><br>
-                <input type="text" placeholder="Zone Name" class="form-control" maxlength="20" /><br>
-                <input type="button" value="Save" class="btn btn-md btn-success" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-    </div>
-    </div>
-    <br>
-</div>
 </div>
     </div>
     <script type="text/javascript" src="/js/jquery.js"></script>
@@ -698,46 +678,92 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
     <script>
             $(document).ready(function() {
+
+                        //load all information into each part
+          //this may have to be done inside index.js on serving of the config page
+          // (unsure how to dynamically change the html from there)
+
+                            // Retrieve
+              var MongoClient = require('mongodb').MongoClient;
+
+              // Connect to the db
+              MongoClient.connect("mongodb://localhost:27017/plant_propogation", function(err, db) {
+                if(err) { alert(err); }
+
+                var collection = db.collection('zonecollection');
+                var zones = collection.find().toArray(function(err, items) {});
+
+                // var stream = collection.find({mykey:{$ne:2}}).stream();
+                // stream.on("data", function(item) {});
+                // stream.on("end", function() {});
+
+
+                for each (var zone in zones) {
+                    var num = zone.zone;
+                    var active = document.getElementById('A'+num);
+                    active.checked = zone.active;
+                    var name = document.getElementById('N'+num);
+                    name.name = zone.name;
+                    
+                    for(var i = 1; i <= 3; i++) {
+                      var begin = document.getElementById('Z'+num+'T'+i);
+                      var end = document.getElementById('Z'+num+'D'+i);
+                      begin.text = zone.times[i-1].begin;
+                      end.text = zone.times[i-1].end;
+                    }
+                }
+
+                });
+              });
+
+
                 $('.input-sm').datetimepicker({
                     format: 'LT'
                 });
 
                 //TODO - change to only buttons for individual zones, add another for 'Update All'
-             $("button").click(function(){
-               var zone = $(this).attr("id");
-                 var  begin1 = $("#Z"+zone+"T1").val();
-                 var  end1 = $('#Z'+zone+"D1").val();
-                 var  begin2 = $('#Z'+zone+"T2").val();
-                 var  end2 = $('#Z'+zone+"D2").val();
-                 var  begin3 = $('#Z'+zone+"T3").val();
-                 var  end3 = $('#Z'+zone+"D3").val();
+               $("button").click(function(){
+                 var zone = $(this).attr("id");
+                   var  begin1 = $("#Z"+zone+"T1").val();
+                   var  end1 = $('#Z'+zone+"D1").val();
+                   var  begin2 = $('#Z'+zone+"T2").val();
+                   var  end2 = $('#Z'+zone+"D2").val();
+                   var  begin3 = $('#Z'+zone+"T3").val();
+                   var  end3 = $('#Z'+zone+"D3").val();
 
-              $.post("/config", 
-              {
-                "zone": zone, 
-                "first" : ["begin": begin1, "end": end1],
-                "middle" : ["begin": begin2, "end": end2],
-                "last" : ["begin": begin3, "end": end3]
-              },
-              function(response){ });
-          });
+                $.post("/config", 
+                {
+                  "zone": zone, 
+                  "times" : [
+                    {"begin": begin1, "end": end1},
+                    {"begin": begin2, "end": end2},
+                    {"begin": begin3, "end": end3}
+                  ]
+                },
+                function(response){ $("#zone" + zone + "response").text(response); });
+            });
           });
           
-//  This is from old zones.html (Setup page)
-// 	 //TODO - have website fill values before load
-//         function setupClick(zone)
-//         {
-//             if(zone)
-//             {
-//               var name = $("#N"+zone).val();
-//               var active = $("#A"+zone).prop("checked");
-// 
-//               $.post("/?setup" + "&zone="+zone+"&name="+name+"&active="+active,
-// 
-//               function(response){
-//                });
-//             }
-//         };
+           //This is from old zones.html (Setup page)
+          	 //TODO - have website fill values before load
+          function setupClick(zone)
+          {
+              if(zone)
+              {
+                var name = $("#N"+zone).val();
+                var active = $("#A"+zone).prop("checked");
+
+                $.post("/setup",
+                {
+                  "zone": zone,
+                  "name": name, 
+                  "active": active
+                }
+
+                function(response){
+                 });
+              }
+          };
 
   </script>
   </body>
