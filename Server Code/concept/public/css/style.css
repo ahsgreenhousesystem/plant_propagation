@@ -100,7 +100,6 @@ a:focus, a:hover {
 
 .panel-heading {
   background-color: #3C3C3C!important;
-  text-align:center;
 }
 
 .panel-body {
@@ -133,4 +132,8 @@ a:focus, a:hover {
 }
 .panel-heading a.collapsed:after {
     content:"\e080";
+}
+
+.page-header {
+	text-align: center;
 }
