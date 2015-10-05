@@ -1,194 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="" />
-    <meta name="description" content="Overview of Environmental Controls">
-    <meta name="author" content="ISU Senior Design Dec15-01">
-    <title>Environmental Controls Overview | Ames High School</title>
-    <link type="text/css" rel="stylesheet" href="/css/bootstrp.css">
-    <link type="text/css" rel="stylesheet" href="/css/datetime.css">
-	<link type="text/css" rel="stylesheet" href="/css/style.css">
-  </head>
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" target="_blank" href="http://www.ames.k12.ia.us/schools/high-school/">Ames High School</a>
-        </div>
-      <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li id="overviewTab" class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
-          <li id="configTab"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
-          <li id="logTab"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Logs</a></li>
-          <li id="usersTab"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
-        </ul>
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="keywords" content="" />
+      <meta name="description" content="Overview of Environmental Controls">
+      <meta name="author" content="ISU Senior Design Dec15-01">
+      <title>Environmental Controls Overview | Ames High School</title>
+      <link type="text/css" rel="stylesheet" href="/css/bootstrp.css">
+      <link type="text/css" rel="stylesheet" href="/css/datetime.css">
+      <link type="text/css" rel="stylesheet" href="/css/style.css">
+   </head>
+   <body>
+      <nav class="navbar navbar-default navbar-fixed-top">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" target="_blank" href="http://www.ames.k12.ia.us/schools/high-school/">Ames High School</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+               <ul class="nav navbar-nav">
+                  <li id="overviewTab" class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span>&nbsp;Overview</a></li>
+                  <li id="configTab"><a href="config.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;Configuration</a></li>
+                  <li id="logTab"><a href="log.html"><span class="glyphicon glyphicon-book"></span>&nbsp;Logs</a></li>
+                  <li id="usersTab"><a href="users.html"><span class="glyphicon glyphicon-user"></span>&nbsp;Users</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="container" style="text-align:center">
+         <div class="page-header">
+            <h1>Overview</h1>
+         </div>
+         <div id="dvOverview" style="margin-left:auto; margin-right:auto;">
+            <div>
+               <img src="zones.png" style="max-width:100%; max-height:100%" type="image/png" alt="Zone Overview" />
+            </div>
+            <form method="GET">
+               <div class="col-lg-4 col-md-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading">
+                        <h3 class="panel-title">Zone 1</h3>
+                     </div>
+                     <div class="panel-body">
+                        <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+                           <input type="submit" name="zone1" value="Open" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone1" value="Close" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone1" value="Auto" class="btn btn-default btn-sm" />
+                        </div>
+                        <div id="zone1log">
+                           Log...
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading">
+                        <h3 class="panel-title">Zone 2</h3>
+                     </div>
+                     <div class="panel-body">
+                        <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+                           <input type="submit" name="zone2" value="Open" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone2" value="Close" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone2" value="Auto" class="btn btn-default btn-sm" />
+                        </div>
+                        <div id="zone2log">
+                           Log...
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading">
+                        <h3 class="panel-title">Zone 3</h3>
+                     </div>
+                     <div class="panel-body">
+                        <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+                           <input type="submit" name="zone3" value="Open" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone3" value="Close" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone3" value="Auto" class="btn btn-default btn-sm" />
+                        </div>
+                        <div id="zone3log">
+                           Log...
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading">
+                        <h3 class="panel-title">Zone 4</h3>
+                     </div>
+                     <div class="panel-body">
+                        <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+                           <input type="submit" name="zone4" value="Open" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone4" value="Close" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone4" value="Auto" class="btn btn-default btn-sm" />
+                        </div>
+                        <div id="zone4log">
+                           Log...
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading">
+                        <h3 class="panel-title">Zone 5</h3>
+                     </div>
+                     <div class="panel-body">
+                        <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+                           <input type="submit" name="zone5" value="Open" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone5" value="Close" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone5" value="Auto" class="btn btn-default btn-sm" />
+                        </div>
+                        <div id="zone5log">
+                           Log...
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading">
+                        <h3 class="panel-title">Zone 6</h3>
+                     </div>
+                     <div class="panel-body">
+                        <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+                           <input type="submit" name="zone6" value="Open" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone6" value="Close" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone6" value="Auto" class="btn btn-default btn-sm" />
+                        </div>
+                        <div id="zone6log">
+                           Log...
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6">
+                  <div class="panel panel-default">
+                     <div class="panel-heading">
+                        <h3 class="panel-title">Zone 7</h3>
+                     </div>
+                     <div class="panel-body">
+                        <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
+                           <input type="submit" name="zone7" value="Open" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone7" value="Close" class="btn btn-default btn-sm" />
+                           <input type="submit" name="zone7" value="Auto" class="btn btn-default btn-sm" />
+                        </div>
+                        <div id="zone7log">
+                           Log...
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </form>
+         </div>
       </div>
-    </div>
-  </nav>
-  <div class="container" style="text-align:center">
-    <div class="page-header">
-      <h1>Overview</h1>
-    </div>
-    <div id="dvOverview" style="margin-left:auto; margin-right:auto;">
-      <div>
-        <img src="zones.png" style="max-width:100%; max-height:100%" type="image/png" alt="Zone Overview" />
-      </div>
-      <form method="GET">
-      <div class="col-lg-4 col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Zone 1</h3>
-        </div>
-        <div class="panel-body">
-          <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
-              <input type="submit" name="zone1" value="Open" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone1" value="Close" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone1" value="Auto" class="btn btn-default btn-sm" />
-             </div>
-             <div id="zone1log">
-               Log...
-             </div>
-        </div>
-    </div>
-  </div>
-     <div class="col-lg-4 col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Zone 2</h3>
-        </div>
-        <div class="panel-body">
-          <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
-              <input type="submit" name="zone2" value="Open" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone2" value="Close" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone2" value="Auto" class="btn btn-default btn-sm" />
-             </div>
-             <div id="zone2log">
-               Log...
-             </div>
-        </div>
-    </div>
-  </div>
-     <div class="col-lg-4 col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Zone 3</h3>
-        </div>
-        <div class="panel-body">
-          <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
-              <input type="submit" name="zone3" value="Open" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone3" value="Close" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone3" value="Auto" class="btn btn-default btn-sm" />
-             </div>
-             <div id="zone3log">
-               Log...
-             </div>
-        </div>
-    </div>
-  </div>
-     <div class="col-lg-4 col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Zone 4</h3>
-        </div>
-        <div class="panel-body">
-          <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
-              <input type="submit" name="zone4" value="Open" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone4" value="Close" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone4" value="Auto" class="btn btn-default btn-sm" />
-             </div>
-             <div id="zone4log">
-               Log...
-             </div>
-        </div>
-    </div>
-  </div>
-     <div class="col-lg-4 col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Zone 5</h3>
-        </div>
-        <div class="panel-body">
-          <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
-              <input type="submit" name="zone5" value="Open" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone5" value="Close" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone5" value="Auto" class="btn btn-default btn-sm" />
-             </div>
-             <div id="zone5log">
-               Log...
-             </div>
-        </div>
-    </div>
-  </div>
-     <div class="col-lg-4 col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Zone 6</h3>
-        </div>
-        <div class="panel-body">
-          <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
-              <input type="submit" name="zone6" value="Open" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone6" value="Close" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone6" value="Auto" class="btn btn-default btn-sm" />
-             </div>
-             <div id="zone6log">
-               Log...
-             </div>
-        </div>
-    </div>
-  </div>
-     <div class="col-lg-4 col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Zone 7</h3>
-        </div>
-        <div class="panel-body">
-          <div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">
-              <input type="submit" name="zone7" value="Open" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone7" value="Close" class="btn btn-default btn-sm" />
-              <input type="submit" name="zone7" value="Auto" class="btn btn-default btn-sm" />
-             </div>
-             <div id="zone7log">
-               Log...
-             </div>
-        </div>
-    </div>
-  </div>
-  </form>
-  </div>
-    </div>
-    <script type="text/javascript" src="/js/jquery.js"></script>
-    <script type="text/javascript" src="/js/bootstrp.js"></script>
-  </body>
-  <script>
-    $(function() {
-      $("form input[type=submit]").click(function() {
-        $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
-        $(this).attr("clicked", "true");
-    });
-
-      $("form").submit(function(e) {
-        e.preventDefault();
-        var button = $("input[type=submit][clicked=true]");      // the button that was clicked
-      var zone = button.attr("name");               // button zone name
-      var action = button.val();                   // button value (Open/Close/Auto)
-      $.post("/?control" + "&zone="+zone.substring(4) + "&action=" + action, function(data) {    // send AJAX request to the web server
-        $("#" + zone + "log").text(data);             // add notification to the log in the zone button panel
-        var zoneButtons = document.getElementsByName(zone);   // array of the buttons for that zone
-        for (var i = 0; i < zoneButtons.length; i++) {
-          zoneButtons[i].setAttribute("class", "btn btn-default btn-sm"); // reset all buttons to default
-        }
-        button.addClass("btn-success");             // highlight the button that was clicked
+      <script type="text/javascript" src="/js/jquery.js"></script>
+      <script type="text/javascript" src="/js/bootstrp.js"></script>
+   </body>
+   <script>
+      $(function() {
+        $("form input[type=submit]").click(function() {
+          $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+          $(this).attr("clicked", "true");
       });
-    });
-  });
-  </script>
+      
+        $("form").submit(function(e) {
+          e.preventDefault();
+          var button = $("input[type=submit][clicked=true]");      // the button that was clicked
+        var zone = button.attr("name");               // button zone name
+        var action = button.val();                   // button value (Open/Close/Auto)
+        $.post("/?control" + "&zone="+zone.substring(4) + "&action=" + action, function(data) {    // send AJAX request to the web server
+          $("#" + zone + "log").text(data);             // add notification to the log in the zone button panel
+          var zoneButtons = document.getElementsByName(zone);   // array of the buttons for that zone
+          for (var i = 0; i < zoneButtons.length; i++) {
+            zoneButtons[i].setAttribute("class", "btn btn-default btn-sm"); // reset all buttons to default
+          }
+          button.addClass("btn-success");             // highlight the button that was clicked
+        });
+      });
+      });
+   </script>
 </html>
