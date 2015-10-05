@@ -22,6 +22,7 @@ app.post('/', (request, response) ->
   console.log("Zone: " + request.query.zone + " Action: " + request.query.action)
   response.end()
 )
+
 # Make our db accessible to our route
 app.use((req, res, next)-> 
 	req.db = db

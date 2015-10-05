@@ -590,7 +590,7 @@
                 <table id="zone-table" class="table table-striped table-hover">
       <tr>
         <td>Zone 7</td>
-        <td style="text-align:right;"><label>Active:&nbsp;</label><input id="A7" type="checkbox" class="visible" checked></td>
+        <td style="text-align:right;"><label>Active:&nbsp;</label><input id="A7" type="checkbox" class="visible" value="1"></td>
         <td><input id="N7" placeholder="Name" class="name form-control" maxlength="20" /></td>
         <td><button type="button" class="btn btn-primary btn-sm" onclick="setupClick('7')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>
         <td><button id = "7" type="button" class="updateTimes btn btn-success btn-sm">Update Times</button></td>
@@ -679,42 +679,36 @@
     <script>
             $(document).ready(function() {
 
-                        //load all information into each part
-          //this may have to be done inside index.js on serving of the config page
-          // (unsure how to dynamically change the html from there)
+          /*
+            Load information into page. 
 
-                            // Retrieve
-              var MongoClient = require('mongodb').MongoClient;
+            This isn't going to be here.  On load of page, need to supply html pages with data to fill in 
+            all sections of the page. This may have to be done when the page is sent from the server. 
 
-              // Connect to the db
-              MongoClient.connect("mongodb://localhost:27017/plant_propogation", function(err, db) {
-                if(err) { alert(err); }
+            You guys have any suggestions on best way to do this?  Probably done in index.js, but not sure how.  
+          */ 
 
-                var collection = db.collection('zonecollection');
-                var zones = collection.find().toArray(function(err, items) {});
+                $.get("/allZones", function(response){
+                  alert(response);
 
-                // var stream = collection.find({mykey:{$ne:2}}).stream();
-                // stream.on("data", function(item) {});
-                // stream.on("end", function() {});
+                  var zones = response.body.zones;
+                  for (var zone in zones) {
+                      var num = zone.zone;
+                      var active = document.getElementById('A'+num);
+                      active.checked = zone.active;
+                      var name = document.getElementById('N'+num);
+                      name.text = zone.name;
 
-
-                for each (var zone in zones) {
-                    var num = zone.zone;
-                    var active = document.getElementById('A'+num);
-                    active.checked = zone.active;
-                    var name = document.getElementById('N'+num);
-                    name.name = zone.name;
-                    
-                    for(var i = 1; i <= 3; i++) {
-                      var begin = document.getElementById('Z'+num+'T'+i);
-                      var end = document.getElementById('Z'+num+'D'+i);
-                      begin.text = zone.times[i-1].begin;
-                      end.text = zone.times[i-1].end;
-                    }
-                }
+                      
+                      for(var i = 1; i <= 3; i++) {
+                        var begin = document.getElementById('Z'+num+'T'+i);
+                        var end = document.getElementById('Z'+num+'D'+i);
+                        begin.text = zone.times[i-1].begin;
+                        end.text = zone.times[i-1].end;
+                      }
+                  }
 
                 });
-              });
 
 
                 $('.input-sm').datetimepicker({
@@ -742,7 +736,6 @@
                 },
                 function(response){ $("#zone" + zone + "response").text(response); });
             });
-          });
           
            //This is from old zones.html (Setup page)
           	 //TODO - have website fill values before load
@@ -758,12 +751,13 @@
                   "zone": zone,
                   "name": name, 
                   "active": active
-                }
-
-                function(response){
+                }, function(response){
+                 
                  });
               }
           };
+
+        });
 
   </script>
   </body>
