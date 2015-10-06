@@ -4,7 +4,7 @@
 | Navigation between pages |
 | Ability to turn sprinklers on/off from web interface |
 
-| HOW TO USE |
+| HOW TO USE - ARDUINO|
 | ----- |
 | 1) Load web interface files onto SD card |
 | 2) Open webserver code in Arduino |
@@ -15,8 +15,8 @@
 | 5) Assign start times and durations to each zone |
 | 6) Verify IO pinout with relays |
 
-| HOW TO USE - UDOO Server |
+| HOW TO USE - UDOO |
 | ----- |
-| Navigate to folder with core.coffee using Terminal |
-| Type "coffee core.coffee" to start the server |
+| Navigate to 'plant_propogation' folder using Terminal |
+| Type "npm start" to start the server |
 | Go to homepage in your browser on port 3000 at http://localhost:3000/index.html |
