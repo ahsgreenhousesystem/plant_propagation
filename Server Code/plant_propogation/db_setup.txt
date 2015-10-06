@@ -1,0 +1,17 @@
+//This file will be needed in a startup script of some sort 
+
+use plant_propogation
+
+//initialize the records if not already existing
+db.zonecollection.insert({"zone": 1, "name": "Zone 1", "active": true})
+db.zonecollection.insert({"zone": 2, "name": "Zone 2", "active": true})
+db.zonecollection.insert({"zone": 3, "name": "Zone 3", "active": true})
+db.zonecollection.insert({"zone": 4, "name": "Zone 4", "active": true})
+db.zonecollection.insert({"zone": 5, "name": "Zone 5", "active": true})
+db.zonecollection.insert({"zone": 6, "name": "Zone 6", "active": true})
+db.zonecollection.insert({"zone": 7, "name": "Zone 7", "active": true})
+
+//display db to verify 
+db.zonecollection.find().pretty() 
+
+//more to do here...
