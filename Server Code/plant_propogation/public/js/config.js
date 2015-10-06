@@ -10,7 +10,7 @@ $(document).ready(function() {
     */
 
     $.get("/allZones", function(response) {
-        alert(response);
+        console.warn(response);
 
         var zones = response.body.zones;
         for (var zone in zones) {

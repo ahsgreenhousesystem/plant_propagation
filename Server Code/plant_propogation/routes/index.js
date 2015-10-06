@@ -22,9 +22,24 @@ router.get('/allZones', function(req, res) {
 });
 
 
+/* GET overview page. */
+router.get('/overview', function(req, res) {
+    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/index.html'));
+});
+
 /* GET config page. */
 router.get('/config', function(req, res) {
-    res.sendFile(path.join(__dirname+'/public/config.html'));
+    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/config.html'));
+});
+
+/* GET logs page. */
+router.get('/logs', function(req, res) {
+    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/logs.html'));
+});
+
+/* GET users page. */
+router.get('/users', function(req, res) {
+    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html'));
 });
 
 /* POST to Config */
