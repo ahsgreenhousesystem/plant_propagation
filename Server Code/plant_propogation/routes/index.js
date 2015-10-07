@@ -11,14 +11,11 @@ router.get('/', function(req, res) {
 
 /* GET json values for all zones */
 router.get('/allZones', function(req, res) {
-    // var db = req.db;
-    // var collection = db.get('zonecollection');
-    // collection.find({},{},function(e,docs){
-    //     res.send({
-    //         "zones": docs
-    //     });
-    // });
-	res.send({"zone" : 1});
+    var db = req.db;
+    var collection = db.get('zonecollection');
+    collection.find({},{},function(e,docs){
+        res.send(docs);
+    });
 });
 
 
@@ -42,17 +39,53 @@ router.get('/users', function(req, res) {
     res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html'));
 });
 
-/* POST to Config */
-router.post('/config', function(request, result) {
-    var db = request.db;
+// var getTimes = function (json) {
+//     console.log("Getting times from json");
+//     var times = "[";
+//     for(var i = 0; i < 3; i++) {
+//         //console.log(json.times[i].begin);
+//         console.log("Time at " + i + " : " + json);
+//        // console.log(json.times[i][begin]);
+//         var begin = json.times[i].begin;
+//         var end = json.times[i].end;
+//         times += "{\"begin\": " + begin + " , \"end\" : " + end + " }";
+//         if(i < 2) times += ", ";
+//     }
+//     times += "]";
 
-    var zone = req.body.zone;
+//     return times;
+// };
+
+/* POST to Config */
+router.post('/config', function(req, res) {
+    var db = req.db;
+
+    var zone = req.body;
+    console.log(zone);
+    //var times = getTimes(req.body);
+
+
+    console.log(zone.times);
+    var times = "[";
+    for(var i = 0; i < 3; i++) {
+        //console.log(timeArray[i]);
+       // console.log(timeArray[i]);
+        // var begin = req.body.times[i].begin;
+        // var end = req.body.times[i].end;
+        // times += "{\"begin\": " + begin + " , \"end\" : " + end + " }";
+        // if(i < 2) times += ", ";
+    }
+    times += "]";
+    console.log(times);
+    
+    console.log("Zone: " + zone.zone);
+    //console.log("Times: " + zone.times);
 
     var collection = db.get('zonecollection');
 
     collection.update({
-        "zone" : zone,
-        "times" : req.body.times
+        "zone" : zone.zone,
+        "times" : times
     }, function (err, doc) {
         if (err) {
             result.send("There was an issue adding the information to the database.");

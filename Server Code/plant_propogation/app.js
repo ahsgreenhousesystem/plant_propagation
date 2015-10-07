@@ -32,20 +32,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
-
-app.post('/', function (request, response) {
-    console.log("Zone: " + request.query.zone + " Action: " + request.query.action);
-    response.end();
-});
-
 // Make our db accessible to our route
 app.use(function (req, res, next) {
   req.db = db;
   next();
-  });
+});
+
 app.use('/', routes);
+app.use('/users', users);
 
 /*
 # set pins

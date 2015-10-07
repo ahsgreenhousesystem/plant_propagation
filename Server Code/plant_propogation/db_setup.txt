@@ -1,4 +1,10 @@
 //This file will be needed in a startup script of some sort 
+//RUNS THE SERVER
+mongod --dbpath /path/to/plant_propogation/data/
+
+MONGO CONSOLE
+//RUNS THE CONSOLE 
+mongo
 
 use plant_propogation
 
@@ -10,6 +16,41 @@ db.zonecollection.insert({"zone": 4, "name": "Zone 4", "active": true})
 db.zonecollection.insert({"zone": 5, "name": "Zone 5", "active": true})
 db.zonecollection.insert({"zone": 6, "name": "Zone 6", "active": true})
 db.zonecollection.insert({"zone": 7, "name": "Zone 7", "active": true})
+
+ db.zonecollection.update(
+ {zone: 1}, 
+ {"zone": 1, "name": "Zone 1", "active": true, "times":[
+ {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
+
+  db.zonecollection.update(
+ {zone: 2}, 
+ {"zone": 2, "name": "Zone 2", "active": true, "times":[
+ {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
+
+  db.zonecollection.update(
+ {zone: 3}, 
+ {"zone": 3, "name": "Zone 3", "active": true, "times":[
+ {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
+
+  db.zonecollection.update(
+ {zone: 4}, 
+ {"zone": 4, "name": "Zone 4", "active": true, "times":[
+ {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
+
+  db.zonecollection.update(
+ {zone: 5}, 
+ {"zone": 5, "name": "Zone 5", "active": true, "times":[
+ {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
+
+  db.zonecollection.update(
+ {zone: 6}, 
+ {"zone": 6, "name": "Zone 6", "active": true, "times":[
+ {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
+
+  db.zonecollection.update(
+ {zone: 7}, 
+ {"zone": 7, "name": "Zone 7", "active": true, "times":[
+ {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
 //display db to verify 
 db.zonecollection.find().pretty() 

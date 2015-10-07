@@ -10,22 +10,15 @@ $(document).ready(function() {
     */
 
     $.get("/allZones", function(response) {
-        console.warn(response);
-
-        var zones = response.body.zones;
-        for (var zone in zones) {
-            var num = zone.zone;
-            var active = document.getElementById('A' + num);
-            active.checked = zone.active;
-            var name = document.getElementById('N' + num);
-            name.text = zone.name;
-
+       // alert(response);
+        for (var zone = 0; zone < response.length; zone++) {
+            var num = zone + 1;
+            $("#N"+num).text(zone);
+            $("#A"+num).prop("checked", response[zone].active);
 
             for (var i = 1; i <= 3; i++) {
-                var begin = document.getElementById('Z' + num + 'T' + i);
-                var end = document.getElementById('Z' + num + 'D' + i);
-                begin.text = zone.times[i - 1].begin;
-                end.text = zone.times[i - 1].end;
+                $("#Z" + num + "T" + i).text(response[zone].times[i-1].begin);
+                $("#Z" + num + "D" + i).text(response[zone].times[i-1].end);
             }
         }
 
@@ -64,7 +57,6 @@ $(document).ready(function() {
     });
 
     //This is from old zones.html (Setup page)
-    //TODO - have website fill values before load
     function setupClick(zone) {
         if (zone) {
             var name = $("#N" + zone).val();
