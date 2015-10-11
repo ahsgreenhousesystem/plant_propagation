@@ -62,10 +62,9 @@ router.post('/config', function(req, res) {
 
     var zone = req.body;
     console.log(zone);
-    //var times = getTimes(req.body);
+    ///var times = getTimes(req.body);
 
-
-    console.log(zone.times);
+    console.log("Times: " + zone.times);
     var times = "[";
     for(var i = 0; i < 3; i++) {
         //console.log(timeArray[i]);

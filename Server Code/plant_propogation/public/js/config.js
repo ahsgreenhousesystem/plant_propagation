@@ -39,8 +39,8 @@ $(document).ready(function() {
         var end3 = $('#Z' + zone + "D3").val();
 
         $.post("/config", {
-                "zone": zone,
-                "times": [{
+                'zone': zone,
+                'times[]': [{
                     "begin": begin1,
                     "end": end1
                 }, {
@@ -53,7 +53,7 @@ $(document).ready(function() {
             },
             function(response) {
                 $("#zone" + zone + "response").text(response);
-            });
+            }, 'json');
     });
 
     //This is from old zones.html (Setup page)
