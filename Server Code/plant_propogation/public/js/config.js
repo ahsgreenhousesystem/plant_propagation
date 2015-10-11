@@ -9,6 +9,15 @@ $(document).ready(function() {
     You guys have any suggestions on best way to do this?  Probably done in index.js, but not sure how.  
     */
 
+    $(".timeTable").each(function() {
+        var noScheduledTimesDiv = $(this).closest(".panel-body").find(".noScheduledTimes");
+        var rows = $(this).find("tr").length;
+        if (rows == 1) {
+            noScheduledTimesDiv.show();
+            $(this).hide();
+        }
+    });
+
     $.get("/allZones", function(response) {
        // alert(response);
         for (var zone = 0; zone < response.length; zone++) {
@@ -71,4 +80,48 @@ $(document).ready(function() {
             });
         }
     };
+
+    $(".addTime").bind("click", function(){
+        var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
+        $("#beginTime").val("");
+        $("#endTime").val("");
+        $("#zoneToAddTime").val(zoneNumber);
+        $("#newTimeModal").modal("show");
+    });
+
+    $("#addTimeBtn").bind("click", function() {
+        addTimeToZone();
+    });
+
+    $(document).on("click", ".deleteTime", function() {
+        var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
+        var noScheduledTimesDiv = $(this).closest(".panel-body").find(".noScheduledTimes");
+        $(this).closest("tr").remove();
+        var rows = $("#timeTable" + zoneNumber + " tr").length;
+        if (rows == 1) {
+            noScheduledTimesDiv.show();
+            $("#timeTable" + zoneNumber).hide();
+        }
+    });
+
+    function addTimeToZone() {
+        var zoneNumber = $("#zoneToAddTime").val();
+        var table = $("#timeTable" + zoneNumber + " tbody");
+        var beginTime = $("#beginTime").val();
+        var endTime = $("#endTime").val();
+        var html = '<tr>';
+        html += '<td style="width:250px;">';
+        html += '<button class="btn btn-sm btn-success deleteTime"><span class="glyphicon glyphicon-remove"></span>&nbsp;Delete Time</button>';
+        html += '</td>';
+        html += '<td class="beginTimeTd">';
+        html += beginTime;
+        html += '</td>';
+        html += '<td class="endTimeTd">';
+        html += endTime;
+        html += '</td>';
+        html += '</tr>';
+        table.append(html);
+        table.closest("div").find(".noScheduledTimes").hide();
+        $("#timeTable" + zoneNumber).show();
+    }
 });
