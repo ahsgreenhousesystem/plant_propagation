@@ -93,6 +93,16 @@ $(document).ready(function() {
         addTimeToZone();
     });
 
+    $(".deleteZone").bind("click", function() {
+        var me = $(this);
+        var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
+        var options = {
+            message: "Are you sure you want to delete Zone " + zoneNumber + "?",
+            title: 'Delete confirmation'
+         };
+        eModal.confirm(options).then(function (/* DOM */) { me.closest(".row").remove(); });
+    });
+
     $(document).on("click", ".deleteTime", function() {
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
         var noScheduledTimesDiv = $(this).closest(".panel-body").find(".noScheduledTimes");
