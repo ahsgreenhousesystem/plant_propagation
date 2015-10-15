@@ -96,23 +96,32 @@ $(document).ready(function() {
     $(".deleteZone").bind("click", function() {
         var me = $(this);
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
-        var options = {
-            message: "Are you sure you want to delete Zone " + zoneNumber + "?",
-            title: 'Delete confirmation'
-         };
+        var options = setModalConfirmationOptions("Are you sure you want to delete Zone " + zoneNumber + "?", "Delete Confirmation");
         eModal.confirm(options).then(function (/* DOM */) { me.closest(".row").remove(); });
     });
 
     $(document).on("click", ".deleteTime", function() {
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
-        var noScheduledTimesDiv = $(this).closest(".panel-body").find(".noScheduledTimes");
-        $(this).closest("tr").remove();
-        var rows = $("#timeTable" + zoneNumber + " tr").length;
-        if (rows == 1) {
-            noScheduledTimesDiv.show();
-            $("#timeTable" + zoneNumber).hide();
-        }
+        var me = $(this);
+        var options = setModalConfirmationOptions("Are you sure you want to delete this time?", "Delete Confirmation");
+        eModal.confirm(options).then(function (/* DOM */) {
+            var noScheduledTimesDiv = me.closest(".panel-body").find(".noScheduledTimes");
+            me.closest("tr").remove();
+            var rows = $("#timeTable" + zoneNumber + " tr").length;
+            if (rows == 1) {
+                noScheduledTimesDiv.show();
+                $("#timeTable" + zoneNumber).hide();
+            }
+        });
     });
+
+    function setModalConfirmationOptions(message, title) {
+        var options = {
+            message: message,
+            title: title
+         };
+         return options;
+    }
 
     function addTimeToZone() {
         var zoneNumber = $("#zoneToAddTime").val();

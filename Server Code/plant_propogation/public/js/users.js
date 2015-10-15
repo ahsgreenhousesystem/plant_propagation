@@ -4,7 +4,11 @@ $('#newUserModal').on('hidden.bs.modal', function(e) {
 });
 
 function removeUser(btn) {
-    $(btn).closest("tr").remove();
+    var options = {
+        message: "Are you sure you want to delete this user?",
+        title: "Delete Confirmation"
+     };
+    eModal.confirm(options).then(function (/* DOM */) { $(btn).closest("tr").remove(); });
 }
 
 function updateUser(btn) {
