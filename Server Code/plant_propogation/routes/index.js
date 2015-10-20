@@ -5,7 +5,7 @@ var path = require('path');
 /* GET home page. */
 router.get('/', function(req, res) {
     //res.render('index.html');
-    res.sendFile(path.join(__dirname+'/public/index.html'));
+    res.sendFile(path.join(__dirname+'/public/overview.html'));
 });
 
 
@@ -21,7 +21,7 @@ router.get('/allZones', function(req, res) {
 
 /* GET overview page. */
 router.get('/overview', function(req, res) {
-    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/index.html'));
+    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/overview.html'));
 });
 
 /* GET config page. */

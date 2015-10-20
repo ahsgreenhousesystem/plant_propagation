@@ -4,7 +4,7 @@ var logger = require('morgan');
 // udoo = require('udoo');
 
 var routes = require('./routes/index');
-//var users = require('./routes/users');
+// var users = require('./routes/users');
 
 var app = express();
 
@@ -14,7 +14,6 @@ var monk = require('monk');
 var db = monk('localhost:27017/plant_propogation');
 
 app.use(express.static(__dirname + '/public'));
-
 
 // Make our db accessible to our route
 app.use(function (req, res, next) {
@@ -79,6 +78,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
