@@ -8,17 +8,23 @@ function removeUser(btn) {
         message: "Are you sure you want to delete this user?",
         title: "Delete Confirmation"
      };
-    eModal.confirm(options).then(function (/* DOM */) { $(btn).closest("tr").remove(); });
+    eModal.confirm(options).then(function (/* DOM */) { $(btn).closest("tr").remove(); });xw
+    var email = $(btn).closest("tr").find(".emailField");
+    if (validateFields(name, email, phone)) {
+         $.post("/deleteUser", {
+                "email": email.val()
+            }, function(response) {
+            	alert(response);
+            }, 'json');
+    }
 }
 
 function updateUser(btn) {
-	var userId = $(btn).closest("tr").find(".userId");
     var name = $(btn).closest("tr").find(".fullNameField");
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
     if (validateFields(name, email, phone)) {
          $.post("/updateUser", {
-         		"userId": userId.val(),
                 "name": name.val(),
                 "email": email.val(),
                 "phone": phone.val()
@@ -60,14 +66,21 @@ function validateFields(fullName, email, phone) {
     }
     return allValid;
 }
+
 $("#saveUser").bind("click", function() {
-    var fullName = $("#newUserFullName");
+    var name = $("#newUserFullName");
     var email = $("#newUserEmail");
     var phone = $("#newUserPhoneNumber");
-    if (validateFields(fullName, email, phone)) {
+    if (validateFields(name, email, phone)) {
         $("#userTable").append(addUser());
         $("#newUserModal").modal("hide");
-        //Add new user to db
+         $.post("/addUser", {
+                "name": name.val(),
+                "email": email.val(),
+                "phone": phone.val()
+            }, function(response) {
+            	alert(response);
+            }, 'json');
     }
 });
 
