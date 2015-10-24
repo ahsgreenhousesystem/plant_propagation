@@ -2,6 +2,8 @@
 //RUNS THE SERVER
 mongod --dbpath /path/to/plant_propogation/data/
 
+// saldin ./mongod --dbpath /Users/SaldinBajric/Documents/Schoolwork/Major/491/dec15-01/Server\ Code/plant_propogation/data
+
 MONGO CONSOLE
 //RUNS THE CONSOLE 
 mongo

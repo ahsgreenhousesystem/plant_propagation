@@ -12,11 +12,22 @@ function removeUser(btn) {
 }
 
 function updateUser(btn) {
-    var fullName = $(btn).closest("tr").find(".fullNameField");
+	var userId = $(btn).closest("tr").find(".userId");
+    var name = $(btn).closest("tr").find(".fullNameField");
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
-    if (validateFields(fullName, email, phone)) {
+    if (validateFields(name, email, phone)) {
         //update user
+         $.post("/updateUser", {
+         		"userId": userId.val(),
+                "name": name.val(),
+                "email": email.val(),
+                "phone": phone.val()
+            }, function(response) {
+            	alert(response);
+            	console.warn(response);
+				console.warn('user updated');
+            }, 'json');
     }
 }
 

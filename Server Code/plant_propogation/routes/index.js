@@ -8,17 +8,6 @@ router.get('/', function(req, res) {
     res.sendFile(path.join(__dirname+'/public/index.html'));
 });
 
-
-/* GET json values for all zones */
-router.get('/allZones', function(req, res) {
-    var db = req.db;
-    var collection = db.get('zonecollection');
-    collection.find({},{},function(e,docs){
-        res.send(docs);
-    });
-});
-
-
 /* GET overview page. */
 router.get('/overview', function(req, res) {
     res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/index.html'));
@@ -37,6 +26,23 @@ router.get('/logs', function(req, res) {
 /* GET users page. */
 router.get('/users', function(req, res) {
     res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html'));
+});
+
+/* Load json values */
+router.get('/allZones', function(req, res) {
+    var db = req.db;
+    var collection = db.get('zonecollection');
+    collection.find({},{},function(e,docs){
+        res.send(docs);
+    });
+});
+
+router.get('/allUsers', function(req, res) {
+    var db = req.db;
+    var collection = db.get('users');
+    collection.find({},{},function(e,docs){
+        res.send(docs);
+    });
 });
 
 // var getTimes = function (json) {
@@ -111,6 +117,74 @@ router.post('/setup', function(request, result) {
             result.send("There was an issue adding the information to the database.");
         } else {
             result.send("Zone successfully updated."); 
+        }
+    })
+});
+
+router.post('/addUser', function(req, res) {
+    var db = req.db;
+// 	var userId = req.bod  y.userId;
+	var name = req.body.name;
+	var email = req.body.email;
+	var phone = req.body.phone;
+    
+    // need to find the user in the database with this ID and update it
+    var collection = db.get('users');
+    collection.update({
+    	"userId" : userId,
+        "name" : name,
+        "email" : email,
+        "phone" : phone
+    }, function (err, doc) {
+        if (err) {
+            res.send("There was an issue updating the user's information in the database.");
+        } else {
+            res.send("The user was successfully updated!");
+        }
+    })
+});
+
+router.post('/updateUser', function(req, res) {
+    var db = req.db;
+	var userId = req.body.userId;
+	var name = req.body.name;
+	var email = req.body.email;
+	var phone = req.body.phone;
+    
+    // need to find the user in the database with this ID and update it
+    var collection = db.get('users');
+    var user = collection.find({"userId" : userId});
+    collection.update({"userId" : userId}, {
+        "name" : name,
+        "email" : email,
+        "phone" : phone
+    }, function (err, doc) {
+        if (err) {
+            res.send("There was an issue updating the user's information in the database.");
+        } else {
+            res.send("The user was successfully updated!");
+        }
+    })
+});
+
+router.post('/deleteUser', function(req, res) {
+    var db = req.db;
+	var userId = req.body.userId;
+	var name = req.body.name;
+	var email = req.body.email;
+	var phone = req.body.phone;
+    
+    // need to find the user in the database with this ID and update it
+    var collection = db.get('users');
+    collection.update({
+        "name" : name,
+        "email" : email,
+        "phone" : phone
+    }, function (err, doc) {
+        if (err) {
+            res.send("There was an issue updating the user's information in the database.");
+        } else {
+            res.send("The user was successfully updated!");
         }
     })
 });
