@@ -122,11 +122,11 @@ router.post('/setup', function(request, result) {
 });
 
 router.post('/addUser', function(req, res) {
-    var db = req.db;
+    var users = req.db.get('users');
 	var name = req.body.name;
 	var email = req.body.email;
 	var phone = req.body.phone;
-    db.users.insert({"name": name, "email": email, "phone": phone}, function (err, doc) {
+    users.insert({"name": name, "email": email, "phone": phone}, function (err, doc) {
         if (err) {
             res.send("There was an issue adding the user's information in the database.");
         } else {
@@ -136,12 +136,12 @@ router.post('/addUser', function(req, res) {
 });
 
 router.post('/updateUser', function(req, res) {
-    var db = req.db;
+    var users = req.db.get('users');
 	var name = req.body.name;
 	var email = req.body.email;
 	var phone = req.body.phone;
     var collection = db.get('users');
-    collection.update({"email" : email}, {
+    users.update({"email" : email}, {
         "name" : name,
         "email" : email,
         "phone" : phone
