@@ -16,15 +16,13 @@ function removeUser(btn) {
         message: "Are you sure you want to delete this user?",
         title: "Delete Confirmation"
      };
-    eModal.confirm(options).then(function (/* DOM */) { $(btn).closest("tr").remove(); });xw
+    eModal.confirm(options).then(function (/* DOM */) { $(btn).closest("tr").remove(); });
     var email = $(btn).closest("tr").find(".emailField");
-    if (validateFields(name, email, phone)) {
          $.post("/deleteUser", {
                 "email": email.val()
             }, function(response) {
             	alert(response);
             }, 'json');
-    }
 }
 
 function updateUser(btn) {

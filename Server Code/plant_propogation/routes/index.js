@@ -154,10 +154,9 @@ router.post('/updateUser', function(req, res) {
 });
 
 router.post('/deleteUser', function(req, res) {
-    var db = req.db;
+    var users = req.db.get('users');
     var email = req.body.email;
-    var collection = db.get('users');
-    collection.remove({"email" : email}, function (err, doc) {
+    users.remove({"email" : email}, function (err, doc) {
         if (err) {
             res.send("There was an issue deleting the user's information in the database.");
         } else {
