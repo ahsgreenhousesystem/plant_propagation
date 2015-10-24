@@ -140,7 +140,6 @@ router.post('/updateUser', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
 	var phone = req.body.phone;
-    var collection = db.get('users');
     users.update({"email" : email}, {
         "name" : name,
         "email" : email,
