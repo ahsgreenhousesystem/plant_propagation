@@ -1,8 +1,9 @@
 //This file will be needed in a startup script of some sort 
 //RUNS THE SERVER
+// First go to where mongoDB is installed and in the 'bin' folder, then run this below
 mongod --dbpath /path/to/plant_propogation/data/
 
-// saldin ./mongod --dbpath /Users/SaldinBajric/Documents/Schoolwork/Major/491/dec15-01/Server\ Code/plant_propogation/data
+// for saldin ./mongod --dbpath /Users/SaldinBajric/Documents/Schoolwork/Major/491/dec15-01/Server\ Code/plant_propogation/data
 
 MONGO CONSOLE
 //RUNS THE CONSOLE 
@@ -18,6 +19,10 @@ db.zonecollection.insert({"zone": 4, "name": "Zone 4", "active": true})
 db.zonecollection.insert({"zone": 5, "name": "Zone 5", "active": true})
 db.zonecollection.insert({"zone": 6, "name": "Zone 6", "active": true})
 db.zonecollection.insert({"zone": 7, "name": "Zone 7", "active": true})
+
+//for user inserts
+db.users.insert({"userId": 1, "name": "Mike Todd", "email": "mike.todd@ames.k12.ia.us", "phone": "515-451-0898"})
+
 
  db.zonecollection.update(
  {zone: 1}, 

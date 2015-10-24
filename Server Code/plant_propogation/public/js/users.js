@@ -17,7 +17,6 @@ function updateUser(btn) {
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
     if (validateFields(name, email, phone)) {
-        //update user
          $.post("/updateUser", {
          		"userId": userId.val(),
                 "name": name.val(),
@@ -25,8 +24,6 @@ function updateUser(btn) {
                 "phone": phone.val()
             }, function(response) {
             	alert(response);
-            	console.warn(response);
-				console.warn('user updated');
             }, 'json');
     }
 }

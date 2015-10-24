@@ -123,38 +123,25 @@ router.post('/setup', function(request, result) {
 
 router.post('/addUser', function(req, res) {
     var db = req.db;
-// 	var userId = req.bod  y.userId;
 	var name = req.body.name;
 	var email = req.body.email;
 	var phone = req.body.phone;
-    
-    // need to find the user in the database with this ID and update it
-    var collection = db.get('users');
-    collection.update({
-    	"userId" : userId,
-        "name" : name,
-        "email" : email,
-        "phone" : phone
-    }, function (err, doc) {
+    db.users.insert({"name": name, "email": email, "phone": phone}, function (err, doc) {
         if (err) {
-            res.send("There was an issue updating the user's information in the database.");
+            res.send("There was an issue adding the user's information in the database.");
         } else {
-            res.send("The user was successfully updated!");
+            res.send("The user was successfully added!");
         }
     })
 });
 
 router.post('/updateUser', function(req, res) {
     var db = req.db;
-	var userId = req.body.userId;
 	var name = req.body.name;
 	var email = req.body.email;
 	var phone = req.body.phone;
-    
-    // need to find the user in the database with this ID and update it
     var collection = db.get('users');
-    var user = collection.find({"userId" : userId});
-    collection.update({"userId" : userId}, {
+    collection.update({"email" : email}, {
         "name" : name,
         "email" : email,
         "phone" : phone
@@ -169,22 +156,13 @@ router.post('/updateUser', function(req, res) {
 
 router.post('/deleteUser', function(req, res) {
     var db = req.db;
-	var userId = req.body.userId;
-	var name = req.body.name;
-	var email = req.body.email;
-	var phone = req.body.phone;
-    
-    // need to find the user in the database with this ID and update it
+    var email = req.body.email;
     var collection = db.get('users');
-    collection.update({
-        "name" : name,
-        "email" : email,
-        "phone" : phone
-    }, function (err, doc) {
+    collection.remove({"email" : email}, function (err, doc) {
         if (err) {
-            res.send("There was an issue updating the user's information in the database.");
+            res.send("There was an issue deleting the user's information in the database.");
         } else {
-            res.send("The user was successfully updated!");
+            res.send("The user was successfully deleted!");
         }
     })
 });
