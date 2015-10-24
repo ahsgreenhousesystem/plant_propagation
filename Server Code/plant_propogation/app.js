@@ -60,11 +60,12 @@ function sprinklerOff(zone) {
 
 /*
  * Theoretical Scheduling Code
+ * https://github.com/tejasmanohar/node-schedule/wiki/Date-based-Scheduling
  *
 
 // load dates
 ***load all dates from database
-***schedule jobs for each date 
+***schedule jobs for each date (if isn't already scheduled)
 
 // add date
 ***add date to database
