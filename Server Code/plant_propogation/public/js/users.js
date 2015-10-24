@@ -1,3 +1,11 @@
+$(document).ready(function() {
+	$.get("/allUsers", function(response) {
+    	for (var i = 0; i < response.length; i++) {
+    		$("#userTable").append(addUser(response[i].name, response[i].email, response[i].phone));
+    	}
+    });
+});
+
 $('#newUserModal').on('hidden.bs.modal', function(e) {
     clearNewUserModalFields();
     clearValidation();
@@ -71,8 +79,8 @@ $("#saveUser").bind("click", function() {
     var name = $("#newUserFullName");
     var email = $("#newUserEmail");
     var phone = $("#newUserPhoneNumber");
-    if (validateFields(name, email, phone)) {
-        $("#userTable").append(addUser());
+    if (validateFields(name.val(), email.val(), phone.val())) {
+        $("#userTable").append(addUser(name, email, phone));
         $("#newUserModal").modal("hide");
          $.post("/addUser", {
                 "name": name.val(),
@@ -104,11 +112,11 @@ function isPhoneValid(obj) {
     return pattern.test(phoneNumber);
 }
 
-function addUser() {
+function addUser(name, email, phone) {
     var userHtml = '<tr>';
-    userHtml += '<td><input type="text" class="form-control fullNameField" placeholder="Full Name" value="' + $("#newUserFullName").val() + '" /></td>';
-    userHtml += '<td><input type="text" class="form-control emailField" placeholder="Email Address" value="' + $("#newUserEmail").val() + '" /></td>';
-    userHtml += '<td><input type="text" class="form-control phoneField" placeholder="Phone Number" value="' + $("#newUserPhoneNumber").val() + '" /></td>';
+    userHtml += '<td><input type="text" class="form-control fullNameField" placeholder="Full Name" value="' + name + '" /></td>';
+    userHtml += '<td><input type="text" class="form-control emailField" placeholder="Email Address" value="' + email + '" /></td>';
+    userHtml += '<td><input type="text" class="form-control phoneField" placeholder="Phone Number" value="' + phone + '" /></td>';
     userHtml += '<td><button type="button" class="btn btn-primary btn-sm" onclick="updateUser(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>';
     userHtml += '<td><button type="button" class="btn btn-success btn-sm" onclick="removeUser(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>';
     userHtml += '</tr>';
