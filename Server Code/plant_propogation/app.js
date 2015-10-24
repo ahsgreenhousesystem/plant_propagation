@@ -2,7 +2,8 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-// udoo = require('udoo');
+//var udoo = require('udoo');
+//var schedule = require('node-schedule');
 
 var routes = require('./routes/index');
 // var users = require('./routes/users');
@@ -33,28 +34,45 @@ app.use(function (req, res, next) {
 app.use('/', routes);
 
 /*
-# set pins
-zone1 = udoo.outputPin(23)
-zone2 = udoo.outputPin(25)
-zone3 = udoo.outputPin(27)
-zone4 = udoo.outputPin(29)
-zone5 = udoo.outputPin(31)
-zone6 = udoo.outputPin(33)
-zone7 = udoo.outputPin(35)
-timeDelay = 1000
+ * Theoretical UDOO Code
+ *
+ 
+// set pins
+var zone1 = udoo.outputPin(23);
+var zone2 = udoo.outputPin(25);
+var zone3 = udoo.outputPin(27);
+var zone4 = udoo.outputPin(29);
+var zone5 = udoo.outputPin(31);
+var zone6 = udoo.outputPin(33);
+var zone7 = udoo.outputPin(35);
+var timeDelay = 1000;
 
-# turn on sprinkler
-sprinklerOn = (zone) ->
-  setTimeout( ->
-    zone.setHigh()
-  timeDelay)
+// turn on sprinkler
+function sprinklerOn(zone) {
+  setTimeout(function(){ zone.setHigh(); }, timeDelay);
+}
 
-# turn off sprinkler
-sprinklerOff = (zone) ->
-  setTimeout( ->
-    zone.setLow()
-  timeDelay)
-###
+// turn off sprinkler
+function sprinklerOff(zone) {
+  setTimeout(function(){ zone.setLow(); }, timeDelay);
+}
+*/
+
+/*
+ * Theoretical Scheduling Code
+ *
+
+// load dates
+***load all dates from database
+***schedule jobs for each date 
+
+// add date
+***add date to database
+***loadDates()
+
+// remove date
+***remove date from database
+***loadDates() 
 */
 
 // catch 404 and forward to error handler
