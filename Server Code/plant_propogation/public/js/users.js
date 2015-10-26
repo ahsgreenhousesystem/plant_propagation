@@ -1,8 +1,8 @@
 $(document).ready(function() {
-	$.get("/allUsers", function(response) {
-    	for (var i = 0; i < response.length; i++) {
-    		$("#userTable").append(addUser(response[i]._id, response[i].name, response[i].email, response[i].phone));
-    	}
+    $.get("/allUsers", function(response) {
+        for (var i = 0; i < response.length; i++) {
+            $("#userTable").append(addUser(response[i]._id, response[i].name, response[i].email, response[i].phone));
+        }
     });
 });
 
@@ -15,32 +15,32 @@ function removeUser(btn) {
     var options = {
         message: "Are you sure you want to delete this user?",
         title: "Delete Confirmation"
-     };
-    eModal.confirm(options).then(function (/* DOM */) { 
-    	$(btn).closest("tr").remove(); 
-    	var userId = $(btn).closest("tr").find(".userId");
-         $.post("/deleteUser", {
-                "userId": userId.val()
-            }, function(response) {
-            	alert(response);
-            }, 'json');
+    };
+    eModal.confirm(options).then(function( /* DOM */ ) {
+        $(btn).closest("tr").remove();
+        var userId = $(btn).closest("tr").find(".userId");
+        $.post("/deleteUser", {
+            "userId": userId.val()
+        }, function(response) {
+            alert(response);
+        }, 'json');
     });
 }
 
 function updateUser(btn) {
-	var userId = $(btn).closest("tr").find(".userId");
+    var userId = $(btn).closest("tr").find(".userId");
     var name = $(btn).closest("tr").find(".nameField");
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
     if (validateFields(name, email, phone)) {
-         $.post("/updateUser", {
-         		"userId" : userId.val(),
-                "name": name.val(),
-                "email": email.val(),
-                "phone": phone.val()
-            }, function(data) {
-            	alert(data);
-            }, 'json');
+        $.post("/updateUser", {
+            "userId": userId.val(),
+            "name": name.val(),
+            "email": email.val(),
+            "phone": phone.val()
+        }, function(data) {
+            alert(data);
+        }, 'json');
     }
 }
 
@@ -83,13 +83,13 @@ $("#saveUser").bind("click", function() {
     var phone = $("#newUserPhoneNumber");
     if (validateFields(name, email, phone)) {
         $("#newUserModal").modal("hide");
-         $.post("/addUser", {
-                "name": name.val(),
-                "email": email.val(),
-                "phone": phone.val()
-            }, function(response) {
-            	alert(response);
-            }, 'json');
+        $.post("/addUser", {
+            "name": name.val(),
+            "email": email.val(),
+            "phone": phone.val()
+        }, function(response) {
+            alert(response);
+        }, 'json');
         location.reload();
     }
 });
