@@ -2,57 +2,17 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 
-/* GET home page. */
-router.get('/', function(req, res) {
-    //res.render('index.html');
-    res.sendFile(path.join(__dirname+'/public/index.html'));
-});
+/* GET the different pages */
+router.get('/', function(req, res) { res.sendFile(path.join(__dirname+'/public/index.html')); });
+router.get('/overview', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/index.html')); });
+router.get('/config', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/config.html')); });
+router.get('/logs', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/logs.html')); });
+router.get('/users', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html')); });
 
-/* GET overview page. */
-router.get('/overview', function(req, res) {
-    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/index.html'));
-});
-
-/* GET config page. */
-router.get('/config', function(req, res) {
-    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/config.html'));
-});
-
-/* GET logs page. */
-router.get('/logs', function(req, res) {
-    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/logs.html'));
-});
-
-/* GET users page. */
-router.get('/users', function(req, res) {
-    res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html'));
-});
-
-
-/* Load json values */
-router.get('/allZones', function(req, res) {
-    var db = req.db;
-    var collection = db.get('zonecollection');
-    collection.find({},{},function(e,docs){
-        res.send(docs);
-    });
-});
-
-router.get('/allUsers', function(req, res) {
-    var db = req.db;
-    var collection = db.get('users');
-    collection.find({},{},function(e,docs){
-        res.send(docs);
-    });
-});
-
-router.get('/allLogs', function(req, res) {
-    var db = req.db;
-    var collection = db.get('logs');
-    collection.find({},{},function(e,docs){
-        res.send(docs);
-    });
-});
+/* Load json values from the database */
+router.get('/allZones', function(req, res) { req.db.get('zonecollection').find({},{},function(e,docs){ res.send(docs); }); });
+router.get('/allUsers', function(req, res) { req.db.get('users').find({},{},function(e,docs){ res.send(docs); }); });
+router.get('/allLogs', function(req, res) { req.db.get('logs').find({},{},function(e,docs){ res.send(docs); }); });
 
 /* POST to Config */
 router.post('/config', function(req, res) {
@@ -160,6 +120,18 @@ router.post('/deleteUser', function(req, res) {
         	var logs = req.db.get('logs');
         	logs.insert({"type": "User Deleted", "date": getCurrentDate(), "info": "userId: " + userId});
             res.send("The user was successfully deleted!");
+        }
+    })
+});
+
+router.post('/deleteZone', function(req, res) {
+    var zones = req.db.get('zonecollection');
+    var zoneNumber = req.body.zoneNumber;
+    zones.remove({"zone" : zoneNumber}, function (err, doc) {
+        if (err) {
+            res.send("There was an issue deleting the zones's information in the database.");
+        } else {
+            res.send("The zone was successfully deleted!");
         }
     })
 });
