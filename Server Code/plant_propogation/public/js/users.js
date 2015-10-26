@@ -38,20 +38,20 @@ function updateUser(btn) {
                 "name": name.val(),
                 "email": email.val(),
                 "phone": phone.val()
-            }, function(response) {
-            	alert(response);
+            }, function(data) {
+            	alert(data);
             }, 'json');
     }
 }
 
 function clearNewUserModalFields() {
-    $("#newUserFullName").val("");
+    $("#newUserName").val("");
     $("#newUserEmail").val("");
     $("#newUserPhoneNumber").val("");
 }
 
 function clearValidation() {
-    $("#newUserFullName").parent().removeClass("has-error");
+    $("#newUserName").parent().removeClass("has-error");
     $("#newUserEmail").parent().removeClass("has-error");
     $("#newUserPhoneNumber").parent().removeClass("has-error");
     $(".nameField").parent().removeClass("has-error");
@@ -78,7 +78,7 @@ function validateFields(fullName, email, phone) {
 }
 
 $("#saveUser").bind("click", function() {
-    var name = $("#newUserFullName");
+    var name = $("#newUserName");
     var email = $("#newUserEmail");
     var phone = $("#newUserPhoneNumber");
     if (validateFields(name, email, phone)) {
