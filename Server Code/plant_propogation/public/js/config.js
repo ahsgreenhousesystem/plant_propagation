@@ -54,7 +54,30 @@ $(document).ready(function() {
     $("#addTimeBtn").bind("click", function() {
 		var beginTime = $("#beginTime");
         var endTime = $("#endTime");
-		if(beginTime.val() == "") {
+		
+		var beginTimeArr = beginTime.val().split(":");
+		var beginTimeArr2 = beginTimeArr[1].split(" ");
+		var beginHour = beginTimeArr[0];
+		var beginMinute = beginTimeArr2[0];
+		var beginAmFm = beginTimeArr2[1];
+		var endTimeArr = endTime.val().split(":");
+		var endTimeArr2 = endTimeArr[1].split(" ");
+		var endHour = endTimeArr[0];
+		var endMinute = endTimeArr2[0];
+		var endAmFm = endTimeArr2[1];
+		
+		var startTimeObject = new Date();
+		startTimeObject.setHours(beginHour, beginMinute, "00");
+		
+		var endTimeObject = new Date();
+		endTimeObject.setHours(endHour, endMinute, "00");
+		
+		if(startTimeObject > endTimeObject) {
+			var errorMessage = "You cannot have a start time later than the end time."
+			$("#modal-error-message").empty();
+			$("#modal-error-message").append(errorMessage);
+			$("#modal-error-message").show();
+		} else if(beginTime.val() == "") {
 			var errorMessage = "Please enter in a start time."
 			$("#modal-error-message").empty();
 			$("#modal-error-message").append(errorMessage);
