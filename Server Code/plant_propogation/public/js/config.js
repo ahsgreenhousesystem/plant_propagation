@@ -72,7 +72,7 @@ $(document).ready(function() {
 		var endTimeObject = new Date();
 		endTimeObject.setHours(endHour, endMinute, "00");
 		
-		if(startTimeObject > endTimeObject) {
+		if(startTimeObject > endTimeObject || startTimeObject.getTime() === endTimeObject.getTime()) {
 			var errorMessage = "You cannot have a start time later than the end time."
 			$("#modal-error-message").empty();
 			$("#modal-error-message").append(errorMessage);
