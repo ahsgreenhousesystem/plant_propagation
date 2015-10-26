@@ -8,17 +8,6 @@ router.get('/', function(req, res) {
     res.sendFile(path.join(__dirname+'/public/overview.html'));
 });
 
-
-/* GET json values for all zones */
-router.get('/allZones', function(req, res) {
-    var db = req.db;
-    var collection = db.get('zonecollection');
-    collection.find({},{},function(e,docs){
-        res.send(docs);
-    });
-});
-
-
 /* GET overview page. */
 router.get('/overview', function(req, res) {
     res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/overview.html'));
@@ -37,6 +26,24 @@ router.get('/logs', function(req, res) {
 /* GET users page. */
 router.get('/users', function(req, res) {
     res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html'));
+});
+
+
+/* Load json values */
+router.get('/allZones', function(req, res) {
+    var db = req.db;
+    var collection = db.get('zonecollection');
+    collection.find({},{},function(e,docs){
+        res.send(docs);
+    });
+});
+
+router.get('/allUsers', function(req, res) {
+    var db = req.db;
+    var collection = db.get('users');
+    collection.find({},{},function(e,docs){
+        res.send(docs);
+    });
 });
 
 /* POST to Config */
@@ -94,6 +101,50 @@ router.post('/setup', function(request, result) {
             result.send("There was an issue adding the information to the database.");
         } else {
             result.send("Zone successfully updated."); 
+        }
+    })
+});
+
+router.post('/addUser', function(req, res) {
+    var users = req.db.get('users');
+	var name = req.body.name;
+	var email = req.body.email;
+	var phone = req.body.phone;
+    users.insert({"name": name, "email": email, "phone": phone}, function (err, doc) {
+        if (err) {
+            res.send("There was an issue adding the user's information in the database.");
+        } else {
+            res.send("The user was successfully added!");
+        }
+    })
+});
+
+router.post('/updateUser', function(req, res) {
+    var users = req.db.get('users');
+	var name = req.body.name;
+	var email = req.body.email;
+	var phone = req.body.phone;
+    users.update({"email" : email}, {
+        "name" : name,
+        "email" : email,
+        "phone" : phone
+    }, function (err, doc) {
+        if (err) {
+            res.send("There was an issue updating the user's information in the database.");
+        } else {
+            res.send("The user was successfully updated!");
+        }
+    })
+});
+
+router.post('/deleteUser', function(req, res) {
+    var users = req.db.get('users');
+    var email = req.body.email;
+    users.remove({"email" : email}, function (err, doc) {
+        if (err) {
+            res.send("There was an issue deleting the user's information in the database.");
+        } else {
+            res.send("The user was successfully deleted!");
         }
     })
 });

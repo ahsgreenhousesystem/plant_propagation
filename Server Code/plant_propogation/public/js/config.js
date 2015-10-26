@@ -42,18 +42,49 @@ $(document).ready(function() {
         $("#beginTime").val("");
         $("#endTime").val("");
         $("#zoneToAddTime").val(zoneNumber);
+		clearValidation();
         $("#newTimeModal").modal("show");
     });
+	
+	function clearValidation() {
+		$("#modal-error-message").empty();
+		$("#modal-error-message").hide();
+	}
 
     $("#addTimeBtn").bind("click", function() {
-        addTimeToZone();
+		var beginTime = $("#beginTime");
+        var endTime = $("#endTime");
+		if(beginTime.val() == "") {
+			var errorMessage = "Please enter in a start time."
+			$("#modal-error-message").empty();
+			$("#modal-error-message").append(errorMessage);
+			$("#modal-error-message").show();
+		} else if(endTime.val() == "") {
+			var errorMessage = "Please enter in a end time."
+			$("#modal-error-message").empty();
+			$("#modal-error-message").append(errorMessage);
+			$("#modal-error-message").show();
+		} else {
+			$("#newTimeModal").modal("hide");
+			addTimeToZone();
+		}
     });
 
     $(".deleteZone").bind("click", function() {
         var me = $(this);
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
         var options = setModalConfirmationOptions("Are you sure you want to delete Zone " + zoneNumber + "?", "Delete Confirmation");
-        eModal.confirm(options).then(function (/* DOM */) { me.closest(".row").remove(); });
+        eModal.confirm(options).then(function (/* DOM */) {
+			me.closest(".row").remove(); 
+			//remove zone
+			 $.post("/removeZone", {
+				"zoneNumber": zoneNumber
+			}, function(response) {
+				alert(response);
+				console.warn(response);
+				console.warn('zone remove');
+			}, 'json');
+		});
     });
 
     $(document).on("click", ".deleteTime", function() {
