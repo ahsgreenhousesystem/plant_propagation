@@ -82,7 +82,6 @@ $("#saveUser").bind("click", function() {
     var email = $("#newUserEmail");
     var phone = $("#newUserPhoneNumber");
     if (validateFields(name, email, phone)) {
-        $("#userTable").append(addUser("", name.val(), email.val(), phone.val()));
         $("#newUserModal").modal("hide");
          $.post("/addUser", {
                 "name": name.val(),
@@ -91,6 +90,7 @@ $("#saveUser").bind("click", function() {
             }, function(response) {
             	alert(response);
             }, 'json');
+        location.reload();
     }
 });
 
