@@ -9,6 +9,7 @@ $(document).ready(function() {
            if(response[i].type.indexOf("User") > -1) {
            		userTable += '<tr><td>' + response[i].type + '</td><td>' + response[i].date + '</td><td>' + response[i].info + '</td></tr>';
            } else {
+           		
            		// add to zone logs
            		/*
             <div class="panel panel-default" id="panel7">
