@@ -26,6 +26,10 @@ db.zonecollection.insert({"zone": "7", "name": "Zone 7", "active": true})
 //for user inserts
 db.users.insert({"name": "Mike Todd", "email": "mike.todd@ames.k12.ia.us", "phone": "515-451-0898"})
 
+//for log inserts
+db.logs.insert({"type": "User Deleted", "date": getCurrentDate(), "info": "userId: " + userId});
+db.logs.insert({"type": "Zone1", "date": "right now", "info": "Zone1 was opened"});
+
 
  db.zonecollection.update(
  {zone: 1}, 
