@@ -23,7 +23,7 @@ db.zonecollection.insert({"zone": 6, "name": "Zone 6", "active": true})
 db.zonecollection.insert({"zone": 7, "name": "Zone 7", "active": true})
 
 //for user inserts
-db.users.insert({"userId": 1, "name": "Mike Todd", "email": "mike.todd@ames.k12.ia.us", "phone": "515-451-0898"})
+db.users.insert({"name": "Mike Todd", "email": "mike.todd@ames.k12.ia.us", "phone": "515-451-0898"})
 
 
  db.zonecollection.update(
