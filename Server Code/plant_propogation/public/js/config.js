@@ -78,12 +78,12 @@ $(document).ready(function() {
 			$("#modal-error-message").append(errorMessage);
 			$("#modal-error-message").show();
 		} else if(beginTime.val() == "") {
-			var errorMessage = "Please enter in a start time."
+			var errorMessage = "Please enter a start time."
 			$("#modal-error-message").empty();
 			$("#modal-error-message").append(errorMessage);
 			$("#modal-error-message").show();
 		} else if(endTime.val() == "") {
-			var errorMessage = "Please enter in a end time."
+			var errorMessage = "Please enter an end time."
 			$("#modal-error-message").empty();
 			$("#modal-error-message").append(errorMessage);
 			$("#modal-error-message").show();
