@@ -164,6 +164,18 @@ router.post('/deleteUser', function(req, res) {
     })
 });
 
+router.post('/deleteZone', function(req, res) {
+    var zones = req.db.get('zonecollection');
+    var zoneNumber = req.body.zoneNumber;
+    zones.remove({"zone" : zoneNumber}, function (err, doc) {
+        if (err) {
+            res.send("There was an issue deleting the zones's information in the database.");
+        } else {
+            res.send("The zone was successfully deleted!");
+        }
+    })
+});
+
 function getCurrentDate() {
 	var currentdate = new Date(); 
 	var datetime = (currentdate.getMonth()+1) + "/"

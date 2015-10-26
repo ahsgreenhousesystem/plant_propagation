@@ -33,8 +33,18 @@ $(document).ready(function() {
 
     });
 
-    $('.input-sm').datetimepicker({
-        format: 'LT'
+	$("#beginTime").datetimepicker({
+        format: 'LT',
+		widgetPositioning: {
+			veritcal: 'top'
+		}
+    });
+	
+	$("#endTime").datetimepicker({
+        format: 'LT',
+		widgetPositioning: {
+			veritcal: 'top'
+		}
     });
 
     $(".addTime").bind("click", function(){
@@ -99,14 +109,12 @@ $(document).ready(function() {
         var options = setModalConfirmationOptions("Are you sure you want to delete Zone " + zoneNumber + "?", "Delete Confirmation");
         eModal.confirm(options).then(function (/* DOM */) {
 			me.closest(".row").remove(); 
-			//remove zone
-			 $.post("/removeZone", {
-				"zoneNumber": zoneNumber
-			}, function(response) {
-				alert(response);
-				console.warn(response);
-				console.warn('zone remove');
-			}, 'json');
+			//remove 
+			 $.post("/deleteZone", {
+                "zoneNumber": zoneNumber
+            }, function(response) {
+            	alert(response);
+            }, 'json');
 		});
     });
 
