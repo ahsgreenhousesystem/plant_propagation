@@ -40,9 +40,9 @@ $(document).ready(function() {
 			zoneHtml += zoneObject.name + '- <label>Active:&nbsp;</label><input id="A'+zoneObject.zone+'" type="checkbox" class="visible">';
 		}
         zoneHtml += '<span class="pull-right">';
-        zoneHtml += '<button class="btn btn-default btn-sm addTime"><span class="glyphicon glyphicon-time"></span>&nbsp;<span class="hidden-xs">Add Time</span></button>';
-        zoneHtml += '<button id= "'+zoneObject.zone+'" type="button" class="btn btn-default btn-sm" onclick="updateTimes('+zoneObject.zone+')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update Times</span></button>';
-        zoneHtml += '<button type="button" class="btn btn-success btn-sm deleteZone"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button>';
+        zoneHtml += '<button class="btn btn-default btn-xs addTime"><span class="glyphicon glyphicon-time"></span>&nbsp;<span class="hidden-xs">Add Time</span></button>';
+        zoneHtml += '&nbsp;<button id= "'+zoneObject.zone+'" type="button" class="btn btn-default btn-xs" onclick="updateTimes('+zoneObject.zone+')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update Times</span></button>';
+        zoneHtml += '&nbsp;<button type="button" class="btn btn-success btn-xs deleteZone"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button>';
         zoneHtml += '</span>';
         zoneHtml += '</h3>';
         zoneHtml += '</div>';
@@ -99,6 +99,20 @@ $(document).ready(function() {
 		var beginTime = $("#beginTime");
         var endTime = $("#endTime");
 		
+		if(beginTime.val() == "") {
+			var errorMessage = "Please enter a start time."
+			$("#modal-error-message").empty();
+			$("#modal-error-message").append(errorMessage);
+			$("#modal-error-message").show();
+			return false;
+		} else if(endTime.val() == "") {
+			var errorMessage = "Please enter an end time."
+			$("#modal-error-message").empty();
+			$("#modal-error-message").append(errorMessage);
+			$("#modal-error-message").show();
+			return false;
+		}
+		
 		var beginTimeArr = beginTime.val().split(":");
 		var beginTimeArr2 = beginTimeArr[1].split(" ");
 		var beginHour = beginTimeArr[0];
@@ -121,20 +135,10 @@ $(document).ready(function() {
 			$("#modal-error-message").empty();
 			$("#modal-error-message").append(errorMessage);
 			$("#modal-error-message").show();
-		} else if(beginTime.val() == "") {
-			var errorMessage = "Please enter a start time."
-			$("#modal-error-message").empty();
-			$("#modal-error-message").append(errorMessage);
-			$("#modal-error-message").show();
-		} else if(endTime.val() == "") {
-			var errorMessage = "Please enter an end time."
-			$("#modal-error-message").empty();
-			$("#modal-error-message").append(errorMessage);
-			$("#modal-error-message").show();
-		} else {
-			$("#newTimeModal").modal("hide");
-			addTimeToZone();
+			return false;
 		}
+		$("#newTimeModal").modal("hide");
+		addTimeToZone();
     });
 
 	$(document).on("click", ".deleteZone", function() {
