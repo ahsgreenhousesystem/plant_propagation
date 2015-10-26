@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$.get("/allUsers", function(response) {
     	for (var i = 0; i < response.length; i++) {
-    		$("#userTable").append(addUser(response[i].name, response[i].email, response[i].phone));
+    		$("#userTable").append(addUser(response[i]._id, response[i].name, response[i].email, response[i].phone));
     	}
     });
 });
@@ -17,20 +17,22 @@ function removeUser(btn) {
         title: "Delete Confirmation"
      };
     eModal.confirm(options).then(function (/* DOM */) { $(btn).closest("tr").remove(); });
-    var email = $(btn).closest("tr").find(".emailField");
+    var userId = $(btn).closest("tr").find(".userId");
          $.post("/deleteUser", {
-                "email": email.val()
+                "userId": userId.val()
             }, function(response) {
             	alert(response);
             }, 'json');
 }
 
 function updateUser(btn) {
-    var name = $(btn).closest("tr").find(".fullNameField");
+	var userId = $(btn).closest("tr").find(".userId");
+    var name = $(btn).closest("tr").find(".nameField");
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
     if (validateFields(name, email, phone)) {
          $.post("/updateUser", {
+         		"userId" : userId.val(),
                 "name": name.val(),
                 "email": email.val(),
                 "phone": phone.val()
@@ -50,7 +52,7 @@ function clearValidation() {
     $("#newUserFullName").parent().removeClass("has-error");
     $("#newUserEmail").parent().removeClass("has-error");
     $("#newUserPhoneNumber").parent().removeClass("has-error");
-    $(".fullNameField").parent().removeClass("has-error");
+    $(".nameField").parent().removeClass("has-error");
     $(".emailField").parent().removeClass("has-error");
     $(".phoneField").parent().removeClass("has-error");
 }
@@ -78,7 +80,7 @@ $("#saveUser").bind("click", function() {
     var email = $("#newUserEmail");
     var phone = $("#newUserPhoneNumber");
     if (validateFields(name, email, phone)) {
-        $("#userTable").append(addUser(name.val(), email.val(), phone.val()));
+        $("#userTable").append(addUser("", name.val(), email.val(), phone.val()));
         $("#newUserModal").modal("hide");
          $.post("/addUser", {
                 "name": name.val(),
@@ -107,9 +109,10 @@ function isPhoneValid(phone) {
     return pattern.test(phone.val());
 }
 
-function addUser(name, email, phone) {
+function addUser(userId, name, email, phone) {
     var userHtml = '<tr>';
-    userHtml += '<td><input type="text" class="form-control fullNameField" placeholder="Full Name" value="' + name + '" /></td>';
+    userHtml += '<td class="sr-only"><input type="text" class="userId" placeholder="User Id" value="' + userId + '" /></td>';
+    userHtml += '<td><input type="text" class="form-control nameField" placeholder="Full Name" value="' + name + '" /></td>';
     userHtml += '<td><input type="text" class="form-control emailField" placeholder="Email Address" value="' + email + '" /></td>';
     userHtml += '<td><input type="text" class="form-control phoneField" placeholder="Phone Number" value="' + phone + '" /></td>';
     userHtml += '<td><button type="button" class="btn btn-primary btn-sm" onclick="updateUser(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>';

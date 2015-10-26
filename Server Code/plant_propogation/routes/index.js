@@ -121,10 +121,11 @@ router.post('/addUser', function(req, res) {
 
 router.post('/updateUser', function(req, res) {
     var users = req.db.get('users');
+    var userId = req.body.userId;
 	var name = req.body.name;
 	var email = req.body.email;
 	var phone = req.body.phone;
-    users.update({"email" : email}, {
+    users.update({"_id" : userId}, {
         "name" : name,
         "email" : email,
         "phone" : phone
@@ -139,8 +140,8 @@ router.post('/updateUser', function(req, res) {
 
 router.post('/deleteUser', function(req, res) {
     var users = req.db.get('users');
-    var email = req.body.email;
-    users.remove({"email" : email}, function (err, doc) {
+    var userId = req.body.userId;
+    users.remove({"_id" : userId}, function (err, doc) {
         if (err) {
             res.send("There was an issue deleting the user's information in the database.");
         } else {
