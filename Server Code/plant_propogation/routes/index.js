@@ -46,6 +46,14 @@ router.get('/allUsers', function(req, res) {
     });
 });
 
+router.get('/allLogs', function(req, res) {
+    var db = req.db;
+    var collection = db.get('logs');
+    collection.find({},{},function(e,docs){
+        res.send(docs);
+    });
+});
+
 /* POST to Config */
 router.post('/config', function(req, res) {
     var db = req.db;
@@ -114,6 +122,8 @@ router.post('/addUser', function(req, res) {
         if (err) {
             res.send("There was an issue adding the user's information in the database.");
         } else {
+        	var logs = req.db.get('logs');
+        	logs.insert({"type": "User Added", "date": getCurrentDate(), "info": "name: " + name + " email: " + email + " phone: " + phone});
             res.send("The user was successfully added!");
         }
     })
@@ -133,6 +143,8 @@ router.post('/updateUser', function(req, res) {
         if (err) {
             res.send("There was an issue updating the user's information in the database.");
         } else {
+        	var logs = req.db.get('logs');
+        	logs.insert({"type": "User Updated", "date": getCurrentDate(), "info": "userId: " + userId + " name: " + name + " email: " + email + " phone: " + phone});
             res.send("The user was successfully updated!");
         }
     })
@@ -145,9 +157,22 @@ router.post('/deleteUser', function(req, res) {
         if (err) {
             res.send("There was an issue deleting the user's information in the database.");
         } else {
+        	var logs = req.db.get('logs');
+        	logs.insert({"type": "User Deleted", "date": getCurrentDate(), "info": "userId: " + userId});
             res.send("The user was successfully deleted!");
         }
     })
 });
+
+function getCurrentDate() {
+	var currentdate = new Date(); 
+	var datetime = (currentdate.getMonth()+1) + "/"
+                + currentdate.getDate() + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+    return datetime;
+}
 
 module.exports = router;
