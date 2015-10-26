@@ -28,6 +28,7 @@ router.get('/users', function(req, res) {
     res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html'));
 });
 
+
 /* Load json values */
 router.get('/allZones', function(req, res) {
     var db = req.db;
@@ -45,57 +46,40 @@ router.get('/allUsers', function(req, res) {
     });
 });
 
-// var getTimes = function (json) {
-//     console.log("Getting times from json");
-//     var times = "[";
-//     for(var i = 0; i < 3; i++) {
-//         //console.log(json.times[i].begin);
-//         console.log("Time at " + i + " : " + json);
-//        // console.log(json.times[i][begin]);
-//         var begin = json.times[i].begin;
-//         var end = json.times[i].end;
-//         times += "{\"begin\": " + begin + " , \"end\" : " + end + " }";
-//         if(i < 2) times += ", ";
-//     }
-//     times += "]";
-
-//     return times;
-// };
-
 /* POST to Config */
 router.post('/config', function(req, res) {
     var db = req.db;
 
-    var zone = req.body;
-    console.log(zone);
-    ///var times = getTimes(req.body);
+    var zone = req.body.zone;
+    var size = req.body.count;
 
-    console.log("Times: " + zone.times);
-    var times = "[";
-    for(var i = 0; i < 3; i++) {
-        //console.log(timeArray[i]);
-       // console.log(timeArray[i]);
-        // var begin = req.body.times[i].begin;
-        // var end = req.body.times[i].end;
-        // times += "{\"begin\": " + begin + " , \"end\" : " + end + " }";
-        // if(i < 2) times += ", ";
+    console.log(req.body);
+
+    console.log("Zone: " + zone);
+    console.log("Size: " + size);
+
+    var timesArr =[];
+    for(var i = 0; i < size; i++) {
+        var begin = req.body['times[' + i + '][begin]'];
+        var end = req.body['times['+ i + '][end]'];
+        
+        timesArr.push({"begin":begin, "end":end});
     }
-    times += "]";
-    console.log(times);
-    
-    console.log("Zone: " + zone.zone);
-    //console.log("Times: " + zone.times);
+
+    console.log(timesArr);
 
     var collection = db.get('zonecollection');
 
-    collection.update({
-        "zone" : zone.zone,
-        "times" : times
+    collection.update({"zone": zone}, 
+    { 
+        $set : { "times" : timesArr }
     }, function (err, doc) {
         if (err) {
-            result.send("There was an issue adding the information to the database.");
+            res.send("There was an issue adding the information to the database.");
+            console.log("There was an issue adding the information to the database.");
         } else {
-            result.send("Times successfully updated.");
+            res.send("Times successfully updated.");
+            console.log("Times successfully updated.");
         }
     })
 });
@@ -140,7 +124,6 @@ router.post('/updateUser', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
 	var phone = req.body.phone;
-    var collection = db.get('users');
     users.update({"email" : email}, {
         "name" : name,
         "email" : email,
@@ -155,10 +138,9 @@ router.post('/updateUser', function(req, res) {
 });
 
 router.post('/deleteUser', function(req, res) {
-    var db = req.db;
+    var users = req.db.get('users');
     var email = req.body.email;
-    var collection = db.get('users');
-    collection.remove({"email" : email}, function (err, doc) {
+    users.remove({"email" : email}, function (err, doc) {
         if (err) {
             res.send("There was an issue deleting the user's information in the database.");
         } else {

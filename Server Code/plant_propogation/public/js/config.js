@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function() { 
 
     /*
     Load information into page. 
@@ -36,50 +36,6 @@ $(document).ready(function() {
     $('.input-sm').datetimepicker({
         format: 'LT'
     });
-
-    //TODO - change to only buttons for individual zones, add another for 'Update All'
-    $("button").click(function() {
-        var zone = $(this).attr("id");
-        var begin1 = $("#Z" + zone + "T1").val();
-        var end1 = $('#Z' + zone + "D1").val();
-        var begin2 = $('#Z' + zone + "T2").val();
-        var end2 = $('#Z' + zone + "D2").val();
-        var begin3 = $('#Z' + zone + "T3").val();
-        var end3 = $('#Z' + zone + "D3").val();
-
-        $.post("/config", {
-                'zone': zone,
-                'times[]': [{
-                    "begin": begin1,
-                    "end": end1
-                }, {
-                    "begin": begin2,
-                    "end": end2
-                }, {
-                    "begin": begin3,
-                    "end": end3
-                }]
-            },
-            function(response) {
-                $("#zone" + zone + "response").text(response);
-            }, 'json');
-    });
-
-    //This is from old zones.html (Setup page)
-    function setupClick(zone) {
-        if (zone) {
-            var name = $("#N" + zone).val();
-            var active = $("#A" + zone).prop("checked");
-
-            $.post("/setup", {
-                "zone": zone,
-                "name": name,
-                "active": active
-            }, function(response) {
-
-            });
-        }
-    };
 
     $(".addTime").bind("click", function(){
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
@@ -144,6 +100,7 @@ $(document).ready(function() {
                 $("#timeTable" + zoneNumber).hide();
             }
         });
+        updateTimes(zoneNumber);
     });
 
     function setModalConfirmationOptions(message, title) {
@@ -175,3 +132,24 @@ $(document).ready(function() {
         $("#timeTable" + zoneNumber).show();
     }
 });
+
+function updateTimes(zone) {
+
+        var timeArr = [];
+        var count = 0;
+
+        $('#timeTable' + zone + ' > tbody > tr').each(function() {
+            var begin = $(this).find('.beginTimeTd').text();
+            var end = $(this).find('.endTimeTd').text();
+
+            timeArr.push({'begin': begin, 'end' : end});
+            count++;
+        });
+
+        var data = { 'zone': zone, 'count': count, 'times': timeArr};
+
+        $.post("/config", data, 
+        function(response) {
+                $("#zone" + zone + "response").text(response);
+            }, 'json');
+};
