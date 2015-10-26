@@ -8,30 +8,63 @@ $(document).ready(function() {
          
     You guys have any suggestions on best way to do this?  Probably done in index.js, but not sure how.  
     */
-
-    $(".timeTable").each(function() {
-        var noScheduledTimesDiv = $(this).closest(".panel-body").find(".noScheduledTimes");
-        var rows = $(this).find("tr").length;
-        if (rows == 1) {
-            noScheduledTimesDiv.show();
-            $(this).hide();
-        }
-    });
+	function hideTimeTable() {
+		$(".timeTable").each(function() {
+			var noScheduledTimesDiv = $(this).closest(".panel-body").find(".noScheduledTimes");
+			var rows = $(this).find("tr").length;
+			if (rows == 1) {
+				noScheduledTimesDiv.show();
+				$(this).hide();
+			}
+		});
+	}
 
     $.get("/allZones", function(response) {
        // alert(response);
-        for (var zone = 0; zone < response.length; zone++) {
-            var num = zone + 1;
-            $("#N"+num).text(zone);
-            $("#A"+num).prop("checked", response[zone].active);
-
-            for (var i = 1; i <= 3; i++) {
-                $("#Z" + num + "T" + i).text(response[zone].times[i-1].begin);
-                $("#Z" + num + "D" + i).text(response[zone].times[i-1].end);
-            }
-        }
-
+        for (var zone = 1; zone < response.length; zone++) {
+			createZonePanel(response[zone]);
+		}
+		hideTimeTable();
     });
+	
+	function createZonePanel(zoneObject) {
+		var zoneHtml = '<div class="row">';
+        zoneHtml += '<input class="zoneNumber" type="hidden" value="'+zoneObject.zone+'" />';
+        zoneHtml += '<div class="col-lg-12 col-md-12">';
+        zoneHtml += '<div class="panel panel-default">';
+        zoneHtml += '<div class="panel-heading">';
+        zoneHtml += '<h3 class="panel-title">';
+		if(zoneObject.active) {
+			zoneHtml += zoneObject.name + '- <label>Active:&nbsp;</label><input id="A'+zoneObject.zone+'" type="checkbox" class="visible" checked>';
+		} else {
+			zoneHtml += zoneObject.name + '- <label>Active:&nbsp;</label><input id="A'+zoneObject.zone+'" type="checkbox" class="visible">';
+		}
+        zoneHtml += '<span class="pull-right">';
+        zoneHtml += '<button class="btn btn-default btn-sm addTime"><span class="glyphicon glyphicon-time"></span>&nbsp;<span class="hidden-xs">Add Time</span></button>';
+        zoneHtml += '<button id= "'+zoneObject.zone+'" type="button" class="btn btn-default btn-sm" onclick="updateTimes('+zoneObject.zone+')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update Times</span></button>';
+        zoneHtml += '<button type="button" class="btn btn-success btn-sm deleteZone"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button>';
+        zoneHtml += '</span>';
+        zoneHtml += '</h3>';
+        zoneHtml += '</div>';
+        zoneHtml += '<div class="panel-body">';
+        zoneHtml += '<table id="timeTable'+zoneObject.zone+'" class="table table-striped table-condensed table-hover timeTable" style="text-align:left;">';
+        zoneHtml += '<thead>';
+        zoneHtml += '<tr>';
+        zoneHtml += '<th></th>';
+        zoneHtml += '<th>Begin Time</th>';
+        zoneHtml += '<th>End Time</th>';
+        zoneHtml += '</tr>';
+        zoneHtml += '</thead>';
+        zoneHtml += '<tbody></tbody>';
+        zoneHtml += '</table>';
+        zoneHtml += '<div class="noScheduledTimes"><em>There are no scheduled watering times.</em></div>';
+        zoneHtml += '</div>';
+        zoneHtml += '</div>';
+        zoneHtml += '</div>';
+        zoneHtml += '<div class="row" id="zone'+zoneObject.zone+'response"></div>';
+        zoneHtml += '</div>';
+		$("#zoneDiv").append(zoneHtml);
+	}
 
 	$("#beginTime").datetimepicker({
         format: 'LT',
@@ -47,7 +80,7 @@ $(document).ready(function() {
 		}
     });
 
-    $(".addTime").bind("click", function(){
+	$(document).on("click", ".addTime", function() {
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
         $("#beginTime").val("");
         $("#endTime").val("");
@@ -61,6 +94,7 @@ $(document).ready(function() {
 		$("#modal-error-message").hide();
 	}
 
+	
     $("#addTimeBtn").bind("click", function() {
 		var beginTime = $("#beginTime");
         var endTime = $("#endTime");
@@ -103,7 +137,7 @@ $(document).ready(function() {
 		}
     });
 
-    $(".deleteZone").bind("click", function() {
+	$(document).on("click", ".deleteZone", function() {
         var me = $(this);
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
         var options = setModalConfirmationOptions("Are you sure you want to delete Zone " + zoneNumber + "?", "Delete Confirmation");
