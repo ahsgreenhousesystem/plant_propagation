@@ -6,9 +6,6 @@ mongod --dbpath /path/to/plant_propogation/data/
 // for saldin ./mongod --dbpath /Users/SaldinBajric/Documents/Schoolwork/Major/491/dec15-01/Server\ Code/plant_propogation/data
 // for brian laptop mongod --dbpath "C:/Users/sutherpfs/documents/dec15-01/Server Code/plant_propogation/data"
 
-
-MOmongod --dbpath /Users/sutherpfs/documents/dec15-01/server code/plant_propogation/data
-NGO CONSOLE
 //RUNS THE CONSOLE 
 mongo
 
