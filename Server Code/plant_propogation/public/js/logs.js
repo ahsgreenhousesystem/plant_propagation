@@ -1,7 +1,6 @@
 $(document).ready(function() {
     $.get("/allLogs", function(response) {
     	var zoneLogs = '';
-    	var zone = 1;
     	var userTable = '<table class="table table-striped table-condensed table-hover" style="width:100%"><thead>';
            		userTable += '<th style="text-align:center">Log Type</th>';
            		userTable += '<th style="text-align:center">Date</th>';
@@ -11,7 +10,7 @@ $(document).ready(function() {
            if(response[i].type.indexOf("User") > -1) {
            		userTable += '<tr><td>' + response[i].type + '</td><td>' + response[i].date + '</td><td>' + response[i].info + '</td></tr>';
            } else {
-           		zone = response[i].info.charAt(4); // Zone logs must start with 'Zone#'
+           		var zone = response[i].info.charAt(4); // Zone logs must start with 'Zone#'
            		var zonePanel = '<div class="panel panel-default" id="panel' + zone + '"><div class="panel-heading"><h4 class="panel-title">';
            		zonePanel += '<a data-toggle="collapse" data-target="#collapse' + zone + '" href="#collapse' + zone + '" class="collapsed">';
            		zonePanel += 'Zone ' + zone + '</a></h4></div>';
