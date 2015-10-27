@@ -236,8 +236,15 @@ function updateZone(zone) {
 
         var data = { 'zone': zone, 'count': count, 'name' : name, 'active' : active, 'times': timeArr};
 
-        $.post("/config", data, 
-        function(response) {
-                $("#zone" + zone + "response").text(response);
-            }, 'json');
+		$.ajax({
+			url: '/config',
+			data: data,
+			method: "post",
+			success: function(response){
+				eModal.alert('Times successfully updated!');
+			},
+			error: function(){
+				eModal.alert('Times not updated!');
+			}
+		});
 };

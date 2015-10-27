@@ -33,14 +33,19 @@ function updateUser(btn) {
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
     if (validateFields(name, email, phone)) {
-        $.post("/updateUser", {
-            "userId": userId.val(),
-            "name": name.val(),
-            "email": email.val(),
-            "phone": phone.val()
-        }, function(data) {
-            alert(data);
-        }, 'json');
+		var data = { 'userId': userId.val(), 'name': name.val(), 'email' : email.val(), 'phone' : phone.val()};
+		$.ajax({
+			url: '/updateUser',
+			data: data,
+			method: "post",
+			success: function(response){
+				eModal.alert('User successfully updated!');
+			},
+			error: function(response){
+				console.warn(response);
+				eModal.alert('User was not updated!');
+			}
+		});
     }
 }
 
