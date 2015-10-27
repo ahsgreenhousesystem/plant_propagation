@@ -28,7 +28,7 @@ $(document).ready(function() {
             zoneTable += '<th style="text-align:center">Information</th>';
             zoneTable += '</thead><tbody>';
             for (var j = 0; j < response.length; j++) {
-                if (response[j].info.charAt(4) == zone) {
+                if (response[j].type.charAt(4) == zone) {
                     zoneTable += '<tr><td>' + response[j].type + '</td><td>' + response[j].date + '</td><td>' + response[j].info + '</td></tr>';
                 }
             }
