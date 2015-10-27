@@ -1,13 +1,5 @@
 $(document).ready(function() { 
 
-    /*
-    Load information into page. 
-         
-    This isn't going to be here.  On load of page, need to supply html pages with data to fill in 
-    all sections of the page. This may have to be done when the page is sent from the server. 
-         
-    You guys have any suggestions on best way to do this?  Probably done in index.js, but not sure how.  
-    */
 	function hideTimeTable() {
 		$(".timeTable").each(function() {
 			var noScheduledTimesDiv = $(this).closest(".panel-body").find(".noScheduledTimes");
@@ -20,8 +12,8 @@ $(document).ready(function() {
 	}
 
     $.get("/allZones", function(response) {
-       // alert(response);
-        for (var zone = 1; zone < response.length; zone++) {
+        console.log("/allZones response: " + response);
+        for (var zone = 0; zone < response.length; zone++) {
 			createZonePanel(response[zone]);
 		}
 		hideTimeTable();
@@ -41,7 +33,7 @@ $(document).ready(function() {
 		}
         zoneHtml += '<span class="pull-right">';
         zoneHtml += '<button class="btn btn-default btn-xs addTime"><span class="glyphicon glyphicon-time"></span>&nbsp;<span class="hidden-xs">Add Time</span></button>';
-        zoneHtml += '&nbsp;<button id= "'+zoneObject.zone+'" type="button" class="btn btn-default btn-xs" onclick="updateTimes('+zoneObject.zone+')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update Times</span></button>';
+        zoneHtml += '&nbsp;<button id= "'+zoneObject.zone+'" type="button" class="btn btn-default btn-xs" onclick="updateZone('+zoneObject.zone+')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update Times</span></button>';
         zoneHtml += '&nbsp;<button type="button" class="btn btn-success btn-xs deleteZone"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button>';
         zoneHtml += '</span>';
         zoneHtml += '</h3>';
@@ -64,6 +56,7 @@ $(document).ready(function() {
         zoneHtml += '<div class="row" id="zone'+zoneObject.zone+'response"></div>';
         zoneHtml += '</div>';
 		$("#zoneDiv").append(zoneHtml);
+        addConfiguredTimes(zoneObject);
 	}
 
 	$("#beginTime").datetimepicker({
@@ -138,7 +131,7 @@ $(document).ready(function() {
 			return false;
 		}
 		$("#newTimeModal").modal("hide");
-		addTimeToZone();
+		addNewTime();
     });
 
 	$(document).on("click", ".deleteZone", function() {
@@ -180,29 +173,50 @@ $(document).ready(function() {
          return options;
     }
 
-    function addTimeToZone() {
+    function addNewTime() {
         var zoneNumber = $("#zoneToAddTime").val();
-        var table = $("#timeTable" + zoneNumber + " tbody");
         var beginTime = $("#beginTime").val();
         var endTime = $("#endTime").val();
+        addTableRow(zoneNumber, beginTime, endTime);
+        
+    }
+
+    function addConfiguredTimes(zoneObject) {
+        if(zoneObject.times.length == 0)
+            return;
+
+        var num = zoneObject.zone;
+        var times = zoneObject.times;
+
+        for(var i = 0; i < times.length; i++) {
+            console.log(times[i].begin);
+            console.log(times[i].end);
+            addTableRow(num, times[i].begin, times[i].end);
+        }
+    }
+
+    function addTableRow(zone, begin, end) {
+        var table = $("#timeTable" + zone + " tbody");
         var html = '<tr>';
         html += '<td style="width:250px;">';
         html += '<button class="btn btn-sm btn-success deleteTime"><span class="glyphicon glyphicon-remove"></span>&nbsp;Delete Time</button>';
         html += '</td>';
         html += '<td class="beginTimeTd">';
-        html += beginTime;
+        html += begin;
         html += '</td>';
         html += '<td class="endTimeTd">';
-        html += endTime;
+        html += end;
         html += '</td>';
         html += '</tr>';
         table.append(html);
         table.closest("div").find(".noScheduledTimes").hide();
-        $("#timeTable" + zoneNumber).show();
+        $("#timeTable" + zone).show();
     }
+
+
 });
 
-function updateTimes(zone) {
+function updateZone(zone) {
 
         var timeArr = [];
         var count = 0;
@@ -215,7 +229,11 @@ function updateTimes(zone) {
             count++;
         });
 
-        var data = { 'zone': zone, 'count': count, 'times': timeArr};
+        var active = $('#A'+zone).prop('checked');
+        //var name = $('');
+        var name = "";
+
+        var data = { 'zone': zone, 'count': count, 'name' : name, 'active' : active, 'times': timeArr};
 
         $.post("/config", data, 
         function(response) {

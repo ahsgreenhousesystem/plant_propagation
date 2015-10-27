@@ -10,7 +10,7 @@ router.get('/logs', function(req, res) { res.sendFile(path.join(__dirname.substr
 router.get('/users', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) +'/public/users.html')); });
 
 /* Load json values from the database */
-router.get('/allZones', function(req, res) { req.db.get('zonecollection').find({},{},function(e,docs){ res.send(docs); }); });
+router.get('/allZones', function(req, res) { req.db.get('zones').find({},{},function(e,docs){ res.send(docs); }); });
 router.get('/allUsers', function(req, res) { req.db.get('users').find({},{},function(e,docs){ res.send(docs); }); });
 router.get('/allLogs', function(req, res) { req.db.get('logs').find({},{},function(e,docs){ res.send(docs); }); });
 
@@ -36,12 +36,17 @@ router.post('/config', function(req, res) {
 
     console.log(timesArr);
 
-    var collection = db.get('zonecollection');
+    var collection = db.get('zones');
+
+    console.log("DB Zone: " + collection.find({"zone": zone}));
 
     collection.update({"zone": zone}, 
     { 
-        $set : { "times" : timesArr }
-    }, function (err, doc) {
+        "zone": zone, 
+        "active": req.body.active, 
+        "name": req.body.name, 
+        "times" : timesArr
+    }, {upsert: true}, function (err, doc) {
         if (err) {
             res.send("There was an issue adding the information to the database.");
             console.log("There was an issue adding the information to the database.");
@@ -49,7 +54,7 @@ router.post('/config', function(req, res) {
             res.send("Times successfully updated.");
             console.log("Times successfully updated.");
         }
-    })
+    });
 });
 
 /* POST to Setup */
@@ -57,7 +62,7 @@ router.post('/setup', function(request, result) {
     var db = request.db;
     var zone = req.body.zone;
 
-    var collection = db.get('zonecollection');
+    var collection = db.get('zones');
 
     collection.update({
         "zone" : zone, 
@@ -125,7 +130,7 @@ router.post('/deleteUser', function(req, res) {
 });
 
 router.post('/deleteZone', function(req, res) {
-    var zones = req.db.get('zonecollection');
+    var zones = req.db.get('zones');
     var zoneNumber = req.body.zoneNumber;
     zones.remove({"zone" : zoneNumber}, function (err, doc) {
         if (err) {
