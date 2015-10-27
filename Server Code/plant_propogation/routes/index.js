@@ -137,6 +137,7 @@ router.post('/deleteZone', function(req, res) {
             res.send("There was an issue deleting the zones's information in the database.");
         } else {
             res.send("The zone was successfully deleted!");
+			logs.insert({"type": "Zone Deleted", "date": getCurrentDate(), "info" :"zone: " + zoneNumber});
         }
     })
 });

@@ -18,12 +18,25 @@ $(function() {
         controlPanelHtml += '</div>';
         controlPanelHtml += '<div class="panel-body">';
         controlPanelHtml += '<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">';
-        controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Open" class="btn btn-default btn-sm" />';
-        controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Close" class="btn btn-default btn-sm" />';
-        controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Auto" class="btn btn-default btn-sm" />';
+        controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Open" class="btn btn-default btn-sm zoneButton" />';
+		if(zoneObject.active) {
+			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Close" class="btn btn-default btn-sm zoneButton" />';
+			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Auto" class="btn btn-success btn-sm zoneButton" />';
+		} else {
+			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Close" class="btn btn-success btn-sm zoneButton" />';
+			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Auto" class="btn btn-default btn-sm zoneButton" />';
+		}
         controlPanelHtml += '</div></div></div></div>';
 		$("#zoneControlDiv").append(controlPanelHtml);
 	}
+	
+	$(document).on("click", ".zoneButton", function(){
+		var controlButtons = $(this).closest(".panel-body").find(".zoneButton");
+		controlButtons.removeClass("btn-success");
+		controlButtons.removeClass("btn-default");
+		controlButtons.addClass("btn-default");
+		$(this).addClass("btn-success");
+	});
 
     $("form").submit(function(e) {
         e.preventDefault();
