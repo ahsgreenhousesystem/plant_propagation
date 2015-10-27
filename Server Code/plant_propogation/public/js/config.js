@@ -182,7 +182,8 @@ $(document).ready(function() {
     }
 
     function addConfiguredTimes(zoneObject) {
-        if(zoneObject.times.length == 0)
+		var times = zoneObject.times;
+        if(times == null || (times != '' && times.length == 0))
             return;
 
         var num = zoneObject.zone;
