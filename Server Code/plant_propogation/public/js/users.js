@@ -16,14 +16,23 @@ function removeUser(btn) {
         message: "Are you sure you want to delete this user?",
         title: "Delete Confirmation"
     };
-    eModal.confirm(options).then(function( /* DOM */ ) {
+    eModal.confirm(options).then(function() {
         $(btn).closest("tr").remove();
         var userId = $(btn).closest("tr").find(".userId");
-        $.post("/deleteUser", {
-            "userId": userId.val()
-        }, function(response) {
-            alert(response);
-        }, 'json');
+        $.ajax({
+            url: '/deleteUser',
+            data: {
+                'userId': userId.val()
+            },
+            method: "post",
+            success: function(response) {
+                eModal.alert('The user was successfully deleted!');
+                location.reload();
+            },
+            error: function(response) {
+                eModal.alert('The user was not deleted!');
+            }
+        });
     });
 }
 
@@ -33,19 +42,23 @@ function updateUser(btn) {
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
     if (validateFields(name, email, phone)) {
-		var data = { 'userId': userId.val(), 'name': name.val(), 'email' : email.val(), 'phone' : phone.val()};
-		$.ajax({
-			url: '/updateUser',
-			data: data,
-			method: "post",
-			success: function(response){
-				eModal.alert('User successfully updated!');
-			},
-			error: function(response){
-				console.warn(response);
-				eModal.alert('User was not updated!');
-			}
-		});
+        var data = {
+            'userId': userId.val(),
+            'name': name.val(),
+            'email': email.val(),
+            'phone': phone.val()
+        };
+        $.ajax({
+            url: '/updateUser',
+            data: data,
+            method: "post",
+            success: function(response) {
+                eModal.alert('The user was successfully updated!');
+            },
+            error: function(response) {
+                eModal.alert('The user was not updated!');
+            }
+        });
     }
 }
 
