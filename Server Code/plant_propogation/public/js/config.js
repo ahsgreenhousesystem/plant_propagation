@@ -232,7 +232,7 @@ function updateZone(zone) {
 
         var active = $('#A'+zone).prop('checked');
         //var name = $('');
-        var name = "";
+        var name = "Zone " + zone;
 
         var data = { 'zone': zone, 'count': count, 'name' : name, 'active' : active, 'times': timeArr};
 
