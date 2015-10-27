@@ -3,7 +3,7 @@ var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 //var udoo = require('udoo');
-//var schedule = require('node-schedule');
+var schedule = require('node-schedule');
 
 var routes = require('./routes/index');
 // var users = require('./routes/users');
@@ -46,35 +46,61 @@ var zone5 = udoo.outputPin(31);
 var zone6 = udoo.outputPin(33);
 var zone7 = udoo.outputPin(35);
 var timeDelay = 1000;
+*/
+
+// dummy values
+var zone1 = 23;
+var timeDelay = 1000;
 
 // turn on sprinkler
 function sprinklerOn(zone) {
-  setTimeout(function(){ zone.setHigh(); }, timeDelay);
+  //setTimeout(function(){ zone.setHigh(); }, timeDelay);
+  setTimeout(function(){ console.log(zone + " ON!"); }, timeDelay);
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-  setTimeout(function(){ zone.setLow(); }, timeDelay);
+  //setTimeout(function(){ zone.setLow(); }, timeDelay);
+  setTimeout(function(){ console.log(zone + " OFF!"); }, timeDelay);
 }
-*/
+
 
 /*
  * Theoretical Scheduling Code
  * https://github.com/tejasmanohar/node-schedule/wiki/Date-based-Scheduling
  *
-
-// load dates
-***load all dates from database
-***schedule jobs for each date (if isn't already scheduled)
-
-// add date
-***add date to database
-***loadDates()
-
-// remove date
-***remove date from database
-***loadDates() 
 */
+
+// load jobs
+// TODO: loop through all dates from database
+//       schedule jobs for each date (if isn't already scheduled)
+function loadJob() {
+  // loop through db and populate these values for each entry
+  var scheduledDate = new Date("October 30, 2015 21:09:00");
+  var scheduledJob  = "sprinklerOn";
+  var scheduledZone = zone1; 
+
+  // scheduling the job (cancel using j.cancel())
+  if (scheduledJob === "sprinklerOn") 
+    var j = schedule.scheduleJob(scheduledDate, function(){ sprinklerOn(scheduledZone); });
+  else if (scheduledJob === "sprinklerOff")
+    var j = schedule.scheduleJob(scheduledDate, function(){ sprinklerOff(scheduledZone); });
+  else
+    console.log("The scheduledJob variable is not valid.");
+}
+loadJob();
+
+// add job
+// TODO: add job to database
+//       loadJobs()
+function addJob(date, job, zone) {
+}
+
+// remove job
+// TODO: remove job from database
+//       loadJobs() 
+function removeJob(id) {
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
