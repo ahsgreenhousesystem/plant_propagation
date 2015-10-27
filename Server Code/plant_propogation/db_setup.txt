@@ -31,42 +31,42 @@ db.logs.insert({"type": "User Deleted", "date": getCurrentDate(), "info": "userI
 db.logs.insert({"type": "Zone1", "date": "right now", "info": "Zone1 was opened"});
 
 
- db.zonecollection.update(
+ db.zones.update(
  {zone: 1}, 
  {"zone": 1, "name": "Zone 1", "active": true, "times":[
  {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
-  db.zonecollection.update(
+  db.zones.update(
  {zone: 2}, 
  {"zone": 2, "name": "Zone 2", "active": true, "times":[
  {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
-  db.zonecollection.update(
+  db.zones.update(
  {zone: 3}, 
  {"zone": 3, "name": "Zone 3", "active": true, "times":[
  {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
-  db.zonecollection.update(
+  db.zones.update(
  {zone: 4}, 
  {"zone": 4, "name": "Zone 4", "active": true, "times":[
  {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
-  db.zonecollection.update(
+  db.zones.update(
  {zone: 5}, 
  {"zone": 5, "name": "Zone 5", "active": true, "times":[
  {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
-  db.zonecollection.update(
+  db.zones.update(
  {zone: 6}, 
  {"zone": 6, "name": "Zone 6", "active": true, "times":[
  {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
-  db.zonecollection.update(
+  db.zones.update(
  {zone: 7}, 
  {"zone": 7, "name": "Zone 7", "active": true, "times":[
  {"begin":"", "end":""},{"begin":"", "end":""},{"begin":"", "end":""}]})
 
-//display db to verify 
-db.zonecollection.find().pretty() 
-
-//more to do here...
+// Use find() to display data from the table and pretty() to format it better 
+db.zones.find().pretty()
+db.logs.find().pretty()
+db.users.find().pretty() 
