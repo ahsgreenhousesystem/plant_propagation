@@ -132,7 +132,7 @@ router.post('/updateUser', function(req, res) {
                 "date": getCurrentDate(),
                 "info": "userId: " + userId + " name: " + name + " email: " + email + " phone: " + phone
             });
-            res.send("The user was successfully updated!"):
+            res.send("The user was successfully updated!");
         }
     })
 });
