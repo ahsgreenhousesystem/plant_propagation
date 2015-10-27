@@ -21,11 +21,6 @@ router.post('/config', function(req, res) {
     var zone = req.body.zone;
     var size = req.body.count;
 
-    console.log(req.body);
-
-    console.log("Zone: " + zone);
-    console.log("Size: " + size);
-
     var timesArr = [];
     for (var i = 0; i < size; i++) {
         var begin = req.body['times[' + i + '][begin]'];
@@ -37,13 +32,7 @@ router.post('/config', function(req, res) {
         });
     }
 
-    console.log(timesArr);
-
     var collection = db.get('zones');
-
-    console.log("DB Zone: " + collection.find({
-        "zone": zone
-    }));
 
     collection.update({
         "zone": zone
@@ -57,10 +46,13 @@ router.post('/config', function(req, res) {
     }, function(err, doc) {
         if (err) {
             res.send("There was an issue adding the information to the database.");
-            console.log("There was an issue adding the information to the database.");
         } else {
+        	logs.insert({
+                "type": "Zone" + zone,
+                "date": getCurrentDate(),
+                "info": "Zone " + zone + " was created. Name: " + req.body.name + " Active: " + req.body.active + " Times: " + timesArr
+            });
             res.send("Times successfully updated.");
-            console.log("Times successfully updated.");
         }
     });
 });
@@ -69,9 +61,7 @@ router.post('/config', function(req, res) {
 router.post('/setup', function(request, result) {
     var db = request.db;
     var zone = req.body.zone;
-
     var collection = db.get('zones');
-
     collection.update({
         "zone": zone,
         "name": req.body.name,
@@ -81,6 +71,11 @@ router.post('/setup', function(request, result) {
         if (err) {
             result.send("There was an issue adding the information to the database.");
         } else {
+        	logs.insert({
+                "type": "Zone" + zone,
+                "date": getCurrentDate(),
+                "info": "Zone " + zone + " was updated. Name: " + req.body.name + " Active: " + req.body.active
+            });
             result.send("Zone successfully updated.");
         }
     })
@@ -167,9 +162,9 @@ router.post('/deleteZone', function(req, res) {
             res.send("There was an issue deleting the zones's information in the database.");
         } else {
             logs.insert({
-                "type": "Zone Deleted",
+                "type": "Zone" + zoneNumber,
                 "date": getCurrentDate(),
-                "info": "zone: " + zoneNumber
+                "info": "Zone " + zoneNumber + " was deleted."
             });
             res.send("The zone was successfully deleted!");
         }
