@@ -3,13 +3,15 @@ $(document).ready(function() {
         var zoneLogs = '';
         var zones = [];
         var userTable = '<table class="table table-striped table-condensed table-hover" style="width:100%"><thead>';
-        userTable += '<th style="text-align:center">Log Type</th>';
-        userTable += '<th style="text-align:center">Date</th>';
-        userTable += '<th style="text-align:center">Information</th>';
+        userTable += '<th>Log Type</th>';
+        userTable += '<th>Date</th>';
+        userTable += '<th>Information</th>';
         userTable += '</thead><tbody>';
         for (var i = 0; i < response.length; i++) {
             if (response[i].type.indexOf("User") > -1) {
-                userTable += '<tr><td>' + response[i].type + '</td><td>' + response[i].date + '</td><td>' + response[i].info + '</td></tr>';
+                userTable += '<tr><td style="text-align:left">' + response[i].type + '</td>';
+                userTable += '<td style="text-align:left">' + response[i].date + '</td>';
+                userTable += '<td style="text-align:left">' + response[i].info + '</td></tr>';
             } else {
                 if (zones.indexOf(response[i].info.charAt(4)) < 0) {
                     zones.push(response[i].info.charAt(4));
@@ -23,13 +25,15 @@ $(document).ready(function() {
             zonePanel += 'Zone ' + zone + '</a></h4></div>';
             zonePanel += '<div id="collapse' + zone + '" class="panel-collapse collapse"><div class="panel-body">';
             var zoneTable = '<table class="table table-striped table-condensed table-hover" style="width:100%"><thead>';
-            zoneTable += '<th style="text-align:center">Log Type</th>';
-            zoneTable += '<th style="text-align:center">Date</th>';
-            zoneTable += '<th style="text-align:center">Information</th>';
+            zoneTable += '<th>Log Type</th>';
+            zoneTable += '<th>Date</th>';
+            zoneTable += '<th>Information</th>';
             zoneTable += '</thead><tbody>';
             for (var j = 0; j < response.length; j++) {
                 if (response[j].type.charAt(4) == zone) {
-                    zoneTable += '<tr><td>' + response[j].type + '</td><td>' + response[j].date + '</td><td>' + response[j].info + '</td></tr>';
+                    zoneTable += '<tr><td style="text-align:left">' + response[j].type + '</td>';
+                    zoneTable += '<td style="text-align:left">' + response[j].date + '</td>';
+                    zoneTable += '<td style="text-align:left">' + response[j].info + '</td></tr>';
                 }
             }
             zoneTable += '</tbody></table>';
