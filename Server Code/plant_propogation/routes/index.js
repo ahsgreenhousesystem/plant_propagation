@@ -47,6 +47,7 @@ router.post('/config', function(req, res) {
         if (err) {
             res.send("There was an issue adding the information to the database.");
         } else {
+			var logs = req.db.get('logs');
         	logs.insert({
                 "type": "Zone" + zone,
                 "date": getCurrentDate(),
@@ -71,6 +72,7 @@ router.post('/setup', function(request, result) {
         if (err) {
             result.send("There was an issue adding the information to the database.");
         } else {
+			var logs = req.db.get('logs');
         	logs.insert({
                 "type": "Zone" + zone,
                 "date": getCurrentDate(),
@@ -161,6 +163,7 @@ router.post('/deleteZone', function(req, res) {
         if (err) {
             res.send("There was an issue deleting the zones's information in the database.");
         } else {
+			var logs = req.db.get('logs');
             logs.insert({
                 "type": "Zone" + zoneNumber,
                 "date": getCurrentDate(),
