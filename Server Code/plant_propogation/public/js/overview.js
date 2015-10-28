@@ -1,5 +1,5 @@
 $(function() {
-    $("form input[type=submit]").click(function() {
+	$(document).on("click", "form input[type=submit]", function() {
         $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
         $(this).attr("clicked", "true");
     });
@@ -38,7 +38,7 @@ $(function() {
 		$(this).addClass("btn-success");
 	});
 
-    $("form").submit(function(e) {
+	$(document).on("submit", "form", function(e) {
         e.preventDefault();
         var button = $("input[type=submit][clicked=true]"); // the button that was clicked
         var zone = button.attr("name"); // button zone name
