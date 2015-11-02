@@ -161,8 +161,21 @@ $(document).ready(function() {
                 $("#timeTable" + zoneNumber).hide();
             }
         });
-        updateTimes(zoneNumber);
+        updateZone(zoneNumber);
     });
+	
+	$("#hideZonesCbx").bind("click", function() {
+		if($(this).is(":checked")) {
+			$("#zoneDiv .row").each(function() {
+				var noScheduledTimesDiv = $(this).find(".noScheduledTimes");
+				if(noScheduledTimesDiv.is(":visible")) {
+					$(this).addClass("hide-zone");
+				}
+			});
+		} else {
+			$("#zoneDiv .row").removeClass("hide-zone");
+		}
+	});
 
     function setModalConfirmationOptions(message, title) {
         var options = {

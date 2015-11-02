@@ -20,6 +20,10 @@ body > .container {
 /*  margin-bottom:60px; */
 }
 
+.hide-zone {
+	display: none;
+}
+
 .modal {
   top: 50px
 }
