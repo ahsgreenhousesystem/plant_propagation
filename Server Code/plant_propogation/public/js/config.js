@@ -152,7 +152,7 @@ $(document).ready(function() {
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
         var me = $(this);
         var options = setModalConfirmationOptions("Are you sure you want to delete this time?", "Delete Confirmation");
-        eModal.confirm(options).then(function (/* DOM */) {
+       //eModal.confirm(options).then(function (/* DOM */) {
             var noScheduledTimesDiv = me.closest(".panel-body").find(".noScheduledTimes");
             me.closest("tr").remove();
             var rows = $("#timeTable" + zoneNumber + " tr").length;
@@ -160,7 +160,7 @@ $(document).ready(function() {
                 noScheduledTimesDiv.show();
                 $("#timeTable" + zoneNumber).hide();
             }
-        });
+        //});
         updateZone(zoneNumber);
     });
 	
