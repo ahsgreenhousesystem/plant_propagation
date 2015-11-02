@@ -51,7 +51,7 @@ router.post('/config', function(req, res) {
         	logs.insert({
                 "type": "Zone" + zone,
                 "date": getCurrentDate(),
-                "info": "Zone " + zone + " was created. Name: " + req.body.name + " Active: " + req.body.active + " Times: " + timesArr
+                "info": "Zone " + zone + " was updated. Name: " + req.body.name + " Active: " + req.body.active + " Times: " + timesArr
             });
             res.send("Times successfully updated.");
         }

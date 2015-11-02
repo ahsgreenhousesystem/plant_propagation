@@ -33,7 +33,6 @@ $(document).ready(function() {
 		}
         zoneHtml += '<span class="pull-right">';
         zoneHtml += '<button class="btn btn-default btn-xs addTime"><span class="glyphicon glyphicon-time"></span>&nbsp;<span class="hidden-xs">Add Time</span></button>';
-        zoneHtml += '&nbsp;<button id= "'+zoneObject.zone+'" type="button" class="btn btn-default btn-xs" onclick="updateZone('+zoneObject.zone+')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update Times</span></button>';
         zoneHtml += '&nbsp;<button type="button" class="btn btn-success btn-xs deleteZone"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button>';
         zoneHtml += '</span>';
         zoneHtml += '</h3>';
@@ -178,7 +177,7 @@ $(document).ready(function() {
         var beginTime = $("#beginTime").val();
         var endTime = $("#endTime").val();
         addTableRow(zoneNumber, beginTime, endTime);
-        
+        updateZone(zoneNumber);
     }
 
     function addConfiguredTimes(zoneObject) {
