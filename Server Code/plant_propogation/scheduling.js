@@ -1,4 +1,5 @@
 //var udoo = require('udoo');
+//udoo.reset() // reset all pins to INPUT mode
 var schedule = require('node-schedule');
 
 //WHEN SCHEDULING, NEED TO CHECK IF ZONE IS ON AUTO ***** 
