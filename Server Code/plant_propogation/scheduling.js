@@ -1,32 +1,33 @@
 //var udoo = require('udoo');
-//udoo.reset() // reset all pins to INPUT mode
 var schedule = require('node-schedule');
 
-//WHEN SCHEDULING, NEED TO CHECK IF ZONE IS ON AUTO ***** 
+//WHEN SCHEDULING, NEED TO CHECK IF ZONE IS ON AUTO *****
 
 /*
  * Theoretical UDOO Code
  *
- 
-// set pins
-var zone1 = udoo.outputPin(23);
-var zone2 = udoo.outputPin(25);
-var zone3 = udoo.outputPin(27);
-var zone4 = udoo.outputPin(29);
-var zone5 = udoo.outputPin(31);
-var zone6 = udoo.outputPin(33);
-var zone7 = udoo.outputPin(35);
-var timeDelay = 1000;
+
+// zone number, pin, state
+var zones = [[1, udoo.outputPin(23), 0],
+             [2, udoo.outputPin(25), 0],
+             [3, udoo.outputPin(27), 0],
+             [4, udoo.outputPin(29), 0],
+             [5, udoo.outputPin(31), 0],
+             [6, udoo.outputPin(33), 0],
+             [7, udoo.outputPin(35), 0]]
+var timeDelay = 700;
+udoo.reset();
 */
 
-// dummy values
-var zone1 = 23;
-var timeDelay = 1000;
+// dummy values: zone number, pin, state (on/off), beginTime[hr][mn], endTime[hr][mn]
+var zones = [[1, 23, 0, [23,41], [23,43]],
+             [2, 25, 0, [0,0], [0,0]]];
+var timeDelay = 700;
 
 module.exports = {
 	sprinklerOn : function (zone) {
 		sprinklerOn(zone);
-	}, 
+	},
 
 	sprinklerOff : function (zone) {
 		sprinklerOff(zone);
@@ -36,14 +37,16 @@ module.exports = {
 
 // turn on sprinkler
 function sprinklerOn(zone) {
-  //setTimeout(function(){ zone.setHigh(); }, timeDelay);
-  setTimeout(function(){ console.log(zone + " ON!"); }, timeDelay);
+  //setTimeout(function(){ zone[1].setLow(); }, timeDelay);
+  setTimeout(function(){ console.log("Zone " + zone[0] + " ON!"); }, timeDelay);
+  zone[2] = 1;
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-  //setTimeout(function(){ zone.setLow(); }, timeDelay);
-  setTimeout(function(){ console.log(zone + " OFF!"); }, timeDelay);
+  //setTimeout(function(){ zone[1].setHigh(); }, timeDelay);
+  setTimeout(function(){ console.log("Zone " + zone[0] + " OFF!"); }, timeDelay);
+  zone[2] = 0;
 }
 
 
@@ -53,33 +56,42 @@ function sprinklerOff(zone) {
  *
 */
 
-// load jobs
-// TODO: loop through all dates from database
-//       schedule jobs for each date (if isn't already scheduled)
-function loadJob() {
-  // loop through db and populate these values for each entry
-  var scheduledDate = new Date("October 30, 2015 21:09:00");
-  var scheduledJob  = "sprinklerOn";
-  var scheduledZone = zone1; 
+// load every job (run every time a job is added/deleted)
+var jobs = [];
+function loadJobs() {
 
-  // scheduling the job (cancel using j.cancel())
-  if (scheduledJob === "sprinklerOn") 
-    var j = schedule.scheduleJob(scheduledDate, function(){ sprinklerOn(scheduledZone); });
-  else if (scheduledJob === "sprinklerOff")
-    var j = schedule.scheduleJob(scheduledDate, function(){ sprinklerOff(scheduledZone); });
-  else
-    console.log("The scheduledJob variable is not valid.");
-}
-loadJob();
+  // loop through db and populate these values to create jobs for each zone
+  var scheduledZone = zones[0];
+  
+  var scheduledBeginTime = new schedule.RecurrenceRule();
+  scheduledBeginTime.hour = scheduledZone[3][0];
+  scheduledBeginTime.minute = scheduledZone[3][1]; 
 
-// add job
-// TODO: add job to database
-//       loadJobs()
-function addJob(date, job, zone) {
+  var scheduledEndTime = new schedule.RecurrenceRule();
+  scheduledEndTime.hour = scheduledZone[4][0];
+  scheduledEndTime.minute = scheduledZone[4][1];
+ 
+  jobs.push(schedule.scheduleJob(scheduledBeginTime, function(){ sprinklerOn(scheduledZone); }));
+  jobs.push(schedule.scheduleJob(scheduledEndTime, function(){ sprinklerOff(scheduledZone); }));
 }
 
-// remove job
-// TODO: remove job from database
-//       loadJobs() 
-function removeJob(id) {
+// cancel every job (run before adding/deleting a job)
+function cancelJobs() {
+  while(jobs.length > 0) {
+    jobs.pop().cancel();
+  }
+
+  // make sure sprinklers are off
+  setTimeout(function() {
+    for (i = 0; i < zones.length; ++i) {
+      if (zones[i][2] == 1) {
+        sprinklerOff(zones[i]);
+      }
+    }
+  }, timeDelay*2);
 }
+
+loadJobs();
+// cancelJobs();
+console.log("There are " + jobs.length + " jobs scheduled.");
+
