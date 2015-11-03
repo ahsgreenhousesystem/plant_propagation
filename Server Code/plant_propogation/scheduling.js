@@ -64,7 +64,7 @@ function loadJobs() {
   // cancel any previous jobs
   cancelJobs();
 
-  // loop through each zone
+  // loop through each zone & add jobs for watering
   for (i = 0; i < zones.length; ++i) { 
     var scheduledZone = zones[i];
   
