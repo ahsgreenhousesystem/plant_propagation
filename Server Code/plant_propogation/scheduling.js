@@ -38,16 +38,20 @@ module.exports = {
 
 // turn on sprinkler
 function sprinklerOn(zone) {
-  //setTimeout(function(){ zone[1].setLow(); }, timeDelay);
-  setTimeout(function(){ console.log("Zone " + zone[0] + " ON!"); }, timeDelay);
-  zone[2] = 1;
+  setTimeout(function(){ 
+    //zone[1].setLow();
+    console.log("Zone " + zone[0] + " ON!"); 
+    zone[2] = 1;
+  }, timeDelay);
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-  //setTimeout(function(){ zone[1].setHigh(); }, timeDelay);
-  setTimeout(function(){ console.log("Zone " + zone[0] + " OFF!"); }, timeDelay);
-  zone[2] = 0;
+  setTimeout(function(){ 
+    //zone[1].setHigh();
+    console.log("Zone " + zone[0] + " OFF!"); 
+    zone[2] = 0;
+  }, timeDelay);
 }
 
 
