@@ -20,8 +20,9 @@ udoo.reset();
 */
 
 // dummy values: zone number, pin, state (on/off), beginTime[hr][mn], endTime[hr][mn]
+// populate these values via the database
 var zones = [[1, 23, 0, [23,41], [23,43]],
-             [2, 25, 0, [0,0], [0,0]]];
+             [2, 25, 0, [0,0], [0,2]]];
 var timeDelay = 700;
 
 module.exports = {
@@ -60,22 +61,27 @@ function sprinklerOff(zone) {
 var jobs = [];
 function loadJobs() {
 
-  // loop through db and populate these values to create jobs for each zone
-  var scheduledZone = zones[0];
-  
-  var scheduledBeginTime = new schedule.RecurrenceRule();
-  scheduledBeginTime.hour = scheduledZone[3][0];
-  scheduledBeginTime.minute = scheduledZone[3][1]; 
+  // cancel any previous jobs
+  cancelJobs();
 
-  var scheduledEndTime = new schedule.RecurrenceRule();
-  scheduledEndTime.hour = scheduledZone[4][0];
-  scheduledEndTime.minute = scheduledZone[4][1];
+  // loop through each zone
+  for (i = 0; i < zones.length; ++i) { 
+    var scheduledZone = zones[i];
+  
+    var scheduledBeginTime = new schedule.RecurrenceRule();
+    scheduledBeginTime.hour = scheduledZone[3][0];
+    scheduledBeginTime.minute = scheduledZone[3][1]; 
+
+    var scheduledEndTime = new schedule.RecurrenceRule();
+    scheduledEndTime.hour = scheduledZone[4][0];
+    scheduledEndTime.minute = scheduledZone[4][1];
  
-  jobs.push(schedule.scheduleJob(scheduledBeginTime, function(){ sprinklerOn(scheduledZone); }));
-  jobs.push(schedule.scheduleJob(scheduledEndTime, function(){ sprinklerOff(scheduledZone); }));
+    jobs.push(schedule.scheduleJob(scheduledBeginTime, function(){ sprinklerOn(scheduledZone); }));
+    jobs.push(schedule.scheduleJob(scheduledEndTime, function(){ sprinklerOff(scheduledZone); }));
+  }
 }
 
-// cancel every job (run before adding/deleting a job)
+// cancel every job 
 function cancelJobs() {
   while(jobs.length > 0) {
     jobs.pop().cancel();
