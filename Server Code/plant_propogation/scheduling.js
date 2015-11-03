@@ -90,7 +90,7 @@ function cancelJobs() {
   // make sure sprinklers are off
   setTimeout(function() {
     for (i = 0; i < zones.length; ++i) {
-      if (zones[i][2] == 1) {
+      if (zones[i][2] === 1) {
         sprinklerOff(zones[i]);
       }
     }
