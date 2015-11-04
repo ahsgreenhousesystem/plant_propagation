@@ -33,7 +33,6 @@ $(document).ready(function() {
 		}
         zoneHtml += '<span class="pull-right">';
         zoneHtml += '<button class="btn btn-default btn-xs addTime"><span class="glyphicon glyphicon-time"></span>&nbsp;<span class="hidden-xs">Add Time</span></button>';
-        zoneHtml += '&nbsp;<button type="button" class="btn btn-success btn-xs deleteZone"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button>';
         zoneHtml += '</span>';
         zoneHtml += '</h3>';
         zoneHtml += '</div>';
@@ -131,21 +130,6 @@ $(document).ready(function() {
 		}
 		$("#newTimeModal").modal("hide");
 		addNewTime();
-    });
-
-	$(document).on("click", ".deleteZone", function() {
-        var me = $(this);
-        var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
-        var options = setModalConfirmationOptions("Are you sure you want to delete Zone " + zoneNumber + "?", "Delete Confirmation");
-        eModal.confirm(options).then(function (/* DOM */) {
-			me.closest(".row").remove(); 
-			//remove 
-			 $.post("/deleteZone", {
-                "zoneNumber": zoneNumber
-            }, function(response) {
-            	alert(response);
-            }, 'json');
-		});
     });
 
     $(document).on("click", ".deleteTime", function() {
