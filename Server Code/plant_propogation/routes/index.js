@@ -3,7 +3,7 @@ var mailer = require("nodemailer");
 var router = express.Router();
 var path = require('path');
 
-var smtpTransport = nodemailer.createTransport("SMTP",{
+var smtpTransport = mailer.createTransport("SMTP",{
 	service: "Gmail",
 	auth: {
 		user: "ahsgreenhousesystem@gmail.com",
@@ -177,7 +177,7 @@ function leftPad(num, size) {
 
 function sendEmail(subject, body) {
 	var mailOptions={
-		to : req.query.to,
+		to : "sbajric@iastate.edu",
 		subject : subject,
 		text : body
 	}

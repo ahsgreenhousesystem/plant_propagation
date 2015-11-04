@@ -8,7 +8,7 @@ var routes = require('./routes/index');
 var control = require('./routes/control');
 
 var app = express();
-var smtpTransport = nodemailer.createTransport("SMTP",{
+var smtpTransport = mailer.createTransport("SMTP",{
 	service: "Gmail",
 	auth: {
 		user: "ahsgreenhousesystem@gmail.com",
