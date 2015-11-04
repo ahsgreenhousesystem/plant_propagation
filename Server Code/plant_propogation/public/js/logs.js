@@ -13,13 +13,13 @@ $(document).ready(function() {
                 userTable += '<td style="text-align:left">' + response[i].date + '</td>';
                 userTable += '<td style="text-align:left">' + response[i].info + '</td></tr>';
             } else {
-                if (zones.indexOf(response[i].info.charAt(4)) < 0) {
-                    zones.push(response[i].info.charAt(4));
+                if (zones.indexOf(response[i].type.charAt(4)) < 0) {
+                    zones.push(response[i].type.charAt(4));
                 }
             }
         }
         for (var i = 0; i < zones.length; i++) {
-            var zone = zones[i]; // Zone logs must start with 'Zone#'  
+            var zone = zones[i]; // Zone log types must start with 'Zone#'
             var zonePanel = '<div class="panel panel-default" id="panel' + zone + '"><div class="panel-heading"><h4 class="panel-title">';
             zonePanel += '<a data-toggle="collapse" data-target="#collapse' + zone + '" href="#collapse' + zone + '" class="collapsed">';
             zonePanel += 'Zone ' + zone + '</a></h4></div>';
