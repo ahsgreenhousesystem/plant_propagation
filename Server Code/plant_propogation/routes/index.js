@@ -1,6 +1,15 @@
 var express = require('express');
+var mailer = require("nodemailer");
 var router = express.Router();
 var path = require('path');
+
+var smtpTransport = nodemailer.createTransport("SMTP",{
+	service: "Gmail",
+	auth: {
+		user: "ahsgreenhousesystem@gmail.com",
+		pass: "greenhouse101"
+	}
+});
 
 /* GET the different pages */
 router.get('/', function(req, res) { res.sendFile(path.join(__dirname + '/public/index.html')); });
@@ -164,6 +173,21 @@ function leftPad(num, size) {
     var s = num + "";
     while (s.length < size) s = "0" + s;
     return s;
+}
+
+function sendEmail(subject, body) {
+	var mailOptions={
+		to : req.query.to,
+		subject : subject,
+		text : body
+	}
+	smtpTransport.sendMail(mailOptions, function(error, response){
+		if(error){
+			res.end("error");
+		} else{
+			res.end("sent");
+		}
+	});
 }
 
 module.exports = router;

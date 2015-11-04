@@ -1,4 +1,5 @@
 var express = require('express');
+var mailer = require("nodemailer");
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
@@ -7,6 +8,13 @@ var routes = require('./routes/index');
 var control = require('./routes/control');
 
 var app = express();
+var smtpTransport = nodemailer.createTransport("SMTP",{
+	service: "Gmail",
+	auth: {
+		user: "ahsgreenhousesystem@gmail.com",
+		pass: "greenhouse101"
+	}
+});
 
 // hooking up Mongo DB
 var mongo = require('mongodb');
