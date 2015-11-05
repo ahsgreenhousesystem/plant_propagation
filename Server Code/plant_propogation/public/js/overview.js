@@ -14,18 +14,16 @@ $(function() {
 		var controlPanelHtml = '<div class="col-lg-4 col-md-6">';
         controlPanelHtml += '<div class="panel panel-default">';
         controlPanelHtml += '<div class="panel-heading">';
-        controlPanelHtml += '<h3 class="panel-title">'+zoneObject.name+'</h3>';
+		if(zoneObject.active) {
+			controlPanelHtml += '<h3 class="panel-title" style="text-align:left;">'+zoneObject.name+'<span class="pull-right" style="font-weight:bold;color:#4BC93A">Active&nbsp;<span class="glyphicon glyphicon-ok-sign"></span></span></h3>';
+		} else {
+			controlPanelHtml += '<h3 class="panel-title" style="text-align:left;">'+zoneObject.name+'<span class="pull-right" style="font-weight:bold;color:#FF5C5C">Not Active&nbsp;<span class="glyphicon glyphicon-remove-sign"></span></span></h3>';
+		}
         controlPanelHtml += '</div>';
         controlPanelHtml += '<div class="panel-body">';
         controlPanelHtml += '<div class="btn-group btn-group-lg" role="group" style="padding-bottom: 15px;">';
-        controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Open" class="btn btn-default btn-sm zoneButton" />';
-		if(zoneObject.active) {
-			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Close" class="btn btn-default btn-sm zoneButton" />';
-			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Auto" class="btn btn-success btn-sm zoneButton" />';
-		} else {
-			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Close" class="btn btn-success btn-sm zoneButton" />';
-			controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Auto" class="btn btn-default btn-sm zoneButton" />';
-		}
+        controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Open Sprinkler" class="btn btn-default btn-sm zoneButton" />';
+		controlPanelHtml += '<input type="submit" name="zone'+zoneObject.zone+'" value="Close Sprinkler" class="btn btn-default btn-sm zoneButton" />';
         controlPanelHtml += '</div></div></div></div>';
 		$("#zoneControlDiv").append(controlPanelHtml);
 	}
