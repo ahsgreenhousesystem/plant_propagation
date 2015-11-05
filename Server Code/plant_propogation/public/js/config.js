@@ -12,7 +12,6 @@ $(document).ready(function() {
 	}
 
     $.get("/allZones", function(response) {
-        console.log("/allZones response: " + response);
         for (var zone = 0; zone < response.length; zone++) {
 			createZonePanel(response[zone]);
 		}
@@ -186,8 +185,6 @@ $(document).ready(function() {
         var times = zoneObject.times;
 
         for(var i = 0; i < times.length; i++) {
-            console.log(times[i].begin);
-            console.log(times[i].end);
             addTableRow(num, times[i].begin, times[i].end);
         }
     }
