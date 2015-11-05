@@ -14,7 +14,7 @@ $(function() {
 		var controlPanelHtml = '<div class="col-lg-4 col-md-6">';
         controlPanelHtml += '<div class="panel panel-default">';
         controlPanelHtml += '<div class="panel-heading">';
-		if(zoneObject.active) {
+		if(zoneObject.active == "true") {
 			controlPanelHtml += '<h3 class="panel-title" style="text-align:left;">'+zoneObject.name+'<span class="pull-right" style="font-weight:bold;color:#4BC93A">Active&nbsp;<span class="glyphicon glyphicon-ok-sign"></span></span></h3>';
 		} else {
 			controlPanelHtml += '<h3 class="panel-title" style="text-align:left;">'+zoneObject.name+'<span class="pull-right" style="font-weight:bold;color:#FF5C5C">Not Active&nbsp;<span class="glyphicon glyphicon-remove-sign"></span></span></h3>';

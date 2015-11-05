@@ -25,10 +25,10 @@ $(document).ready(function() {
         zoneHtml += '<div class="panel panel-default">';
         zoneHtml += '<div class="panel-heading">';
         zoneHtml += '<h3 class="panel-title">';
-		if(zoneObject.active) {
-			zoneHtml += zoneObject.name + '- <label>Active:&nbsp;</label><input id="A'+zoneObject.zone+'" type="checkbox" class="visible" checked>';
+		if(zoneObject.active == "true") {
+			zoneHtml += zoneObject.name + '- <label>Active:&nbsp;</label><input id="A'+zoneObject.zone+'" type="checkbox" class="visible active-checkbox" checked>';
 		} else {
-			zoneHtml += zoneObject.name + '- <label>Active:&nbsp;</label><input id="A'+zoneObject.zone+'" type="checkbox" class="visible">';
+			zoneHtml += zoneObject.name + '- <label>Active:&nbsp;</label><input id="A'+zoneObject.zone+'" type="checkbox" class="visible active-checkbox">';
 		}
         zoneHtml += '<span class="pull-right">';
         zoneHtml += '<button class="btn btn-default btn-xs addTime"><span class="glyphicon glyphicon-time"></span>&nbsp;<span class="hidden-xs">Add Time</span></button>';
@@ -210,6 +210,11 @@ $(document).ready(function() {
 
 });
 
+$(document).on("click", ".active-checkbox", function() {
+	var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
+	updateZone(zoneNumber);
+});
+
 function updateZone(zone) {
 
         var timeArr = [];
@@ -223,7 +228,7 @@ function updateZone(zone) {
             count++;
         });
 
-        var active = $('#A'+zone).prop('checked');
+        var active = $('#A'+zone).is(':checked');
         //var name = $('');
         var name = "Zone " + zone;
 
@@ -234,10 +239,10 @@ function updateZone(zone) {
 			data: data,
 			method: "post",
 			success: function(response){
-				eModal.alert('Times successfully updated!');
+				eModal.alert('Zone successfully updated!');
 			},
 			error: function(){
-				eModal.alert('Times not updated!');
+				eModal.alert('Zone not updated!');
 			}
 		});
 };

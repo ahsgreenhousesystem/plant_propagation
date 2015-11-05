@@ -47,8 +47,8 @@ router.post('/config', function(req, res) {
         "zone": zone
     }, {
         "zone": zone,
+		"name": req.body.name,
         "active": req.body.active,
-        "name": req.body.name,
         "times": timesArr
     }, {
         upsert: true
