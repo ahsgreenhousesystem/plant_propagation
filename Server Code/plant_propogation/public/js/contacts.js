@@ -1,87 +1,87 @@
 $(document).ready(function() {
-    $.get("/allUsers", function(response) {
+    $.get("/allContacts", function(response) {
         for (var i = 0; i < response.length; i++) {
-            $("#userTable").append(addUser(response[i]._id, response[i].name, response[i].email, response[i].phone));
+            $("#contactTable").append(addContact(response[i]._id, response[i].name, response[i].email, response[i].phone));
         }
     });
 });
 
-$('#newUserModal').on('hidden.bs.modal', function(e) {
-    clearNewUserModalFields();
+$('#newContactModal').on('hidden.bs.modal', function(e) {
+    clearNewContactModalFields();
     clearValidation();
 });
 
-function removeUser(btn) {
+function removeContact(btn) {
     var options = {
-        message: "Are you sure you want to delete this user?",
+        message: "Are you sure you want to delete this contact?",
         title: "Delete Confirmation"
     };
     eModal.confirm(options).then(function() {
         $(btn).closest("tr").remove();
-        var userId = $(btn).closest("tr").find(".userId");
+        var contactId = $(btn).closest("tr").find(".contactId");
         $.ajax({
-            url: '/deleteUser',
+            url: '/deleteContact',
             data: {
-                'userId': userId.val()
+                'contactId': contactId.val()
             },
             method: "post",
             success: function(response) {
-                eModal.alert('The user was successfully deleted!');
+                eModal.alert('The contact was successfully deleted!');
                 location.reload();
             },
             error: function(response) {
-                eModal.alert('The user was not deleted!');
+                eModal.alert('The contact was not deleted!');
             }
         });
     });
 }
 
-function updateUser(btn) {
-    var userId = $(btn).closest("tr").find(".userId");
+function updateContact(btn) {
+    var contactId = $(btn).closest("tr").find(".contactId");
     var name = $(btn).closest("tr").find(".nameField");
     var email = $(btn).closest("tr").find(".emailField");
     var phone = $(btn).closest("tr").find(".phoneField");
     if (validateFields(name, email, phone)) {
         var data = {
-            'userId': userId.val(),
+            'contactId': contactId.val(),
             'name': name.val(),
             'email': email.val(),
             'phone': phone.val()
         };
         $.ajax({
-            url: '/updateUser',
+            url: '/updateContact',
             data: data,
             method: "post",
             success: function(response) {
-                eModal.alert('The user was successfully updated!');
+                eModal.alert('The contact was successfully updated!');
             },
             error: function(response) {
-                eModal.alert('The user was not updated!');
+                eModal.alert('The contact was not updated!');
             }
         });
     }
 }
 
-function clearNewUserModalFields() {
-    $("#newUserName").val("");
-    $("#newUserEmail").val("");
-    $("#newUserPhoneNumber").val("");
+function clearNewContactModalFields() {
+    $("#newContactName").val("");
+    $("#newContactEmail").val("");
+    $("#newContactPhoneNumber").val("");
 }
 
 function clearValidation() {
-    $("#newUserName").parent().removeClass("has-error");
-    $("#newUserEmail").parent().removeClass("has-error");
-    $("#newUserPhoneNumber").parent().removeClass("has-error");
+    $("#newContactName").parent().removeClass("has-error");
+    $("#newContactEmail").parent().removeClass("has-error");
+    $("#newContactPhoneNumber").parent().removeClass("has-error");
     $(".nameField").parent().removeClass("has-error");
     $(".emailField").parent().removeClass("has-error");
     $(".phoneField").parent().removeClass("has-error");
 }
 
-function validateFields(fullName, email, phone) {
+function validateFields(name, email, phone) {
     clearValidation();
     var allValid = true;
-    if (!isUserNameValid(fullName)) {
-        fullName.parent().addClass("has-error");
+    if (!isContactNameValid(name)) {
+        name.parent().addClass("has-error");
         allValid = false;
     }
     if (!isEmailValid(email)) {
@@ -95,13 +95,13 @@ function validateFields(fullName, email, phone) {
     return allValid;
 }
 
-$("#saveUser").bind("click", function() {
-    var name = $("#newUserName");
-    var email = $("#newUserEmail");
-    var phone = $("#newUserPhoneNumber");
+$("#saveContact").bind("click", function() {
+    var name = $("#newContactName");
+    var email = $("#newContactEmail");
+    var phone = $("#newContactPhoneNumber");
     if (validateFields(name, email, phone)) {
-        $("#newUserModal").modal("hide");
-        $.post("/addUser", {
+        $("#newContactModal").modal("hide");
+        $.post("/addContact", {
             "name": name.val(),
             "email": email.val(),
             "phone": phone.val()
@@ -112,7 +112,7 @@ $("#saveUser").bind("click", function() {
     }
 });
 
-function isUserNameValid(name) {
+function isContactNameValid(name) {
     if (name.length < 1) {
         return false;
     }
@@ -129,14 +129,14 @@ function isPhoneValid(phone) {
     return pattern.test(phone.val());
 }
 
-function addUser(userId, name, email, phone) {
-    var userHtml = '<tr>';
-    userHtml += '<td class="sr-only"><input type="text" class="userId" placeholder="User Id" value="' + userId + '" /></td>';
-    userHtml += '<td><input type="text" class="form-control nameField" placeholder="Full Name" value="' + name + '" /></td>';
-    userHtml += '<td><input type="text" class="form-control emailField" placeholder="Email Address" value="' + email + '" /></td>';
-    userHtml += '<td><input type="text" class="form-control phoneField" placeholder="Phone Number" value="' + phone + '" /></td>';
-    userHtml += '<td><button type="button" class="btn btn-primary btn-sm" onclick="updateUser(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>';
-    userHtml += '<td><button type="button" class="btn btn-success btn-sm" onclick="removeUser(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>';
-    userHtml += '</tr>';
-    return userHtml;
+function addContact(contactId, name, email, phone) {
+    var contactHtml = '<tr>';
+    contactHtml += '<td class="sr-only"><input type="text" class="contactId" placeholder="Contact Id" value="' + contactId + '" /></td>';
+    contactHtml += '<td><input type="text" class="form-control nameField" placeholder="Full Name" value="' + name + '" /></td>';
+    contactHtml += '<td><input type="text" class="form-control emailField" placeholder="Email Address" value="' + email + '" /></td>';
+    contactHtml += '<td><input type="text" class="form-control phoneField" placeholder="Phone Number" value="' + phone + '" /></td>';
+    contactHtml += '<td><button type="button" class="btn btn-primary btn-sm" onclick="updateContact(this)"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span class="hidden-xs">Update</span></button></td>';
+    contactHtml += '<td><button type="button" class="btn btn-success btn-sm" onclick="removeContact(this)"><span class="glyphicon glyphicon-remove"></span>&nbsp;<span class="hidden-xs">Delete</span></button></td>';
+    contactHtml += '</tr>';
+    return contactHtml;
 }

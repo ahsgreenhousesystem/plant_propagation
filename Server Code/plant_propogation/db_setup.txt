@@ -21,7 +21,7 @@ db.zones.insert({"zone": "6", "name": "Zone 6", "active": true})
 db.zones.insert({"zone": "7", "name": "Zone 7", "active": true})
 
 //for user inserts
-db.users.insert({"name": "Mike Todd", "email": "mike.todd@ames.k12.ia.us", "phone": "515-451-0898"})
+db.contacts.insert({"name": "Mike Todd", "email": "mike.todd@ames.k12.ia.us", "phone": "515-451-0898"})
 
 //for log inserts
 db.logs.insert({"type": "User Deleted", "date": getCurrentDate(), "info": "userId: " + userId});
@@ -66,4 +66,4 @@ db.logs.insert({"type": "Zone1", "date": "right now", "info": "Zone1 was opened"
 // Use find() to display data from the table and pretty() to format it better 
 db.zones.find().pretty()
 db.logs.find().pretty()
-db.users.find().pretty() 
+db.contacts.find().pretty() 

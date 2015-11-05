@@ -16,11 +16,11 @@ router.get('/', function(req, res) { res.sendFile(path.join(__dirname + '/public
 router.get('/overview', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/index.html')); });
 router.get('/config', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/config.html')); });
 router.get('/logs', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/logs.html')); });
-router.get('/users', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/users.html')); });
+router.get('/contacts', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/contacts.html')); });
 
 /* Load json values from the database */
 router.get('/allZones', function(req, res) { req.db.get('zones').find({}, {}, function(e, docs) { res.send(docs); }); });
-router.get('/allUsers', function(req, res) { req.db.get('users').find({}, {}, function(e, docs) { res.send(docs); }); });
+router.get('/allContacts', function(req, res) { req.db.get('contacts').find({}, {}, function(e, docs) { res.send(docs); }); });
 router.get('/allLogs', function(req, res) { req.db.get('logs').find({}, {}, function(e, docs) { res.send(docs); }); });
 
 /* POST to Config */
@@ -92,73 +92,73 @@ router.post('/setup', function(request, result) {
     })
 });
 
-router.post('/addUser', function(req, res) {
-    var users = req.db.get('users');
+router.post('/addContact', function(req, res) {
+    var contacts = req.db.get('contacts');
     var name = req.body.name;
     var email = req.body.email;
     var phone = req.body.phone;
-    users.insert({
+    contacts.insert({
         "name": name,
         "email": email,
         "phone": phone
     }, function(err, doc) {
         if (err) {
-            res.send("There was an issue adding the user's information in the database.");
+            res.send("There was an issue adding the contact in the database.");
         } else {
             var logs = req.db.get('logs');
             logs.insert({
-                "type": "User Added",
+                "type": "Contact Addition",
                 "date": getCurrentDate(),
                 "info": "name: " + name + " email: " + email + " phone: " + phone
             });
-            res.send("The user was successfully added!");
+            res.send("The contact was successfully added!");
         }
     })
 });
 
-router.post('/updateUser', function(req, res) {
-    var users = req.db.get('users');
-    var userId = req.body.userId;
+router.post('/updateContact', function(req, res) {
+    var contacts = req.db.get('contacts');
+    var contactId = req.body.contactId;
     var name = req.body.name;
     var email = req.body.email;
     var phone = req.body.phone;
-    users.update({
-        "_id": userId
+    contacts.update({
+        "_id": contactId
     }, {
         "name": name,
         "email": email,
         "phone": phone
     }, function(err, doc) {
         if (err) {
-            res.send("There was an issue updating the user's information in the database.");
+            res.send("There was an issue updating the contact's information in the database.");
         } else {
             var logs = req.db.get('logs');
             logs.insert({
-                "type": "User Updated",
+                "type": "Contact Update",
                 "date": getCurrentDate(),
-                "info": "userId: " + userId + " name: " + name + " email: " + email + " phone: " + phone
+                "info": "contactId: " + contactId + " name: " + name + " email: " + email + " phone: " + phone
             });
-            res.send("The user was successfully updated!");
+            res.send("The contact was successfully updated!");
         }
     })
 });
 
-router.post('/deleteUser', function(req, res) {
-    var users = req.db.get('users');
-    var userId = req.body.userId;
-    users.remove({
-        "_id": userId
+router.post('/deleteContact', function(req, res) {
+    var contacts = req.db.get('contacts');
+    var contactId = req.body.contactId;
+    contacts.remove({
+        "_id": contactId
     }, function(err, doc) {
         if (err) {
-            res.send("There was an issue deleting the user's information in the database.");
+            res.send("There was an issue deleting the contact in the database.");
         } else {
             var logs = req.db.get('logs');
             logs.insert({
-                "type": "User Deleted",
+                "type": "Contact Deletion",
                 "date": getCurrentDate(),
-                "info": "userId: " + userId
+                "info": "contactId: " + contactId
             });
-            res.send("The user was successfully deleted!");
+            res.send("The contact was successfully deleted!");
         }
     })
 });

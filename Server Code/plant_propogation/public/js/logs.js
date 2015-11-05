@@ -2,16 +2,16 @@ $(document).ready(function() {
     $.get("/allLogs", function(response) {
         var zoneLogs = '';
         var zones = [];
-        var userTable = '<table class="table table-striped table-condensed table-hover" style="width:100%"><thead>';
-        userTable += '<th>Log Type</th>';
-        userTable += '<th>Date</th>';
-        userTable += '<th>Information</th>';
-        userTable += '</thead><tbody>';
+        var contactTable = '<table class="table table-striped table-condensed table-hover" style="width:100%"><thead>';
+        contactTable += '<th>Log Type</th>';
+        contactTable += '<th>Date</th>';
+        contactTable += '<th>Information</th>';
+        contactTable += '</thead><tbody>';
         for (var i = 0; i < response.length; i++) {
-            if (response[i].type.indexOf("User") > -1) {
-                userTable += '<tr><td style="text-align:left">' + response[i].type + '</td>';
-                userTable += '<td style="text-align:left">' + response[i].date + '</td>';
-                userTable += '<td style="text-align:left">' + response[i].info + '</td></tr>';
+            if (response[i].type.indexOf("Contact") > -1) {
+                contactTable += '<tr><td style="text-align:left">' + response[i].type + '</td>';
+                contactTable += '<td style="text-align:left">' + response[i].date + '</td>';
+                contactTable += '<td style="text-align:left">' + response[i].info + '</td></tr>';
             } else {
                 if (zones.indexOf(response[i].type.charAt(4)) < 0) {
                     zones.push(response[i].type.charAt(4));
@@ -41,8 +41,8 @@ $(document).ready(function() {
             zonePanel += '</div></div></div>';
             zoneLogs += zonePanel;
         }
-        userTable += '</tbody></table>';
-        $('#userLogs').html(userTable);
+        contactTable += '</tbody></table>';
+        $('#contactLogs').html(contactTable);
         $('#zoneLogs').html('<br>' + zoneLogs);
     });
 });
