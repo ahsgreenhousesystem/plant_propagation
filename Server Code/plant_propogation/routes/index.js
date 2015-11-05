@@ -111,6 +111,7 @@ router.post('/addContact', function(req, res) {
                 "date": getCurrentDate(),
                 "info": "name: " + name + " email: " + email + " phone: " + phone
             });
+            sendEmail(req, "A contact was added!", "Here is their information. Name: " + name + ", Email: " + email + ", Phone: " + phone + ".");
             res.send("The contact was successfully added!");
         }
     })
@@ -178,29 +179,22 @@ function leftPad(num, size) {
 }
 
 function sendEmail(req, subject, body) {
-	console.warn(getContactEmails(req));
-	var mailOptions={
-		to : getContactEmails(),
-		subject : subject,
-		text : body
-	}
-	smtpTransport.sendMail(mailOptions, function(error){
-		if(error){
-			console.warn(error);
-		}
-	});
-}
-
-function getContactEmails(req) {
-	var to;
 	req.db.get('contacts').find({}, function(err, result) {
     	if (!err) {
     		for(var i = 0; i < result.length; i++) {
-        		to += result[i].email + ", ";
+    			var mailOptions={
+					to : result[i].email,
+					subject : subject,
+					text : body
+				}
+				smtpTransport.sendMail(mailOptions, function(error){
+					if(error){
+						console.warn(error);
+					}
+				});
         	}
     	}
 	});
-	return to;
 }
 
 module.exports = router;
