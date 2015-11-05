@@ -138,6 +138,7 @@ router.post('/updateContact', function(req, res) {
                 "date": getCurrentDate(),
                 "info": "contactId: " + contactId + " name: " + name + " email: " + email + " phone: " + phone
             });
+            sendEmail(req, "A contact was updated!", "The contact with contactId " + contactId + " was updated. Here is the current information. Name: " + name + ", Email: " + email + ", Phone: " + phone + ".");
             res.send("The contact was successfully updated!");
         }
     })
@@ -158,6 +159,7 @@ router.post('/deleteContact', function(req, res) {
                 "date": getCurrentDate(),
                 "info": "contactId: " + contactId
             });
+            sendEmail(req, "A contact was deleted!", "The contact with contactId " + contactId + " was deleted.");
             res.send("The contact was successfully deleted!");
         }
     })
@@ -175,19 +177,30 @@ function leftPad(num, size) {
     return s;
 }
 
-function sendEmail(subject, body) {
+function sendEmail(req, subject, body) {
+	console.warn(getContactEmails(req));
 	var mailOptions={
-		to : "sbajric@iastate.edu",
+		to : getContactEmails(),
 		subject : subject,
 		text : body
 	}
-	smtpTransport.sendMail(mailOptions, function(error, response){
+	smtpTransport.sendMail(mailOptions, function(error){
 		if(error){
-			res.end("error");
-		} else{
-			res.end("sent");
+			console.warn(error);
 		}
 	});
+}
+
+function getContactEmails(req) {
+	var to;
+	req.db.get('contacts').find({}, function(err, result) {
+    	if (!err) {
+    		for(var i = 0; i < result.length; i++) {
+        		to += result[i].email + ", ";
+        	}
+    	}
+	});
+	return to;
 }
 
 module.exports = router;
