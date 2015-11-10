@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# this script runs at startup to correctly set up udoo gpio so we can run the node abstraction library
+# this script runs at startup to correctly set up the udoo gpio so we can run the node abstraction library
 
 echo 116 > /sys/class/gpio/export
 echo 112 > /sys/class/gpio/export
