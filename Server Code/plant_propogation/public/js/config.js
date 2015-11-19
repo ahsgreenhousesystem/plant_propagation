@@ -91,15 +91,11 @@ $(document).ready(function() {
 		
 		if(beginTime.val() == "") {
 			var errorMessage = "Please enter a start time."
-			$("#modal-error-message").empty();
-			$("#modal-error-message").append(errorMessage);
-			$("#modal-error-message").show();
-			return false;
+            displayAddTimeErrorMessage(errorMessage);
 		} else if(endTime.val() == "") {
 			var errorMessage = "Please enter an end time."
 			$("#modal-error-message").empty();
-			$("#modal-error-message").append(errorMessage);
-			$("#modal-error-message").show();
+            displayAddTimeErrorMessage(errorMessage);
 			return false;
 		}
 		
@@ -116,20 +112,33 @@ $(document).ready(function() {
 		
 		var startTimeObject = new Date();
 		startTimeObject.setHours(beginHour, beginMinute, "00");
+
+        var startTimePlus15Minutes = new Date();
+        startTimePlus15Minutes.setHours(beginHour, beginMinute, "00");
+        startTimePlus15Minutes.setMinutes(startTimePlus15Minutes.getMinutes() + 15);
 		
 		var endTimeObject = new Date();
 		endTimeObject.setHours(endHour, endMinute, "00");
 		
 		if(startTimeObject > endTimeObject || startTimeObject.getTime() === endTimeObject.getTime()) {
 			var errorMessage = "You cannot have a start time later than the end time."
-			$("#modal-error-message").empty();
-			$("#modal-error-message").append(errorMessage);
-			$("#modal-error-message").show();
+            displayAddTimeErrorMessage(errorMessage);
 			return false;
 		}
+        if(endTimeObject > startTimePlus15Minutes) {
+            var errorMessage = "The sprinkler cannot run for more than 15 minutes at a time."
+            displayAddTimeErrorMessage(errorMessage);
+            return false;
+        }
 		$("#newTimeModal").modal("hide");
 		addNewTime();
     });
+
+    function displayAddTimeErrorMessage(errorMessage) {
+        $("#modal-error-message").empty();
+        $("#modal-error-message").append(errorMessage);
+        $("#modal-error-message").show();
+    }
 
     $(document).on("click", ".deleteTime", function() {
         var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
