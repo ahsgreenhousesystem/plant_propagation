@@ -36,12 +36,8 @@
          </div>
       </nav>
       <div class="container" style="text-align:center;">
-         <div class="page-header">
-            <h1>Streaming</h1>
-         </div>
-         <div id="dvStreaming" style="margin-left:auto; margin-right:auto;">
-            <div id="stream">
-            </div>
+         <div id="streaming" style="margin-left:auto; margin-right:auto;">
+           <img src="streaming.jpg" style="max-width:100%; max-height:100%" type="image/jpg" alt="Stream" id="reloader" onload="setTimeout('document.getElementById(\'reloader\').src=\'streaming.jpg?\'+new Date().getMilliseconds()', 5000)" />
          </div>
       </div>
       <script type="text/javascript" src="/js/jquery.js"></script>
@@ -50,8 +46,5 @@
       <script type="text/javascript" src="/js/datetime.js"></script>
       <script type="text/javascript" src="/js/modal.js"></script>
       <script type="text/javascript" src="/js/overview.js"></script>
-      <script type="text/javascript" src="/js/janus.js"></script>
-      <script type="text/javascript" src="/js/streaming.js"></script>
-      <script type="text/javascript" src="/js/adapter.js"></script>
    </body>
 </html>

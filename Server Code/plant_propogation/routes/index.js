@@ -17,6 +17,7 @@ router.get('/overview', function(req, res) { res.sendFile(path.join(__dirname.su
 router.get('/config', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/config.html')); });
 router.get('/logs', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/logs.html')); });
 router.get('/contacts', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/contacts.html')); });
+router.get('/streaming', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/streaming.html')); });
 
 /* Load json values from the database */
 router.get('/allZones', function(req, res) { req.db.get('zones').find({}, {}, function(e, docs) { res.send(docs); }); });
