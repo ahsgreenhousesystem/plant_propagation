@@ -19,27 +19,17 @@ router.post('', function(req, res) {
 
 	switch(action) {
 		case ACTIONS.OPEN: 
-			//scheduler.sprinklerOn(zone);
+			scheduler.sprinklerOn(zone);
+			console.log("Zone " + zone + " opened.");
 			res.send("Zone opened.");
 			break;
 		case ACTIONS.CLOSE:
-			//scheduler.sprinklerOff(zone);
+			scheduler.sprinklerOff(zone);
+			console.log("Zone " + zone + " closed.");
 			res.send("Zone closed.");
-			break;
-		case ACTIONS.AUTO:
-			// collection.update({"zone":zone}, 
-			// {"zone": zone, "auto":true}, {upsert: true}, function (err, doc) {});
-			toggle = false;
-			res.send("Zone set to auto.");
 			break;
 		default: 
 			//nothing as of yet
-	}
-
-	if(toggle) {
-		collection.update({"zone":zone}, 
-			{"zone": zone, "auto":false}, 
-			{upsert: true}, function (err, doc) {});
 	}
 
 });

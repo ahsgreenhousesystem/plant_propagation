@@ -1,28 +1,29 @@
-//var udoo = require('udoo');
+var udoo = require('udoo');
 var schedule = require('node-schedule');
+
+// hooking up Mongo DB
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/plant_propogation'); 
 
 //WHEN SCHEDULING, NEED TO CHECK IF ZONE IS ON AUTO *****
 
 /*
  * Theoretical UDOO Code
- *
+ */
 
 // zone number, pin, state
-var zones = [[1, udoo.outputPin(23), 0],
-             [2, udoo.outputPin(25), 0],
-             [3, udoo.outputPin(27), 0],
-             [4, udoo.outputPin(29), 0],
-             [5, udoo.outputPin(31), 0],
-             [6, udoo.outputPin(33), 0],
-             [7, udoo.outputPin(35), 0]]
-var timeDelay = 700;
-udoo.reset();
-*/
+//pull/store these with the db? 
+var zonePins = {
+  '1' : udoo.outputPin(23), 
+  '2' : udoo.outputPin(25),
+  '3' : udoo.outputPin(27),
+  '4' : udoo.outputPin(29), 
+  '5' : udoo.outputPin(31), 
+  '6' : udoo.outputPin(33), 
+  '7' : udoo.outputPin(35)
+};
 
-// dummy values: zone number, pin, state (on/off), beginTime[hr][mn], endTime[hr][mn]
-// populate these values via the database
-var zones = [[1, 23, 0, [23,41], [23,43]],
-             [2, 25, 0, [0,0], [0,2]]];
 var timeDelay = 700;
 
 module.exports = {
@@ -39,18 +40,18 @@ module.exports = {
 // turn on sprinkler
 function sprinklerOn(zone) {
   setTimeout(function(){ 
-    //zone[1].setLow();
-    console.log("Zone " + zone[0] + " ON!"); 
-    zone[2] = 1;
+    console.log("Zone " + zone + " ON!"); 
+    //could add a callback. 
+    zonePins[zone].setLow();
   }, timeDelay);
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
   setTimeout(function(){ 
-    //zone[1].setHigh();
     console.log("Zone " + zone[0] + " OFF!"); 
-    zone[2] = 0;
+    //could add a callback
+    zonePins[zone].setHigh();
   }, timeDelay);
 }
 
@@ -68,20 +69,31 @@ function loadJobs() {
   // cancel any previous jobs
   cancelJobs();
 
-  // loop through each zone & add jobs for watering
-  for (i = 0; i < zones.length; ++i) { 
-    var scheduledZone = zones[i];
-  
-    var scheduledBeginTime = new schedule.RecurrenceRule();
-    scheduledBeginTime.hour = scheduledZone[3][0];
-    scheduledBeginTime.minute = scheduledZone[3][1]; 
+  var zones = db.get('zones').find();
 
-    var scheduledEndTime = new schedule.RecurrenceRule();
-    scheduledEndTime.hour = scheduledZone[4][0];
-    scheduledEndTime.minute = scheduledZone[4][1];
- 
-    jobs.push(schedule.scheduleJob(scheduledBeginTime, function(){ sprinklerOn(scheduledZone); }));
-    jobs.push(schedule.scheduleJob(scheduledEndTime, function(){ sprinklerOff(scheduledZone); }));
+  // loop through each zone & add jobs for watering
+  for (i = 0; i < zones.length; i++) { 
+    var scheduledZone = zones.zone;
+    var times = zones[i].times;
+
+    for (j = 0; j < times.length; j++) {
+
+      var begin = times[j].begin;
+      var end = times[j].end;
+  
+      var scheduledBeginTime = new schedule.RecurrenceRule();
+      scheduledBeginTime.hour = getHour(begin);
+      scheduledBeginTime.minute = getMinute(begin);
+      scheduledBeginTime.second = getSecond(begin);
+
+      var scheduledEndTime = new schedule.RecurrenceRule();
+      scheduledEndTime.hour = getHour(end);
+      scheduledEndTime.minute = getMinute(end);
+      scheduledEndTime.second = getSecond(end);
+   
+      jobs.push(schedule.scheduleJob(scheduledBeginTime, function(){ sprinklerOn(scheduledZone); }));
+      jobs.push(schedule.scheduleJob(scheduledEndTime, function(){ sprinklerOff(scheduledZone); }));
+    }
   }
 }
 
@@ -91,14 +103,30 @@ function cancelJobs() {
     jobs.pop().cancel();
   }
 
+  var zones = db.get('zones').find();
+
   // make sure sprinklers are off
   setTimeout(function() {
     for (i = 0; i < zones.length; ++i) {
-      if (zones[i][2] === 1) {
-        sprinklerOff(zones[i]);
-      }
+      sprinklerOff(zones[i].zone);
     }
   }, timeDelay*2);
+}
+
+function getHour(time) {
+  //return hour of given time (0-23)
+  console.log(time);
+  return '';
+}
+
+function getMinute(time) {
+  //return minute of given time
+  return '';
+}
+
+function getSecond(time) {
+  //return second of given time
+  return '';
 }
 
 loadJobs();
