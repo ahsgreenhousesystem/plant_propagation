@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var control = require('./routes/control');
+var scheduling = require('./scheduling');
 
 var app = express();
 var smtpTransport = mailer.createTransport("SMTP",{
@@ -71,5 +72,11 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+//does this run once???????
+db.get('zones').find({}, {}, function(e, docs) { 
+  scheduling.loadJobs(docs);
+});
+
 
 module.exports = app;

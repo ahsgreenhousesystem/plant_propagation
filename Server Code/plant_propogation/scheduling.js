@@ -1,13 +1,6 @@
 var udoo = require('udoo');
 var schedule = require('node-schedule');
 
-// hooking up Mongo DB
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/plant_propogation'); 
-
-//WHEN SCHEDULING, NEED TO CHECK IF ZONE IS ON AUTO *****
-
 /*
  * Theoretical UDOO Code
  */
@@ -33,7 +26,11 @@ module.exports = {
 
 	sprinklerOff : function (zone) {
 		sprinklerOff(zone);
-	}
+	}, 
+
+  loadJobs : function (zones) {
+    loadJobs(zones);
+  }, 
 };
 
 
@@ -64,17 +61,25 @@ function sprinklerOff(zone) {
 
 // load every job (run every time a job is added/deleted)
 var jobs = [];
-function loadJobs() {
+function loadJobs(zones) {
 
   // cancel any previous jobs
-  cancelJobs();
+  cancelJobs(zones);
 
-  var zones = db.get('zones').find();
 
   // loop through each zone & add jobs for watering
+  console.log("zones: " + zones.length);
   for (i = 0; i < zones.length; i++) { 
+    
+    if(zones[i].active !== 'true') {
+      console.log("continueing on zone " + zones[i].zone);
+      continue; 
+    }
+
     var scheduledZone = zones.zone;
     var times = zones[i].times;
+
+    console.log(times.length + " for zone " + zones[i].zone);
 
     for (j = 0; j < times.length; j++) {
 
@@ -90,20 +95,23 @@ function loadJobs() {
       scheduledEndTime.hour = getHour(end);
       scheduledEndTime.minute = getMinute(end);
       scheduledEndTime.second = getSecond(end);
+
+      console.log("pushed job for zone " + zones[i].zone);
    
       jobs.push(schedule.scheduleJob(scheduledBeginTime, function(){ sprinklerOn(scheduledZone); }));
       jobs.push(schedule.scheduleJob(scheduledEndTime, function(){ sprinklerOff(scheduledZone); }));
+
     }
   }
+
+  console.log("There are " + jobs.length + " jobs scheduled."); 
 }
 
 // cancel every job 
-function cancelJobs() {
+function cancelJobs(zones) {
   while(jobs.length > 0) {
     jobs.pop().cancel();
   }
-
-  var zones = db.get('zones').find();
 
   // make sure sprinklers are off
   setTimeout(function() {
@@ -114,22 +122,21 @@ function cancelJobs() {
 }
 
 function getHour(time) {
-  //return hour of given time (0-23)
-  console.log(time);
-  return '';
+  var splits = time.split(':');
+  console.log(splits[0]);
+  return  parseInt(splits[0]);
 }
 
 function getMinute(time) {
-  //return minute of given time
-  return '';
+  var splits = time.split(':');
+    console.log(splits[1]);
+  return  parseInt(splits[1]);
 }
 
 function getSecond(time) {
-  //return second of given time
-  return '';
+  var splits = time.split(':');
+  console.log(splits[2]);
+  return  parseInt(splits[2]);
 }
 
-loadJobs();
-// cancelJobs();
-console.log("There are " + jobs.length + " jobs scheduled.");
 

@@ -7,7 +7,6 @@ var scheduler = require('../scheduling');
 var ACTIONS = {
 	OPEN : "Open", 
 	CLOSE : "Close", 
-	AUTO : "Auto"
 };
 
 router.post('', function(req, res) {

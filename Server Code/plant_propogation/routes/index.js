@@ -20,7 +20,15 @@ router.get('/contacts', function(req, res) { res.sendFile(path.join(__dirname.su
 router.get('/streaming', function(req, res) { res.sendFile(path.join(__dirname.substring(0, __dirname.length - 7) + '/public/streaming.html')); });
 
 /* Load json values from the database */
-router.get('/allZones', function(req, res) { req.db.get('zones').find({}, {}, function(e, docs) { res.send(docs); }); });
+router.get('/allZones', function(req, res) { req.db.get('zones').find({}, {}, function(e, docs) { 
+    docs = docs.sort(function (a,b) {
+        if(a.zone < b.zone) return -1;
+        else if(a.zone > b.zone) return 1;
+        else
+            return 0;
+    }); 
+    res.send(docs); }); 
+});
 router.get('/allContacts', function(req, res) { req.db.get('contacts').find({}, {}, function(e, docs) { res.send(docs); }); });
 router.get('/allLogs', function(req, res) { req.db.get('logs').find({}, {}, function(e, docs) { res.send(docs); }); });
 
@@ -51,8 +59,6 @@ router.post('/config', function(req, res) {
 		"name": req.body.name,
         "active": req.body.active,
         "times": timesArr
-    }, {
-        upsert: true
     }, function(err, doc) {
         if (err) {
             res.send("There was an issue adding the information to the database.");
