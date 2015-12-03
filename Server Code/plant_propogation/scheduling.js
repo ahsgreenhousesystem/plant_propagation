@@ -1,6 +1,7 @@
 var udoo = require('udoo');
 var schedule = require('node-schedule');
 
+
 /*
  * Theoretical UDOO Code
  */
@@ -31,6 +32,15 @@ module.exports = {
   loadJobs : function (zones) {
     loadJobs(zones);
   }, 
+
+  cancelJobsForZone: function (zone) {
+    cancelJobsForZone(zone);
+  },
+
+  addJobsForZone: function (zone, timesArr) {
+    addJobsForZone(zone, timesArr);
+  }
+
 };
 
 
@@ -46,7 +56,7 @@ function sprinklerOn(zone) {
 // turn off sprinkler
 function sprinklerOff(zone) {
   setTimeout(function(){ 
-    console.log("Zone " + zone[0] + " OFF!"); 
+    console.log("Zone " + zone + " OFF!"); 
     //could add a callback
     zonePins[zone].setHigh();
   }, timeDelay);
@@ -59,7 +69,7 @@ function sprinklerOff(zone) {
  *
 */
 
-// load every job (run every time a job is added/deleted)
+// load every job
 var jobs = [];
 function loadJobs(zones) {
 
@@ -76,7 +86,7 @@ function loadJobs(zones) {
       continue; 
     }
 
-    var scheduledZone = zones.zone;
+    var scheduledZone = zones[i].zone;
     var times = zones[i].times;
 
     console.log(times.length + " for zone " + zones[i].zone);
@@ -86,31 +96,58 @@ function loadJobs(zones) {
       var begin = times[j].begin;
       var end = times[j].end;
   
-      var scheduledBeginTime = new schedule.RecurrenceRule();
-      scheduledBeginTime.hour = getHour(begin);
-      scheduledBeginTime.minute = getMinute(begin);
-      scheduledBeginTime.second = getSecond(begin);
-
-      var scheduledEndTime = new schedule.RecurrenceRule();
-      scheduledEndTime.hour = getHour(end);
-      scheduledEndTime.minute = getMinute(end);
-      scheduledEndTime.second = getSecond(end);
-
-      console.log("pushed job for zone " + zones[i].zone);
-   
-      jobs.push(schedule.scheduleJob(scheduledBeginTime, function(){ sprinklerOn(scheduledZone); }));
-      jobs.push(schedule.scheduleJob(scheduledEndTime, function(){ sprinklerOff(scheduledZone); }));
-
+      addJobSet(scheduledZone, begin, end);
     }
   }
 
   console.log("There are " + jobs.length + " jobs scheduled."); 
 }
 
+function addJobSet(zoneNum, begin, end) {
+  console.log("Adding jobset for " + zoneNum);
+  jobs.push({'zone': zoneNum, 'job': createJob(zoneNum, begin, true)});
+  jobs.push({'zone': zoneNum, 'job': createJob(zoneNum, end, false)});
+
+  console.log("pushed begin and end jobs for zone " + zoneNum);
+}
+
+function addJobsForZone(zone, timesArr) {
+  console.log("Total Jobs before: " + jobs.length);
+  console.log("Adding jobs for zone " + zone);
+  for(var i = 0; i < timesArr.length; i++) {
+    console.log("begin time : " + timesArr[i].begin);
+    console.log("end time : " + timesArr[i].end);
+    addJobSet(zone, timesArr[i].begin, timesArr[i].end);
+  }
+  console.log(timesArr.length*2 + " jobs added.");
+  console.log("Total Jobs after: " + jobs.length);
+}
+
+function cancelJobsForZone(zone) {
+  console.log("Cancelling jobs for zone " + zone);
+  var i;
+  for(i = 0; i < jobs.length; i++) {
+    console.log("job : " + (i + 1));
+    if(jobs[i] != null && jobs[i].zone === zone) {
+      console.log("cancelling job " + (i+1) + " for zone " + jobs[i].zone);
+      jobs[i].job.cancel();
+      jobs[i] = null;
+    }
+  }
+
+  console.log("Cancelled " + i + " jobs.");
+
+
+  // make sure sprinkler is off
+  setTimeout(function() {
+      sprinklerOff(zone);
+  }, timeDelay*2);
+}
+
 // cancel every job 
 function cancelJobs(zones) {
   while(jobs.length > 0) {
-    jobs.pop().cancel();
+    jobs.pop().job.cancel();
   }
 
   // make sure sprinklers are off
@@ -129,7 +166,7 @@ function getHour(time) {
 
 function getMinute(time) {
   var splits = time.split(':');
-    console.log(splits[1]);
+  console.log(splits[1]);
   return  parseInt(splits[1]);
 }
 
@@ -137,6 +174,31 @@ function getSecond(time) {
   var splits = time.split(':');
   console.log(splits[2]);
   return  parseInt(splits[2]);
+}
+
+function createJob(zoneNum, time, turnOn) {
+  console.log("Creating a job.");
+  var rule = new schedule.RecurrenceRule();
+  rule.hour = getHour(time);
+  rule.minute = getMinute(time);
+  rule.second = getSecond(time);
+
+  var job;
+
+  if(turnOn) {
+    job = schedule.scheduleJob(rule, function() { sprinklerOn(zoneNum); });
+  }
+  else {
+    job = schedule.scheduleJob(rule, function() { sprinklerOff(zoneNum); });
+  }
+  //add log statement
+
+  return job;
+}
+
+function cancelJob(job) {
+  job.cancel();
+  //log??
 }
 
 

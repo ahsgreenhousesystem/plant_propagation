@@ -2,6 +2,7 @@ var express = require('express');
 var mailer = require("nodemailer");
 var router = express.Router();
 var path = require('path');
+var scheduling = require('../scheduling');
 
 var smtpTransport = mailer.createTransport("SMTP",{
 	service: "Gmail",
@@ -49,6 +50,11 @@ router.post('/config', function(req, res) {
             "end": end
         });
     }
+
+    scheduling.cancelJobsForZone(zone);
+    if(req.body.active) {
+        scheduling.addJobsForZone(zone, timesArr);
+    }   
 
     var collection = db.get('zones');
 
