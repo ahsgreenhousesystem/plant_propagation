@@ -1,15 +1,48 @@
-var udoo = require('udoo');
+var arduino = require('duino');
 var schedule = require('node-schedule');
 
+var board = new arduino.Board({
+  debug: true, 
+  baudrate: 19200
+});
+
+var zone1 = new arduino.Led({
+  board: board, 
+  pin: 23
+});
+var zone2 = new arduino.Led({
+  board: board, 
+  pin: 25
+});
+var zone3 = new arduino.Led({
+  board: board, 
+  pin: 27
+});
+var zone4 = new arduino.Led({
+  board: board, 
+  pin: 29
+});
+var zone5 = new arduino.Led({
+  board: board, 
+  pin: 31
+});
+var zone6 = new arduino.Led({
+  board: board, 
+  pin: 33
+});
+var zone7 = new arduino.Led({
+  board: board, 
+  pin: 35
+});
 
 var zonePins = {
-  '1' : udoo.outputPin(23), 
-  '2' : udoo.outputPin(25),
-  '3' : udoo.outputPin(27),
-  '4' : udoo.outputPin(29), 
-  '5' : udoo.outputPin(31), 
-  '6' : udoo.outputPin(33), 
-  '7' : udoo.outputPin(35)
+  '1' : zone1,
+  '2' : zone2,
+  '3' : zone3,
+  '4' : zone4, 
+  '5' : zone5, 
+  '6' : zone6, 
+  '7' : zone7
 };
 
 var timeDelay = 700;
@@ -40,20 +73,25 @@ module.exports = {
 
 // turn on sprinkler
 function sprinklerOn(zone) {
-  setTimeout(function(){ 
-    console.log("Zone " + zone + " ON!"); 
-    //could add a callback. 
-    zonePins[zone].setLow();
-  }, timeDelay);
+
+  board.on('ready', function(){
+    setTimeout(function() {
+      console.log("Zone " + zone + " ON!");
+      zonePins[zone].off();
+    }, timeDelay);
+  });
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-  setTimeout(function(){ 
-    console.log("Zone " + zone + " OFF!"); 
-    //could add a callback
-    zonePins[zone].setHigh();
-  }, timeDelay);
+   
+   board.on('ready', function(){
+    setTimeout(function() {
+      console.log("Zone " + zone + " OFF!");
+      zonePins[zone].on();
+    }, timeDelay);
+  });
+
 }
 
 
