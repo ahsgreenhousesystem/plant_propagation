@@ -2,7 +2,7 @@ var express = require('express');
 var mailer = require("nodemailer");
 var router = express.Router();
 var path = require('path');
-var scheduling = require('../scheduling');
+var scheduling = require('../modules/scheduling');
 
 var smtpTransport = mailer.createTransport("SMTP",{
 	service: "Gmail",
@@ -51,10 +51,11 @@ router.post('/config', function(req, res) {
         });
     }
 
-    scheduling.cancelJobsForZone(zone);
+    scheduling.cancelJobsForZone(db, zone);
     if(req.body.active) {
-        scheduling.addJobsForZone(zone, timesArr);
-    }   
+        scheduling.addJobsForZone(db, zone, timesArr);
+    }
+    console.log("index.js : added jobs");   
 
     var collection = db.get('zones');
 
@@ -67,8 +68,10 @@ router.post('/config', function(req, res) {
         "times": timesArr
     }, function(err, doc) {
         if (err) {
+            console.log("index.js: error updating zone");
             res.send("There was an issue adding the information to the database.");
         } else {
+            console.log("index.js : getting logs");
 			var logs = req.db.get('logs');
         	logs.insert({
                 "type": "Zone" + zone,

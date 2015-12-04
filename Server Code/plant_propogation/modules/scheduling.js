@@ -2,12 +2,6 @@ var udoo = require('udoo');
 var schedule = require('node-schedule');
 
 
-/*
- * Theoretical UDOO Code
- */
-
-// zone number, pin, state
-//pull/store these with the db? 
 var zonePins = {
   '1' : udoo.outputPin(23), 
   '2' : udoo.outputPin(25),
@@ -33,13 +27,13 @@ module.exports = {
     loadJobs(zones);
   }, 
 
-  cancelJobsForZone: function (zone) {
-    cancelJobsForZone(zone);
+  cancelJobsForZone: function (db, zone) {
+    cancelJobsForZone(db, zone);
   },
 
-  addJobsForZone: function (zone, timesArr) {
-    addJobsForZone(zone, timesArr);
-  }
+  addJobsForZone: function (db, zone, timesArr) {
+    addJobsForZone(db, zone, timesArr);
+  }, 
 
 };
 
@@ -111,7 +105,7 @@ function addJobSet(zoneNum, begin, end) {
   console.log("pushed begin and end jobs for zone " + zoneNum);
 }
 
-function addJobsForZone(zone, timesArr) {
+function addJobsForZone(db, zone, timesArr) {
   console.log("Total Jobs before: " + jobs.length);
   console.log("Adding jobs for zone " + zone);
   for(var i = 0; i < timesArr.length; i++) {
@@ -121,9 +115,24 @@ function addJobsForZone(zone, timesArr) {
   }
   console.log(timesArr.length*2 + " jobs added.");
   console.log("Total Jobs after: " + jobs.length);
+
+  var zoneJobs = [];
+  for(var i = 0; i < jobs.length; i++) {
+    if(jobs[i] != null && jobs[i].zone == zone) {
+      zoneJobs.push(jobs[i]);
+    }
+  }
+
+  var logs = db.get('logs');
+  console.log("Logs are null ? : " + logs == null);
+  logs.insert({
+    "type": "Zone" + zone,
+    "date": getCurrentDate(),
+    "info": "Added jobs to zone " + zone + ".  Jobs: " + JSON.stringify(zoneJobs)
+  });
 }
 
-function cancelJobsForZone(zone) {
+function cancelJobsForZone(db, zone) {
   console.log("Cancelling jobs for zone " + zone);
   var i;
   for(i = 0; i < jobs.length; i++) {
@@ -135,7 +144,15 @@ function cancelJobsForZone(zone) {
     }
   }
 
-  console.log("Cancelled " + i + " jobs.");
+  console.log("Logging jobs.");
+  var logs = db.get('logs');
+  console.log('Got logs.' + logs);
+  console.log("Logs are null ? : " + logs == null);
+  logs.insert({
+    "type": "Zone" + zone,
+    "date": getCurrentDate(),
+    "info": "Cancelled jobs to zone " + zone + "."
+  });
 
 
   // make sure sprinkler is off
@@ -191,7 +208,6 @@ function createJob(zoneNum, time, turnOn) {
   else {
     job = schedule.scheduleJob(rule, function() { sprinklerOff(zoneNum); });
   }
-  //add log statement
 
   return job;
 }
@@ -201,4 +217,15 @@ function cancelJob(job) {
   //log??
 }
 
+function getCurrentDate() {
+    var currentdate = new Date();
+    var datetime = (currentdate.getMonth() + 1) + "/" + currentdate.getDate() + "/" + currentdate.getFullYear() + " @ " + leftPad(currentdate.getHours(), 2) + ":" + leftPad(currentdate.getMinutes(), 2) + ":" + leftPad(currentdate.getSeconds(), 2);
+    return datetime;
+}
+
+function leftPad(num, size) {
+    var s = num + "";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
 

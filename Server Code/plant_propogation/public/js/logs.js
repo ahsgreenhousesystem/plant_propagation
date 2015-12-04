@@ -8,13 +8,18 @@ $(document).ready(function() {
         contactTable += '<th>Information</th>';
         contactTable += '</thead><tbody>';
         for (var i = 0; i < response.length; i++) {
-            if (response[i].type.indexOf("Contact") > -1) {
-                contactTable += '<tr><td style="text-align:left">' + response[i].type + '</td>';
-                contactTable += '<td style="text-align:left">' + response[i].date + '</td>';
-                contactTable += '<td style="text-align:left">' + response[i].info + '</td></tr>';
-            } else {
-                if (zones.indexOf(response[i].type.charAt(4)) < 0) {
-                    zones.push(response[i].type.charAt(4));
+            var type = response[i].type;
+            if(type != null) {
+
+                if (type.indexOf("Contact") > -1) {
+                    contactTable += '<tr><td style="text-align:left">' + type + '</td>';
+                    contactTable += '<td style="text-align:left">' + response[i].date + '</td>';
+                    contactTable += '<td style="text-align:left">' + response[i].info + '</td></tr>';
+                } else {
+                    
+                    if (type.length >= 5 && zones.indexOf(type.charAt(4)) < 0) {
+                        zones.push(type.charAt(4));
+                    }
                 }
             }
         }
@@ -30,7 +35,8 @@ $(document).ready(function() {
             zoneTable += '<th>Information</th>';
             zoneTable += '</thead><tbody>';
             for (var j = 0; j < response.length; j++) {
-                if (response[j].type.charAt(4) == zone) {
+                var type = response[j].type;
+                if (type && type.charAt(4) == zone) {
                     zoneTable += '<tr><td style="text-align:left">' + response[j].type + '</td>';
                     zoneTable += '<td style="text-align:left">' + response[j].date + '</td>';
                     zoneTable += '<td style="text-align:left">' + response[j].info + '</td></tr>';

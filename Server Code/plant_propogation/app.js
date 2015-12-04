@@ -6,7 +6,14 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var control = require('./routes/control');
-var scheduling = require('./scheduling');
+var scheduling = require('./modules/scheduling');
+
+// hooking up Mongo DB
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/plant_propogation');
+
+
 
 var app = express();
 var smtpTransport = mailer.createTransport("SMTP",{
@@ -16,11 +23,6 @@ var smtpTransport = mailer.createTransport("SMTP",{
 		pass: "greenhouse101"
 	}
 });
-
-// hooking up Mongo DB
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/plant_propogation');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -73,7 +75,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-//does this run once???????
 db.get('zones').find({}, {}, function(e, docs) { 
   scheduling.loadJobs(docs);
 });
