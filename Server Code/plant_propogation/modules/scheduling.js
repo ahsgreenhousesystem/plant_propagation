@@ -2,7 +2,7 @@ var arduino = require('duino');
 var schedule = require('node-schedule');
 
 var board = new arduino.Board({
-  debug: true, 
+  debug: true,
   baudrate: 19200
 });
 
@@ -73,23 +73,18 @@ module.exports = {
 
 // turn on sprinkler
 function sprinklerOn(zone) {
-
-  board.on('ready', function(){
     setTimeout(function() {
       console.log("Zone " + zone + " ON!");
       zonePins[zone].off();
     }, timeDelay);
-  });
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
    
-   board.on('ready', function(){
     setTimeout(function() {
       console.log("Zone " + zone + " OFF!");
       zonePins[zone].on();
-    }, timeDelay);
   });
 
 }
@@ -104,6 +99,11 @@ function sprinklerOff(zone) {
 // load every job
 var jobs = [];
 function loadJobs(zones) {
+
+  if(!zones) { 
+    console.log("No zones to load jobs for.");
+    return;
+  }
 
   // cancel any previous jobs
   cancelJobs(zones);
