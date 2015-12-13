@@ -40,6 +40,18 @@
             <h1>Configuration</h1>
          </div>
 		 <div id="zoneDiv">
+			<div style=" padding-bottom:5px;">
+				<div class="form-group">
+					<label class="control-label">Set max watering time (in minutes)</label>
+					<div class="input-group">
+						<input id="maxWateringTime" class="form-control" placeholder="Max watering time" />
+						<input type="hidden" id="maxtimeId" />
+						<span class="input-group-btn">
+							<button id="updateMaxTimeBtn" class="btn btn-success" type="button">Update Max Time</button>
+						</span>
+					</div>
+				 </div>
+			</div>
 			<label>Hide zones with no watering times&nbsp;</label><input id="hideZonesCbx" type="checkbox" class="visible">
 		 </div>
       </div>

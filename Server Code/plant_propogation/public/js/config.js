@@ -18,6 +18,15 @@ $(document).ready(function() {
 		hideTimeTable();
     });
 	
+	$.get("/maxtime", function(response) {
+		if(response[0] != null && response[0].maxtime != null) {
+			var maxtime = response[0].maxtime;
+			var maxtimeId = response[0]._id;
+			$("#maxWateringTime").val(maxtime);
+			$("#maxtimeId").val(maxtimeId);
+		}
+    });
+	
 	function createZonePanel(zoneObject) {
 		var zoneHtml = '<div class="row">';
         zoneHtml += '<input class="zoneNumber" type="hidden" value="'+zoneObject.zone+'" />';
@@ -111,9 +120,13 @@ $(document).ready(function() {
 		var startTimeObject = new Date();
 		startTimeObject.setHours(beginHour, beginMinute, beginSecond);
 
-        var startTimePlus15Minutes = new Date();
-        startTimePlus15Minutes.setHours(beginHour, beginMinute, beginSecond);
-        startTimePlus15Minutes.setMinutes(startTimePlus15Minutes.getMinutes() + 15);
+        var startTimePlusMaxTime = new Date();
+		var maxWateringTime = parseFloat($("#maxWateringTime").val());
+        startTimePlusMaxTime.setHours(beginHour, beginMinute, beginSecond);
+		if(maxWateringTime == null || maxWateringTime == "") {
+			maxWateringTime = 30;
+		}
+        startTimePlusMaxTime.setMinutes(startTimePlusMaxTime.getMinutes() + maxWateringTime);
 		
 		var endTimeObject = new Date();
 		endTimeObject.setHours(endHour, endMinute, endSecond);
@@ -123,8 +136,8 @@ $(document).ready(function() {
             displayAddTimeErrorMessage(errorMessage);
 			return false;
 		}
-        if(endTimeObject > startTimePlus15Minutes) {
-            var errorMessage = "The sprinkler cannot run for more than 15 minutes at a time."
+        if(endTimeObject > startTimePlusMaxTime) {
+            var errorMessage = "The sprinkler cannot run for more than " + maxWateringTime +" minutes at a time."
             displayAddTimeErrorMessage(errorMessage);
             return false;
         }
@@ -221,6 +234,77 @@ $(document).on("click", ".active-checkbox", function() {
 	var zoneNumber = $(this).closest(".row").find(".zoneNumber").val();
 	updateZone(zoneNumber);
 });
+
+$("#updateMaxTimeBtn").bind("click", function() {
+	var maxWateringTime = $("#maxWateringTime").val();
+	var maxtimeId = $("#maxtimeId").val();
+	if(maxtimeId == null || maxtimeId == "") {
+		var data = {'maxtime': maxWateringTime}
+		$.ajax({
+			url: '/maxtimeInsert',
+			data: data,
+			method: "post",
+			success: function(response){
+				eModal.alert('Max watering time successfully set!');
+				$("#maxtimeId").val("1");
+			},
+			error: function(){
+				eModal.alert('Max watering time did not set!');
+			}
+		});
+	} else if(maxWateringTime != null && maxWateringTime != "") {
+		var data = {'id': 1, 'maxtime': maxWateringTime}
+		$.ajax({
+			url: '/maxtime',
+			data: data,
+			method: "post",
+			success: function(response){
+				eModal.alert('Max watering time successfully set!');
+			},
+			error: function(){
+				eModal.alert('Max watering time did not set!');
+			}
+		});
+	} else {
+		alert("Please enter in a max watering time!");
+	}
+	refreshAllTimes();
+});
+
+function refreshAllTimes() {
+	var maxTime = $("#maxWateringTime").val();
+	$(".timeTable tr").each(function() {
+		var beginTime = $(this).find(".beginTimeTd").text();
+		var endTime = $(this).find(".endTimeTd").text();
+		
+		var beginTimeArr = beginTime.split(":");
+		var beginHour = beginTimeArr[0];
+		var beginMinute = beginTimeArr[1];
+        var beginSecond = beginTimeArr[2];
+		var endTimeArr = endTime.split(":");
+		var endHour = endTimeArr[0];
+		var endMinute = endTimeArr[1];
+		var endSecond = endTimeArr[2];
+		
+		var startTimeObject = new Date();
+		startTimeObject.setHours(beginHour, beginMinute, beginSecond);
+
+        var startTimePlusMaxTime = new Date();
+		var maxWateringTime = parseFloat($("#maxWateringTime").val());
+        startTimePlusMaxTime.setHours(beginHour, beginMinute, beginSecond);
+		if(maxWateringTime == null || maxWateringTime == "") {
+			maxWateringTime = 30;
+		}
+        startTimePlusMaxTime.setMinutes(startTimePlusMaxTime.getMinutes() + maxWateringTime);
+		
+		var endTimeObject = new Date();
+		endTimeObject.setHours(endHour, endMinute, endSecond);
+		
+		if(endTimeObject > startTimePlusMaxTime) {
+			$(this).remove();
+		}
+	});
+}
 
 function updateZone(zone) {
 
