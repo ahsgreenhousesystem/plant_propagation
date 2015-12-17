@@ -32,6 +32,7 @@ router.get('/allZones', function(req, res) { req.db.get('zones').find({}, {}, fu
 });
 router.get('/allContacts', function(req, res) { req.db.get('contacts').find({}, {}, function(e, docs) { res.send(docs); }); });
 router.get('/allLogs', function(req, res) { req.db.get('logs').find({}, {}, function(e, docs) { res.send(docs); }); });
+router.get('/maxtime', function(req, res) { req.db.get('maxtime').find({}, {}, function(e, docs) { res.send(docs); }); });
 
 /* POST to Config */
 router.post('/config', function(req, res) {
@@ -131,6 +132,38 @@ router.post('/addContact', function(req, res) {
             res.send("The contact was successfully added!");
         }
     })
+});
+
+router.post('/maxtimeInsert', function(req, res) {
+    var maxtime = req.db.get('maxtime');
+    var newMaxTime = req.body.maxtime;
+    maxtime.insert({
+		"_id" : 1,
+        "maxtime": newMaxTime
+    }, function(err, doc) {
+        if (err) {
+            res.send("There was an issue adding the maxtime in the database.");
+        } else {
+            res.send("The maxtime was successfully added!");
+        }
+    })
+});
+
+router.post('/maxtime', function(req, res) {
+	var maxtimedb = req.db.get('maxtime');
+	var maxtimeId = req.body.id;
+	var newMaxTime = req.body.maxtime;
+	maxtimedb.update({
+        "_id": 1
+    }, {
+        "maxtime": newMaxTime
+	}, function(err, doc) {
+        if (err) {
+            res.send("There was an issue adding the maxtime in the database.");
+        } else {
+            res.send("The maxtime was successfully set!");
+        }	
+	})
 });
 
 router.post('/updateContact', function(req, res) {

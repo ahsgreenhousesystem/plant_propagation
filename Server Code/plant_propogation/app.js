@@ -26,12 +26,12 @@ var smtpTransport = mailer.createTransport("SMTP",{
 
 app.use(express.static(__dirname + '/public'));
 
-// view engine setup   
-app.set('views', path.join(__dirname, 'views'));   
-app.set('view engine', 'jade');    
-    
-app.use(logger('dev'));    
-app.use(bodyParser.json());    
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Make our db accessible to our route
@@ -75,7 +75,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
-db.get('zones').find({}, {}, function(e, docs) { 
+db.get('zones').find({}, {}, function(e, docs) {
+  scheduling.loadJobs(docs, db);
 });
 
 
