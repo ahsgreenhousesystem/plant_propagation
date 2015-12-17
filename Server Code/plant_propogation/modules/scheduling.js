@@ -7,31 +7,31 @@ var board = new arduino.Board({
 });
 
 var zone1 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 23
 });
 var zone2 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 25
 });
 var zone3 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 27
 });
 var zone4 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 29
 });
 var zone5 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 31
 });
 var zone6 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 33
 });
 var zone7 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 35
 });
 
@@ -39,9 +39,9 @@ var zonePins = {
   '1' : zone1,
   '2' : zone2,
   '3' : zone3,
-  '4' : zone4, 
-  '5' : zone5, 
-  '6' : zone6, 
+  '4' : zone4,
+  '5' : zone5,
+  '6' : zone6,
   '7' : zone7
 };
 
@@ -54,11 +54,11 @@ module.exports = {
 
 	sprinklerOff : function (zone) {
 		sprinklerOff(zone);
-	}, 
+	},
 
-  loadJobs : function (zones) {
-    loadJobs(zones);
-  }, 
+  loadJobs : function (zones, db) {
+    loadJobs(zones, db);
+  },
 
   cancelJobsForZone: function (db, zone) {
     cancelJobsForZone(db, zone);
@@ -66,7 +66,7 @@ module.exports = {
 
   addJobsForZone: function (db, zone, timesArr) {
     addJobsForZone(db, zone, timesArr);
-  }, 
+  },
 
 };
 
@@ -75,16 +75,16 @@ module.exports = {
 function sprinklerOn(zone) {
     setTimeout(function() {
       console.log("Zone " + zone + " ON!");
-      zonePins[zone].off();
+      // zonePins[zone].off();
     }, timeDelay);
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-   
+
     setTimeout(function() {
       console.log("Zone " + zone + " OFF!");
-      zonePins[zone].on();
+      // zonePins[zone].on();
   });
 
 }
@@ -98,9 +98,9 @@ function sprinklerOff(zone) {
 
 // load every job
 var jobs = [];
-function loadJobs(zones) {
+function loadJobs(zones, db) {
 
-  if(!zones) { 
+  if(!zones) {
     console.log("No zones to load jobs for.");
     return;
   }
@@ -111,11 +111,11 @@ function loadJobs(zones) {
 
   // loop through each zone & add jobs for watering
   console.log("zones: " + zones.length);
-  for (i = 0; i < zones.length; i++) { 
-    
+  for (i = 0; i < zones.length; i++) {
+
     if(zones[i].active !== 'true') {
       console.log("continueing on zone " + zones[i].zone);
-      continue; 
+      continue;
     }
 
     var scheduledZone = zones[i].zone;
@@ -127,18 +127,18 @@ function loadJobs(zones) {
 
       var begin = times[j].begin;
       var end = times[j].end;
-  
-      addJobSet(scheduledZone, begin, end);
+
+      addJobSet(db, scheduledZone, begin, end);
     }
   }
 
-  console.log("There are " + jobs.length + " jobs scheduled."); 
+  console.log("There are " + jobs.length + " jobs scheduled.");
 }
 
-function addJobSet(zoneNum, begin, end) {
+function addJobSet(db, zoneNum, begin, end) {
   console.log("Adding jobset for " + zoneNum);
-  jobs.push({'zone': zoneNum, 'job': createJob(zoneNum, begin, true)});
-  jobs.push({'zone': zoneNum, 'job': createJob(zoneNum, end, false)});
+  jobs.push({'zone': zoneNum, 'job': createJob(db, zoneNum, begin, true)});
+  jobs.push({'zone': zoneNum, 'job': createJob(db, zoneNum, end, false)});
 
   console.log("pushed begin and end jobs for zone " + zoneNum);
 }
@@ -149,7 +149,7 @@ function addJobsForZone(db, zone, timesArr) {
   for(var i = 0; i < timesArr.length; i++) {
     console.log("begin time : " + timesArr[i].begin);
     console.log("end time : " + timesArr[i].end);
-    addJobSet(zone, timesArr[i].begin, timesArr[i].end);
+    addJobSet(db, zone, timesArr[i].begin, timesArr[i].end);
   }
   console.log(timesArr.length*2 + " jobs added.");
   console.log("Total Jobs after: " + jobs.length);
@@ -199,7 +199,7 @@ function cancelJobsForZone(db, zone) {
   }, timeDelay*2);
 }
 
-// cancel every job 
+// cancel every job
 function cancelJobs(zones) {
   while(jobs.length > 0) {
     jobs.pop().job.cancel();
@@ -231,7 +231,7 @@ function getSecond(time) {
   return  parseInt(splits[2]);
 }
 
-function createJob(zoneNum, time, turnOn) {
+function createJob(db, zoneNum, time, turnOn) {
   console.log("Creating a job.");
   var rule = new schedule.RecurrenceRule();
   rule.hour = getHour(time);
@@ -239,12 +239,28 @@ function createJob(zoneNum, time, turnOn) {
   rule.second = getSecond(time);
 
   var job;
+  var logs = db.get('logs');
 
   if(turnOn) {
-    job = schedule.scheduleJob(rule, function() { sprinklerOn(zoneNum); });
+    job = schedule.scheduleJob(rule, function() {
+       sprinklerOn(zoneNum);
+       logs.insert({
+         "type": "Zone" + zoneNum,
+         "date": getCurrentDate(),
+         "info": "Open sprinkler JOB fired for zone " + zoneNum + "."
+       });
+
+     });
   }
   else {
-    job = schedule.scheduleJob(rule, function() { sprinklerOff(zoneNum); });
+    job = schedule.scheduleJob(rule, function() {
+      sprinklerOff(zoneNum);
+      logs.insert({
+        "type": "Zone" + zoneNum,
+        "date": getCurrentDate(),
+        "info": "Close sprinkler JOB fired for zone " + zoneNum + "."
+      });
+    });
   }
 
   return job;
@@ -266,4 +282,3 @@ function leftPad(num, size) {
     while (s.length < size) s = "0" + s;
     return s;
 }
-
