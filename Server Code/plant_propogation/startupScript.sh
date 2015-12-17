@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# file in init.d
+
 # start database (path might change a little)
 # mongod --dbpath '/home/udooer/plant_propagation/Server Code/plant_propogation/data' &
 
