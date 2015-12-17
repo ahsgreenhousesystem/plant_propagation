@@ -81,35 +81,29 @@ module.exports = {
 
 // turn on sprinkler
 function sprinklerOn(zone) {
-<<<<<<< HEAD
  console.log("Sprinkler on: before board ready.");
     setTimeout(function() {
       console.log("Zone " + zone + " ON!");
 	zonePins[zone].off();    
 }, timeDelay);
-=======
-    setTimeout(function() {
+    
+  setTimeout(function() {
       console.log("Zone " + zone + " ON!");
       zonePins[zone].off();
     }, timeDelay);
->>>>>>> 2d48f402802c2a68e03d49ad2402ac5ee8112d0e
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-<<<<<<< HEAD
-   
     setTimeout(function() {
       console.log("Zone " + zone + " OFF!");
       zonePins[zone].on();
     }, timeDelay);
 
-=======
     setTimeout(function() {
       console.log("Zone " + zone + " OFF!");
       zonePins[zone].on();
   	});
->>>>>>> 2d48f402802c2a68e03d49ad2402ac5ee8112d0e
 }
 
 
