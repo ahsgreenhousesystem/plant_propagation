@@ -40,7 +40,7 @@ router.post('', function(req, res) {
 				"date": getCurrentDate(),
 				"info": "Opened sprinkler for zone " + zoneNum + "."
 			});
-			sendEmail(db, "Zone " + zoneNum + " was turned ON manually!", "This is just a notification to let you know that zone " + zoneNum + " was turned ON manually.");
+			sendEmail(req, "Zone " + zoneNum + " was turned ON manually!", "This is just a notification to let you know that zone " + zoneNum + " was turned ON manually.");
 			res.send("Zone opened.");
 			break;
 		case ACTIONS.CLOSE:
@@ -52,7 +52,7 @@ router.post('', function(req, res) {
 				"date": getCurrentDate(),
 				"info": "Closed sprinkler for zone " + zoneNum + "."
 			});
-			sendEmail(db, "Zone " + zoneNum + " was turned OFF manually!", "This is just a notification to let you know that zone " + zoneNum + " was turned OFF manually.");
+			sendEmail(req, "Zone " + zoneNum + " was turned OFF manually!", "This is just a notification to let you know that zone " + zoneNum + " was turned OFF manually.");
 			res.send("Zone closed.");
 			break;
 		default:
