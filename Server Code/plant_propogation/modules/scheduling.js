@@ -41,7 +41,7 @@ var zone6 = new arduino.Led({
 var zone7 = new arduino.Led({
   board: board, 
   pin: 41
-);
+});
 
 var zonePins = {
   '1' : zone1,
