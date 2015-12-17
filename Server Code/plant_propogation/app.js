@@ -76,7 +76,6 @@ app.use(function(err, req, res, next) {
 });
 
 db.get('zones').find({}, {}, function(e, docs) { 
-  scheduling.loadJobs(docs);
 });
 
 
