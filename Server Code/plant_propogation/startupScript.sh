@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # start database (path might change a little)
-mongod --dbpath '/home/udooer/Documents/plant_propagation/Server Code/plant_propogation/data' &
+# mongod --dbpath '/home/udooer/plant_propagation/Server Code/plant_propogation/data' &
 
 # start camera
 fswebcam -d '/dev/video2' -r 1280x720 '/home/udooer/plant_propagation/Server Code/plant_propogation/public/streaming.jpg' -l 3 >/dev/null 2>&1 &
