@@ -1,5 +1,13 @@
 var arduino = require('duino');
 var schedule = require('node-schedule');
+var mailer = require("nodemailer");
+var smtpTransport = mailer.createTransport("SMTP",{
+	service: "Gmail",
+	auth: {
+		user: "ahsgreenhousesystem@gmail.com",
+		pass: "greenhouse101"
+	}
+});
 
 var board = new arduino.Board({
   debug: true,
@@ -75,18 +83,16 @@ module.exports = {
 function sprinklerOn(zone) {
     setTimeout(function() {
       console.log("Zone " + zone + " ON!");
-      // zonePins[zone].off();
+      zonePins[zone].off();
     }, timeDelay);
 }
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-
     setTimeout(function() {
       console.log("Zone " + zone + " OFF!");
-      // zonePins[zone].on();
-  });
-
+      zonePins[zone].on();
+  	});
 }
 
 
@@ -249,7 +255,7 @@ function createJob(db, zoneNum, time, turnOn) {
          "date": getCurrentDate(),
          "info": "Open sprinkler JOB fired for zone " + zoneNum + "."
        });
-
+    sendEmail(db, "Zone " + zoneNum + " was turned ON automatically!", "This is just a notification to let you know that zone " + zoneNum + " was turned ON automatically.");
      });
   }
   else {
@@ -260,15 +266,33 @@ function createJob(db, zoneNum, time, turnOn) {
         "date": getCurrentDate(),
         "info": "Close sprinkler JOB fired for zone " + zoneNum + "."
       });
+    sendEmail(db, "Zone " + zoneNum + " was turned OFF automatically!", "This is just a notification to let you know that zone " + zoneNum + " was turned OFF automatically.");
     });
   }
-
   return job;
+}
+
+function sendEmail(db, subject, body) {
+	db.get('contacts').find({}, function(err, result) {
+    	if (!err) {
+    		for(var i = 0; i < result.length; i++) {
+    			var mailOptions={
+					to : result[i].email,
+					subject : subject,
+					text : body
+				}
+				smtpTransport.sendMail(mailOptions, function(error){
+					if(error){
+						console.warn(error);
+					}
+				});
+        	}
+    	}
+	});
 }
 
 function cancelJob(job) {
   job.cancel();
-  //log??
 }
 
 function getCurrentDate() {
