@@ -19,27 +19,27 @@ var zone1 = new arduino.Led({
   pin: 23
 });
 var zone2 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 27
 });
 var zone3 = new arduino.Led({
-  board: board, 
-  pin: 31 
+  board: board,
+  pin: 31
 });
 var zone4 = new arduino.Led({
-  board: board, 
-  pin: 35 
+  board: board,
+  pin: 35
 });
 var zone5 = new arduino.Led({
-  board: board, 
-  pin: 53 
+  board: board,
+  pin: 53
 });
 var zone6 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 49
 });
 var zone7 = new arduino.Led({
-  board: board, 
+  board: board,
   pin: 41
 });
 
@@ -80,13 +80,7 @@ module.exports = {
 
 
 // turn on sprinkler
-function sprinklerOn(zone) {
- console.log("Sprinkler on: before board ready.");
-    setTimeout(function() {
-      console.log("Zone " + zone + " ON!");
-	zonePins[zone].off();    
-}, timeDelay);
-    
+function sprinklerOn(zone) {    
   setTimeout(function() {
       console.log("Zone " + zone + " ON!");
       zonePins[zone].off();
@@ -95,11 +89,6 @@ function sprinklerOn(zone) {
 
 // turn off sprinkler
 function sprinklerOff(zone) {
-    setTimeout(function() {
-      console.log("Zone " + zone + " OFF!");
-      zonePins[zone].on();
-    }, timeDelay);
-
     setTimeout(function() {
       console.log("Zone " + zone + " OFF!");
       zonePins[zone].on();
