@@ -53,7 +53,7 @@ var zonePins = {
   '7' : zone7
 };
 
-var timeDelay = 700;
+var timeDelay = 300;
 
 module.exports = {
 	sprinklerOn : function (zone) {
@@ -92,7 +92,7 @@ function sprinklerOff(zone) {
     setTimeout(function() {
       console.log("Zone " + zone + " OFF!");
       zonePins[zone].on();
-  	});
+    }, timeDelay);
 }
 
 
